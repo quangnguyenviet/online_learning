@@ -1,0 +1,82 @@
+*.doc
+*.docx
+# General
+*.log
+*.pyc
+*.pyo
+*.env
+.env.local
+.DS_Store
+node_modules/
+dist/
+build/
+
+# Python / Django
+__pycache__/
+db.sqlite3
+venv/
+staticfiles/
+media/
+
+# React
+/.next/
+/.cache/
+
+# Java / Spring Boot
+*.class
+*.war
+*.jar
+*.iml
+/target/
+/.idea/
+.mvn/
+
+# IDE / Editor specific
+.vscode/
+*.swp
+*.swo
+
+# MySQL
+*.sql
+*.db
+# General
+*.log
+*.pyc
+*.pyo
+*.env
+.env.local
+.DS_Store
+node_modules/
+dist/
+build/
+
+# Python / Django
+__pycache__/
+db.sqlite3
+venv/
+staticfiles/
+media/
+
+# React
+/.next/
+/.cache/
+
+# Java / Spring Boot
+*.class
+*.war
+*.jar
+*.iml
+/target/
+/.idea/
+.mvn/
+
+# IDE / Editor specific
+.vscode/
+*.swp
+*.swo
+
+# MySQL
+*.sql
+*.db
+
+ 
