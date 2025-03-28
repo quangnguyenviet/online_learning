@@ -1,8 +1,8 @@
 package com.vitube.online_learning.dto.response;
 
-import lombok.Data;
-
 import java.util.Date;
+
+import lombok.Data;
 
 @Data
 public class UserResponse {

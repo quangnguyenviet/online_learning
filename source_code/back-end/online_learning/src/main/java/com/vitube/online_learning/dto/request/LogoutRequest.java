@@ -1,4 +1,4 @@
-package com.vitube.online_learning.dto.response;
+package com.vitube.online_learning.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,10 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class AuthenticationResponse {
-    private boolean isAuthenticated;
+public class LogoutRequest {
     private String token;
 }
