@@ -1,13 +1,11 @@
+import { useRoutes } from 'react-router-dom';
 import './App.css';
-import Header from './components/Header/index.js';
-
+import ROUTES from './components/Routes';
 function App() {
+  const ALLL_ROUTES = useRoutes(ROUTES);
   return (
     <>
-      <Header />
-      <main>
-        
-      </main>
+      {ALLL_ROUTES}
     </>
     
   );

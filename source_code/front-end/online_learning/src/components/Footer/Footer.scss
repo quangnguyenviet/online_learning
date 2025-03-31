@@ -1,0 +1,5 @@
+@use "../../var" as v;
+
+.footer{
+    background-color: v.$base-color;
+}
