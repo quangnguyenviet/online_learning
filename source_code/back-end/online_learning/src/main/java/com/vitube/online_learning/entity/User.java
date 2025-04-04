@@ -38,4 +38,7 @@ public class User {
 
     @ManyToMany
     private Set<Role> roles;
+
+    @OneToMany(mappedBy = "instructor")
+    private Set<Course> courses;
 }
