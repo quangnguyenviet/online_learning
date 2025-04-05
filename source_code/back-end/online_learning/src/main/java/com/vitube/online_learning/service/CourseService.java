@@ -7,8 +7,11 @@ import java.util.List;
 
 public interface CourseService {
     CourseResponse createCourse(CourseRequest request);
-    CourseResponse getCourseById(Long id);
-    CourseResponse updateCourse(Long id, CourseRequest request);
-    void deleteCourse(Long id);
+    CourseResponse getCourseById(String id);
+    CourseResponse updateCourse(String id, CourseRequest request);
+    void deleteCourse(String id);
     List<CourseResponse> getAllCourse();
+    List<CourseResponse> getFreeCourse();
+    List<CourseResponse> getPlusCourse();
+    List<CourseResponse> getLearningCourses();
 }

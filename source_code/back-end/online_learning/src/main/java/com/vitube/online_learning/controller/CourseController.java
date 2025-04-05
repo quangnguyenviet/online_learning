@@ -34,4 +34,40 @@ public class CourseController {
                 .build();
     }
 
+    @GetMapping("/{id}")
+    public ApiResponse<CourseResponse> getCourseById(@PathVariable String id) {
+        CourseResponse response = courseService.getCourseById(id);
+        return ApiResponse.<CourseResponse>builder()
+                .status(1000)
+                .data(response)
+                .build();
+    }
+
+    @GetMapping("/free")
+    public ApiResponse<List<CourseResponse>> getFreeCourses() {
+        List<CourseResponse> response = courseService.getFreeCourse();
+        return ApiResponse.<List<CourseResponse>>builder()
+                .status(1000)
+                .data(response)
+                .build();
+    }
+
+    @GetMapping("/plus")
+    public ApiResponse<List<CourseResponse>> getPlusCourses() {
+        List<CourseResponse> response = courseService.getPlusCourse();
+        return ApiResponse.<List<CourseResponse>>builder()
+                .status(1000)
+                .data(response)
+                .build();
+    }
+
+    @GetMapping("/learning")
+    public ApiResponse<List<CourseResponse>> getLearningCourses() {
+        List<CourseResponse> response = courseService.getLearningCourses();
+        return ApiResponse.<List<CourseResponse>>builder()
+                .status(1000)
+                .data(response)
+                .build();
+    }
+
 }

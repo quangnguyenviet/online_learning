@@ -8,7 +8,9 @@ import com.vitube.online_learning.mapper.CousreMapper;
 import com.vitube.online_learning.repository.CourseRepository;
 import com.vitube.online_learning.repository.UserRepository;
 import com.vitube.online_learning.service.CourseService;
+import com.vitube.online_learning.service.SecurityContextService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ public class CourseServiceImpl implements CourseService {
     private final UserRepository userRepository;
     private final CourseRepository courseRepository;
     private final CousreMapper cousreMapper;
+    private final SecurityContextService securityContextService;
 
     @Override
     public CourseResponse createCourse(CourseRequest request) {
@@ -34,26 +37,28 @@ public class CourseServiceImpl implements CourseService {
 
         Course saved = courseRepository.save(course);
 
-        return CourseResponse.builder()
-                .id(saved.getId())
-                .title(saved.getTitle())
-                .instructorId(instructor.getId())
-                .price(saved.getPrice())
-                .build();
+        CourseResponse courseResponse = cousreMapper.courseToCourseResponse(course);
+        courseResponse.setInstructorId(instructor.getId());
+
+        return courseResponse;
     }
 
     @Override
-    public CourseResponse getCourseById(Long id) {
+    public CourseResponse getCourseById(String id) {
+        Course course = courseRepository.findById(id).get();
+
+        CourseResponse response = cousreMapper.courseToCourseResponse(course);
+        response.setInstructorId(course.getInstructor().getId());
+        return response;
+    }
+
+    @Override
+    public CourseResponse updateCourse(String id, CourseRequest request) {
         return null;
     }
 
     @Override
-    public CourseResponse updateCourse(Long id, CourseRequest request) {
-        return null;
-    }
-
-    @Override
-    public void deleteCourse(Long id) {
+    public void deleteCourse(String id) {
 
     }
 
@@ -70,5 +75,44 @@ public class CourseServiceImpl implements CourseService {
                    .build());
         });
         return responseList;
+    }
+
+    @Override
+    public List<CourseResponse> getFreeCourse() {
+        List<CourseResponse> responseList = new ArrayList<>();
+        courseRepository.findAll().forEach(course -> {
+            if (course.getPrice() == 0 || course.getNewPrice() == 0){
+                CourseResponse response = cousreMapper.courseToCourseResponse(course);
+                response.setInstructorId(course.getInstructor().getId());
+                responseList.add(response);
+            }
+        });
+        return responseList;
+    }
+
+    @Override
+    public List<CourseResponse> getPlusCourse() {
+        List<CourseResponse> responseList = new ArrayList<>();
+        courseRepository.findAll().forEach(course -> {
+            if (course.getPrice() != 0 && course.getNewPrice() != 0){
+                CourseResponse response = cousreMapper.courseToCourseResponse(course);
+                response.setInstructorId(course.getInstructor().getId());
+                responseList.add(response);
+            }
+        });
+        return responseList;
+    }
+
+    @Override
+    public List<CourseResponse> getLearningCourses() {
+        List<CourseResponse> responses = new ArrayList<>();
+
+        User user = securityContextService.getUser();
+        user.getRegisters().forEach(registration -> {
+           CourseResponse response = cousreMapper.courseToCourseResponse(registration.getCourse());
+           response.setInstructorId(registration.getCourse().getInstructor().getId());
+           responses.add(response);
+        });
+        return responses;
     }
 }

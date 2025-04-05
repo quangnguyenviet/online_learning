@@ -32,6 +32,11 @@ public class SecurityConfig {
     private final String[] PUBLIC_ENPOINTS = {
         "/users", "/auth/login", "/auth/introspect", "/auth/logout", "/auth/refresh-token"
     };
+    private final String[] PUBLIC_GET = {
+            "/courses",
+            "/courses/{id}",
+            "/courses/free"
+    };
 
     @Value("${jwt.singerKey}")
     @NonFinal
@@ -50,7 +55,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> {
             request.requestMatchers(HttpMethod.POST, PUBLIC_ENPOINTS)
                     .permitAll()
-                    .requestMatchers(HttpMethod.GET, "/users")
+                    .requestMatchers(HttpMethod.GET, PUBLIC_GET).permitAll()
+                    .requestMatchers("/users/**")
                     .hasAuthority("SCOPE_ADMIN")
                     .anyRequest()
                     .authenticated();

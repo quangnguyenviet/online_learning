@@ -15,4 +15,5 @@ public class CourseResponse {
     private String title;
     private String instructorId;
     private double price;
+    private double discount;
 }
