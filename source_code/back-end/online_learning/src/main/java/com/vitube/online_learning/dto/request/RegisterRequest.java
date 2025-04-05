@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CourseRequest {
-    private String title;
-    private String instructorId;
-    private double price;
-    private double discount;
+public class RegisterRequest {
+//    private String studentId;
+    private String courseId;
 }

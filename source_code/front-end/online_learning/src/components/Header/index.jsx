@@ -1,7 +1,27 @@
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import './Header.scss';
 function Header() {
-    let isLogin = false;
+    const token = localStorage.getItem('token');
+    const isLogin = token ? true : false;
+
+    const handleLogout = () => {
+        fetch('http://localhost:8080/online_learning/auth/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ token: token })
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+                if (data.status === 1000) {
+                    localStorage.removeItem('token');
+                    window.location.reload();
+                }
+            })
+
+    }
 
     return (
         <>
@@ -19,18 +39,26 @@ function Header() {
                                 <li><NavLink to="/" className='header__link'>Home</NavLink></li>
                                 <li><NavLink to="/contact" className='header__link'>Contact</NavLink></li>
                                 <li><NavLink to="/about" className='header__link'>About</NavLink></li>
+                                <li><NavLink to="/my-learning" className="header__link">My Learning </NavLink></li>
                             </ul>
                         </div>
                         <div className="col-3 header__auth">
                             {isLogin ? (
-                                <div>
-                                    account
-                                </div>
+                                <>
+                                    <button className='btn btn-primary header__btn--login'>
+                                        <Link to="/infor-user">Infor User</Link>
+                                    </button>
+                                    <button className='btn btn-light header__btn--signup' onClick={handleLogout}>Logout</button>
+                                </>
                             ) 
                             : (
                                 <>
-                                    <button className='btn btn-primary header__btn--login'>login</button>
-                                    <button className='btn btn-light header__btn--signup' >signup</button>
+                                    <button className='btn btn-primary header__btn--login'>
+                                        <Link to="/login">Login</Link>
+                                    </button>
+                                    <button className='btn btn-light header__btn--signup' >
+                                        <Link to="/signup">Signup</Link>
+                                    </button>
                                 </>
                             )}
                         </div>

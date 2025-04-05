@@ -1,15 +1,15 @@
-import FreeCourse from "../../components/FreeCourse";
+import FreeCourse from "../../components/Course/FreeCourse";
+import PlusCourse from "../../components/Course/PlusCourse";
 
 
 export default function Home() {
 
     return (
         <>
-            <div className="free-course">
-                <div className="container">
-                    <h2>Home page</h2>
-                    <FreeCourse />
-                </div>
+            <div className="container">
+                <h1>welcome to my course</h1>
+                <FreeCourse />
+                <PlusCourse />
             </div>
            
         </>

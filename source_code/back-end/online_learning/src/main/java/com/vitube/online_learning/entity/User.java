@@ -9,7 +9,8 @@ import lombok.*;
 
 @Entity
 @Table(name = "user")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -41,4 +42,7 @@ public class User {
 
     @OneToMany(mappedBy = "instructor")
     private Set<Course> courses;
+
+    @OneToMany(mappedBy = "student")
+    private Set<Register> registers;
 }

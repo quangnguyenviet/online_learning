@@ -3,9 +3,13 @@ package com.vitube.online_learning.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+import java.util.Set;
+
 @Table(name = "course")
 @Entity
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,5 +25,14 @@ public class Course {
     private User instructor;
 
     private double price;
+
+    private double discount;
+
+    public double getNewPrice() {
+        return price * (1 - discount / 100);
+    }
+
+    @OneToMany(mappedBy = "course")
+    private Set<Register> registers;
 
 }
