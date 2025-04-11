@@ -2,12 +2,14 @@ package com.vitube.online_learning.service.impl;
 
 import com.vitube.online_learning.dto.request.CourseRequest;
 import com.vitube.online_learning.dto.response.CourseResponse;
+import com.vitube.online_learning.dto.response.LessonResponse;
 import com.vitube.online_learning.entity.Course;
 import com.vitube.online_learning.entity.User;
 import com.vitube.online_learning.mapper.CousreMapper;
 import com.vitube.online_learning.repository.CourseRepository;
 import com.vitube.online_learning.repository.UserRepository;
 import com.vitube.online_learning.service.CourseService;
+import com.vitube.online_learning.service.LessonService;
 import com.vitube.online_learning.service.SecurityContextService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +25,7 @@ public class CourseServiceImpl implements CourseService {
     private final CourseRepository courseRepository;
     private final CousreMapper cousreMapper;
     private final SecurityContextService securityContextService;
+    private final LessonService lessonService;
 
     @Override
     public CourseResponse createCourse(CourseRequest request) {
@@ -48,6 +51,14 @@ public class CourseServiceImpl implements CourseService {
         Course course = courseRepository.findById(id).get();
 
         CourseResponse response = cousreMapper.courseToCourseResponse(course);
+
+        List<LessonResponse> lessonResponses = new ArrayList<>();
+        course.getLessons().forEach(lesson -> {
+            lessonResponses.add(
+                lessonService.lessonToLessonResponse(lesson)
+            );}
+        );
+        response.setLessons(lessonResponses);
         response.setInstructorId(course.getInstructor().getId());
         return response;
     }

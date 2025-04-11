@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,4 +18,5 @@ public class CourseResponse {
     private String instructorId;
     private double price;
     private double discount;
+    private List<LessonResponse> lessons;
 }

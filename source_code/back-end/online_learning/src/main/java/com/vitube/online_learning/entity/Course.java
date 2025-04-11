@@ -35,4 +35,7 @@ public class Course {
     @OneToMany(mappedBy = "course")
     private Set<Register> registers;
 
+    @OneToMany(mappedBy = "course")
+    private Set<Lesson> lessons;
+
 }

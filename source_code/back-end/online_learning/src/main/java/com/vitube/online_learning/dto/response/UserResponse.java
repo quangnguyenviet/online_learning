@@ -3,8 +3,11 @@ package com.vitube.online_learning.dto.response;
 import java.util.Date;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class UserResponse {
     private String id;
     private String email;
