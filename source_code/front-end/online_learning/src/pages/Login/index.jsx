@@ -17,7 +17,9 @@ export default function Login() {
             .then((response) => response.json())
             .then((data) => {
                 if(data.status === 1000){
+                    
                     setData('token', data.data.token);
+                    // console.log(data.data.token);
                     navigate('/');
                 }
             })

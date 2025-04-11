@@ -15,6 +15,10 @@ import java.util.List;
 public class SecurityContextService {
     private final UserRepository userRepository;
 
+    public String getUsername() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+
     public User getUser(){
 
         var authentication = SecurityContextHolder.getContext().getAuthentication();

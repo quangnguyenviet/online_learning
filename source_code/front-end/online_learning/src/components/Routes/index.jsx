@@ -9,6 +9,8 @@ import PrivateRouter from "../PrivateRouter";
 import Signup from "../../pages/Signup";
 import CourseDetail from "../../pages/CourseDetail";
 import MyLearning from "../../pages/MyLearning";
+import MyLearningDetail from "../../pages/MyLearning/MyLearningDetail";
+import UploadVideo from "../../pages/UploadVideo";
 
 const ROUTES = [
     {
@@ -27,8 +29,12 @@ const ROUTES = [
                 element: <Contact />
             },
             {
-                path: "/courses/:id",
+                path: "/courses/:courseId",
                 element: <CourseDetail />
+            },
+            {
+                path: "/upload-video",
+                element: <UploadVideo />
             },
             {
                 element: <PrivateRouter />,
@@ -39,7 +45,12 @@ const ROUTES = [
                     },
                     {
                         path: "/my-learning",
-                        element: <MyLearning />
+                        element: <MyLearning />,
+                        
+                    },
+                    {
+                        path: "/my-learning/:courseId",
+                        element: <MyLearningDetail />
                     }
                 ]
             }

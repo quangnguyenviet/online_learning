@@ -1,5 +1,5 @@
 export function setData(key, value){
-    localStorage.setItem(key, JSON.stringify(value));
+    localStorage.setItem(key, value);
 }
 export function getData(key){
     const data = localStorage.getItem(key);

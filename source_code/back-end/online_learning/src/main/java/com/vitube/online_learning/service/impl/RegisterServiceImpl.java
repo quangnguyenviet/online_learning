@@ -22,7 +22,14 @@ public class RegisterServiceImpl implements RegisterService {
 
     @Override
     public void registerCourse(RegisterRequest request) {
-        User student = securityContextService.getUser();
+        User student;
+        if (request.getStudentId() != null) {
+            student = userRepository.findById(request.getStudentId()).get();
+        }
+        else {
+            student = securityContextService.getUser();
+        }
+
         Course course = courseRepository.findById(request.getCourseId()).get();
         Register register = new Register();
         register.setCourse(course);
@@ -35,4 +42,18 @@ public class RegisterServiceImpl implements RegisterService {
         courseRepository.save(course);
 
     }
+
+    @Override
+    public boolean isRegistered(String courseId) {
+        User student = securityContextService.getUser();
+
+        for (Register register : student.getRegisters()) {
+            if (register.getCourse().getId().equals(courseId)) {
+                return true; // Đã đăng ký khóa học
+            }
+        }
+
+        return false; // Chưa đăng ký khóa học
+    }
+
 }

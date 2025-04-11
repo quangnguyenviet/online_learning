@@ -45,4 +45,7 @@ public class User {
 
     @OneToMany(mappedBy = "student")
     private Set<Register> registers;
+
+    @OneToMany(mappedBy = "student")
+    private Set<Order> orders;
 }

@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import RegisterBtn from "./RegisterBtn";
+import { useParams } from "react-router-dom";
 
 export default function CourseDetail() {
-    const url = "http://localhost:8080/online_learning/courses/23982de1-9d94-46a4-8cc9-6960c032d324";
+    const { courseId } = useParams();
+
+
+    const url = "http://localhost:8080/online_learning/courses/" + courseId;
 
     const [course, setCourse] = useState({});
     const [loading, setLoading] = useState(true);

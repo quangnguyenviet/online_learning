@@ -38,4 +38,7 @@ public class Course {
     @OneToMany(mappedBy = "course")
     private Set<Lesson> lessons;
 
+    @OneToMany(mappedBy = "course")
+    private Set<Order> orders;
+
 }

@@ -30,7 +30,8 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
 
     private final String[] PUBLIC_ENPOINTS = {
-        "/users", "/auth/login", "/auth/introspect", "/auth/logout", "/auth/refresh-token"
+        "/users", "/auth/login", "/auth/introspect", "/auth/logout", "/auth/refresh-token",
+            "/zalopay/callback"
     };
     private final String[] PUBLIC_GET = {
             "/courses",
