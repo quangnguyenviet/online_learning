@@ -79,4 +79,6 @@ media/
 *.sql
 *.db
 
+application.properties
+
  

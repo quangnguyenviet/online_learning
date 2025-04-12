@@ -5,8 +5,10 @@ import com.vitube.online_learning.service.RegisterService;
 import com.vitube.online_learning.service.ZaloPayService;
 import com.vitube.online_learning.utils.HMACUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.NonFinal;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -23,7 +25,12 @@ public class  ZaloPayController {
     private final ZaloPayService zaloPayService;
     private final RegisterService registerService;
 
-    private static final String ZALOPAY_ENDPOINT = "https://sb-openapi.zalopay.vn/v2/create";
+    @Value("${zalopay.endpoint}")
+    private String ZALOPAY_ENDPOINT;
+
+    @Value("${zalopay.key2}")
+    private String KEY_2;
+
 
     @PostMapping("/create-order")
     public ResponseEntity<String> createOrder(@RequestParam String courseId) throws Exception {
@@ -58,8 +65,7 @@ public class  ZaloPayController {
             String reqMac = (String) payload.get("mac");
 
             // Tính lại MAC để xác thực (dùng key2)
-            String key2 = "kLtgPl8HHhfvMuDHPwKfgfsY4Ydm9eIz"; // key2 trong cấu hình
-            String calculatedMac = HMACUtil.HMacHexStringEncode(HMACUtil.HMACSHA256, key2, data);
+            String calculatedMac = HMACUtil.HMacHexStringEncode(HMACUtil.HMACSHA256, KEY_2, data);
 
             if (!calculatedMac.equals(reqMac)) {
                 return ResponseEntity.badRequest().body("Invalid MAC");

@@ -4,6 +4,7 @@ import com.vitube.online_learning.utils.HMACUtil;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -13,9 +14,10 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ZaloPayService {
 
-    private static final String APP_ID = "2553";
-    private static final String KEY1 = "PcY4iZIKFCIdgZvA6ueMcMHHUbRLYjPL";
-    private static final String ENDPOINT = "https://sb-openapi.zalopay.vn/v2/create";
+    @Value("${zalopay.appId}")
+    private  String APP_ID;
+    @Value("${zalopay.key1}")
+    private String KEY1;
     private static final String CALLBACK_URL = "https://9396-2405-4803-ffab-a100-9537-3278-8781-aa68.ngrok-free.app/online_learning/zalopay/callback";
     private final SecurityContextService securityContextService;
 
