@@ -127,6 +127,13 @@
 			<version>4.5.14</version>
 		</dependency>
 
+<!--		get data from .evn-->
+<!--		<dependency>-->
+<!--			<groupId>io.github.cdimascio</groupId>-->
+<!--			<artifactId>dotenv-java</artifactId>-->
+<!--			<version>3.0.0</version>-->
+<!--		</dependency>-->
+
 
 
 
