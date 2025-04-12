@@ -1,12 +1,16 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import GoToCourseBtn from "../../components/GoToCourseBtn";
+import RegisterFreeCourseBtn from "./RegisterFreeCourseBtn";
 
 export default function RegisterBtn(props) {
     const URL_CHECK_REGISTER = "http://localhost:8080/online_learning/registers/check";
+    const [loading, setLoading] = useState(true); // ✅ mở lại loading
+    const [isRegistered, setIsRegistered] = useState(false); // state kiểm tra đăng ký
 
     const { course } = props;
     const token = localStorage.getItem("token");
-    const handleRegister = () => {
 
+    const handleRegister = () => {
         fetch("http://localhost:8080/online_learning/registers", {
             method: "POST",
             headers: {
@@ -15,7 +19,7 @@ export default function RegisterBtn(props) {
             },
             body: JSON.stringify({
                 courseId: course.id,
-                studentId: null
+                studentId: null,
             }),
         })
             .then((response) => response.json())
@@ -23,6 +27,7 @@ export default function RegisterBtn(props) {
                 console.log(data);
                 if (data.status === 1000) {
                     alert("Đăng ký khóa học thành công!");
+                    setIsRegistered(true); // ✅ cập nhật state sau khi đăng ký thành công
                 } else {
                     alert("Đăng ký khóa học thất bại!");
                 }
@@ -33,8 +38,8 @@ export default function RegisterBtn(props) {
     };
 
     useEffect(() => {
-        if (!course?.id) return; // kiểm tra có courseId không
-    
+        if (!course?.id) return;
+
         fetch(`${URL_CHECK_REGISTER}?courseId=${course.id}`, {
             method: "GET",
             headers: {
@@ -45,18 +50,30 @@ export default function RegisterBtn(props) {
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === 1000 && data.data === true) {
-                    alert("Bạn đã đăng ký khóa học này rồi!");
+                    setIsRegistered(true); // ✅ dùng setState thay vì gán trực tiếp
                 }
             })
             .catch((error) => {
                 console.error("Error:", error);
+            })
+            .finally(() => {
+                setLoading(false); // ✅ đúng chính tả
             });
-    }, [course?.id]); // chạy lại khi courseId thay đổi
-    
+    }, [course?.id]);
 
     return (
-        <button onClick={handleRegister} className="btn btn-primary">
-            Đăng ký khóa học
-        </button>
+        <>
+            {loading ? (
+                <h1>Loading...</h1>
+            ) : (
+                <>
+                    {isRegistered ? (
+                        <GoToCourseBtn course={course} /> // ✅ dùng GoToCourseBtn thay vì button
+                    ) : (
+                        <RegisterFreeCourseBtn course={course} /> // ✅ dùng RegisterFreeCourseBtn thay vì button
+                    )}
+                </>
+            )}
+        </>
     );
 }

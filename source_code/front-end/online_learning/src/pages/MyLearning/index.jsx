@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import GoToCourseBtn from "../../components/GoToCourseBtn";
 
 export default function MyLearning() {
     const URL = "http://localhost:8080/online_learning/courses/learning";
@@ -56,7 +57,7 @@ export default function MyLearning() {
                                         <h5 className="card-title">{item.title}</h5>
                                         <p className="card-text">{item.description}</p>
                                         <p className="card-text">{item.category}</p>
-                                        <button onClick={() => handleClick(item.id)} className="btn btn-primary">go to course</button>
+                                        <GoToCourseBtn course={item} />
                                     </div>
                                 </div>
                             </div>
