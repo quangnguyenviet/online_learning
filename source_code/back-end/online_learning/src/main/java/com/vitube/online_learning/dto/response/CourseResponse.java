@@ -16,7 +16,7 @@ public class CourseResponse {
     private String id;
     private String title;
     private String instructorId;
-    private double price;
+    private long price;
     private double discount;
     private List<LessonResponse> lessons;
 }

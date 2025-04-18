@@ -1,12 +1,66 @@
-.login .container{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
+@import "./../../_var.scss";
+a{
+    text-decoration: none;
 }
-.login .content{
-    width: 400px;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+.login{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &__form{
+        background-color: black;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 40%;
+        border-radius: 20px;
+        padding: 30px 0;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        color: white;
+        h1{
+            text-transform: uppercase;
+        }
+        input[type="text"], input[type="password"]{
+            width: 35%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 25px;
+            border: 2px solid white;
+            background-color: inherit;
+            color: white;
+            font-size: 16px;
+            text-align: center;
+            transition: all 0.3s ease;
+            &:focus{
+                outline: none;
+                width: 45%;
+                border: 2px solid $color-green;
+            }
+        }
+        input[type="submit"]{
+            padding: 10px 30px;
+            margin: 10px 0;
+            border-radius: 25px;
+            border: 2px solid white;
+            background-color: inherit;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            &:hover{
+                background-color: $color-green;
+                color: black;
+            }
+        }
+        .forgot{
+            margin-top: 10px;
+            
+        }
+        a{
+            color: $color-green;
+        }
+
+    }
 }

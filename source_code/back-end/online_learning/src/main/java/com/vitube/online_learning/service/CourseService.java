@@ -14,4 +14,8 @@ public interface CourseService {
     List<CourseResponse> getFreeCourse();
     List<CourseResponse> getPlusCourse();
     List<CourseResponse> getLearningCourses();
+    List<CourseResponse> getCoursesOfInstructor(String instructorId);
+    List<CourseResponse> getMyCourses();
+
+
 }

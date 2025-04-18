@@ -126,4 +126,30 @@ public class CourseServiceImpl implements CourseService {
         });
         return responses;
     }
+
+    @Override
+    public List<CourseResponse> getCoursesOfInstructor(String instructorId) {
+        User instructor = userRepository.findById(instructorId)
+                .orElseThrow(() -> new RuntimeException("Instructor not found"));
+        List<CourseResponse> responseList = new ArrayList<>();
+        instructor.getCourses().forEach(course -> {
+            CourseResponse response = cousreMapper.courseToCourseResponse(course);
+            response.setInstructorId(course.getInstructor().getId());
+            responseList.add(response);
+        });
+        return responseList;
+    }
+
+    @Override
+    public List<CourseResponse> getMyCourses() {
+        User instructor = securityContextService.getUser();
+        List<CourseResponse> responseList = new ArrayList<>();
+        instructor.getCourses().forEach(course -> {
+            CourseResponse response = cousreMapper.courseToCourseResponse(course);
+            response.setInstructorId(course.getInstructor().getId());
+            responseList.add(response);
+        });
+        return responseList;
+
+    }
 }

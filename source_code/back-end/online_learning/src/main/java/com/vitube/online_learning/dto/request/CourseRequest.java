@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class CourseRequest {
     private String title;
     private String instructorId;
-    private double price;
+    private long price;
     private double discount;
 }

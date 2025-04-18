@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 public class RegisterController {
     private final RegisterService registerService;
 
-    @PostMapping
-    public ApiResponse<?> registerCourse(@RequestBody RegisterRequest request){
-        registerService.registerCourse(request);
+    @PostMapping("/free")
+    public ApiResponse<?> registerFreeCourse(@RequestBody RegisterRequest request){
+        registerService.registerFreeCourse(request);
 
         return ApiResponse.builder()
                 .status(1000)

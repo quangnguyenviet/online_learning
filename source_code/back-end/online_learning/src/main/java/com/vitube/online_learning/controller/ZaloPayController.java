@@ -5,9 +5,7 @@ import com.vitube.online_learning.service.RegisterService;
 import com.vitube.online_learning.service.ZaloPayService;
 import com.vitube.online_learning.utils.HMACUtil;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.NonFinal;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -81,7 +79,7 @@ public class  ZaloPayController {
             String courseId = embedDataJson.getString("courseId");   // lấy ra giá trị courseId
 
 
-            registerService.registerCourse(
+            registerService.registerFreeCourse(
                     RegisterRequest.builder()
                             .courseId(courseId)
                             .studentId(dataJson.getString("app_user"))

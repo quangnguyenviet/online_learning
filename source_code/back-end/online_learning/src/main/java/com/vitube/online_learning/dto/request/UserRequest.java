@@ -12,4 +12,5 @@ public class UserRequest {
     private String lastName;
     private String username;
     private Date dob;
+    private String role = "USER";
 }
