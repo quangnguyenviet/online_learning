@@ -2,8 +2,23 @@
 
 import React, { useState } from "react";
 
-export function LessonsList({ lessons }) {
+export function LessonsList() {
     const [editingLessonId, setEditingLessonId] = useState(null);
+
+    const [lessons] = useState([
+            {
+                id: 1,
+                title: "Giới thiệu khóa học",
+                description: "Tổng quan về khóa học.",
+                video: "https://youtube.com/example1"
+            },
+            {
+                id: 2,
+                title: "Cài đặt môi trường",
+                description: "Hướng dẫn cài đặt công cụ.",
+                video: "https://youtube.com/example2"
+            }
+        ]);
 
     const toggleEdit = (id) => {
         setEditingLessonId(editingLessonId === id ? null : id);

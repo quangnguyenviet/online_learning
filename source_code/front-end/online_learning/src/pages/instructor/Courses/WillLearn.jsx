@@ -2,7 +2,12 @@
 
 import React, { useState } from "react";
 
-export function WillLearn({ learnings, setLearnings }) {
+export function WillLearn() {
+    const [learnings, setLearnings] = useState([
+        "Xây dựng trang web bằng React",
+        "Kết nối frontend với backend bằng REST API"
+    ]);
+
     const [editLearningIndex, setEditLearningIndex] = useState(null);
     const [newLearning, setNewLearning] = useState("");
     const [showAddLearning, setShowAddLearning] = useState(false);

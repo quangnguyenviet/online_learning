@@ -4,10 +4,7 @@ import com.vitube.online_learning.dto.response.ApiResponse;
 import com.vitube.online_learning.dto.response.RequireResponse;
 import com.vitube.online_learning.service.RequireService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,6 +19,15 @@ public class IRequireController {
 
         List<RequireResponse> response = requireService.getAllRequireByCourseId(courseId);
         return ApiResponse.<List<RequireResponse>>builder()
+                .status(1000)
+                .data(response)
+                .build();
+    }
+
+    @PostMapping("/save")
+    public ApiResponse<RequireResponse> saveRequire(@RequestBody RequireResponse requireResponse) {
+        RequireResponse response = requireService.saveRequire(requireResponse);
+        return ApiResponse.<RequireResponse>builder()
                 .status(1000)
                 .data(response)
                 .build();

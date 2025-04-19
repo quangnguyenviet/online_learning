@@ -1,28 +1,65 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
-export function CourseConditions({ conditions, setConditions }) {
+export function CourseConditions(props) {
+
+    let delIdRef = useRef([]);
+
     const [editConditionIndex, setEditConditionIndex] = useState(null);
     const [newCondition, setNewCondition] = useState("");
     const [showAddCondition, setShowAddCondition] = useState(false);
 
+    const [conditions, setConditions] = useState(props.conditions);
+
     const handleConditionEdit = (index, value) => {
         const updated = [...conditions];
-        updated[index] = value;
+        updated[index].desc = value;
+        updated[index].tag = "Y";
         setConditions(updated);
         setEditConditionIndex(null);
     };
 
     const handleConditionDelete = (index) => {
-        setConditions(conditions.filter((_, i) => i !== index));
+
+
+        setConditions(conditions.filter((condition, i) => {
+            if (i === index) {
+                console.log(condition.id);
+                if (condition.id != null) {
+                    delIdRef.current.push(condition.id);
+
+                }
+            }
+            return i !== index;
+        }
+
+
+        ));
     };
 
     const handleAddCondition = () => {
+
         if (newCondition.trim() !== "") {
-            setConditions([...conditions, newCondition.trim()]);
+            let newConditionObject = {
+                desc: newCondition.trim(),
+                tag: "Y"
+            }
+
+            setConditions([...conditions, newConditionObject]);
             setNewCondition("");
             setShowAddCondition(false);
         }
     };
+
+    const handleSave = () => {
+
+        const changeList = conditions
+            .filter(condition => condition.tag === "Y");
+
+        const delIdList = delIdRef.current;
+
+        console.log("Edit List (full objects):", changeList);
+        console.log("Delete List (IDs):", delIdList);
+    }
 
     return (
         <div style={{ marginBottom: "30px" }}>
@@ -33,13 +70,13 @@ export function CourseConditions({ conditions, setConditions }) {
                         {editConditionIndex === index ? (
                             <input
                                 type="text"
-                                defaultValue={condition}
+                                defaultValue={condition.desc}
                                 onBlur={(e) => handleConditionEdit(index, e.target.value)}
                                 autoFocus
                             />
                         ) : (
                             <>
-                                {condition}
+                                <p className="condition">{condition.desc}</p>
                                 <button onClick={() => setEditConditionIndex(index)} style={{ marginLeft: "10px" }}>Sửa</button>
                                 <button onClick={() => handleConditionDelete(index)} style={{ marginLeft: "5px", color: "red" }}>Xoá</button>
                             </>
@@ -64,9 +101,9 @@ export function CourseConditions({ conditions, setConditions }) {
             )}
 
             <div>
-                <button>save</button>
+                <button onClick={handleSave}>save</button>
             </div>
-            
+
         </div>
     );
 }

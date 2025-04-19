@@ -19,4 +19,6 @@ public class CourseResponse {
     private long price;
     private double discount;
     private List<LessonResponse> lessons;
+    private List<LearnWhatResponse> learnWhats;
+    private List<RequireResponse> requires;
 }
