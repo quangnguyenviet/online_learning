@@ -36,7 +36,8 @@ public class SecurityConfig {
     private final String[] PUBLIC_GET = {
             "/courses",
             "/courses/{id}",
-            "/courses/free"
+            "/courses/free",
+            "/instructor-require/{courseId}",
     };
 
     @Value("${jwt.singerKey}")

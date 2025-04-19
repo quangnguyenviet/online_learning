@@ -8,6 +8,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.UUID;
 
+import com.vitube.online_learning.enums.RoleEnum;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -61,15 +62,31 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        User user = userRepository.findByUsername(request.getUsername());
-        if (user == null) {
-            throw new AppException(ErrorCode.USER_NOT_EXIST);
+        if (request.getRole() == null) {
+            User user = userRepository.findByUsername(request.getUsername());
+            if (user == null) {
+                throw new AppException(ErrorCode.USER_NOT_EXIST);
+            }
+            boolean isAuthenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
+            return AuthenticationResponse.builder()
+                    .token(generateToken(user))
+                    .role(RoleEnum.USER.name())
+                    .isAuthenticated(isAuthenticated)
+                    .build();
         }
-        boolean isAuthenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
-        return AuthenticationResponse.builder()
-                .token(generateToken(user))
-                .isAuthenticated(isAuthenticated)
-                .build();
+        else{
+            User user = userRepository.findByUsernameAndRole(request.getUsername(), request.getRole());
+            if (user == null) {
+                throw new AppException(ErrorCode.USER_NOT_EXIST);
+            }
+            boolean isAuthenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
+            return AuthenticationResponse.builder()
+                    .token(generateToken(user))
+                    .isAuthenticated(isAuthenticated)
+                    .role(request.getRole())
+                    .build();
+        }
+
     }
 
     @Override

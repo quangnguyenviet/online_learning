@@ -1,0 +1,25 @@
+.modal {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(134, 117, 117, 0.5);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal__active {
+  display: flex;
+}
+.modal__inactive {
+  display: none;
+}
+.modal__content {
+  background: #fff;
+  width: 80%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}/*# sourceMappingURL=MyLearningDetail.css.map */

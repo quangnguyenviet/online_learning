@@ -24,12 +24,12 @@ public class Course {
     @JoinColumn(name = "instructor_id")
     private User instructor;
 
-    private double price;
+    private long price;
 
-    private double discount;
+    private int discount;
 
-    public double getNewPrice() {
-        return price * (1 - discount / 100);
+    public long getNewPrice() {
+        return (long) (price * ((100 - discount) * 1.0 / 100));
     }
 
     @OneToMany(mappedBy = "course")
@@ -40,5 +40,18 @@ public class Course {
 
     @OneToMany(mappedBy = "course")
     private Set<Order> orders;
+
+    @OneToMany(mappedBy = "course")
+    private Set<LearnWhat> learnWhats;
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    private String longDesc; // → TEXT
+
+    private String shortDesc;
+
+    @OneToMany(mappedBy = "course")
+    private Set<Require> requires;
+
 
 }

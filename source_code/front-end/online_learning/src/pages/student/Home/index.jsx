@@ -1,5 +1,5 @@
-import FreeCourse from "../../components/Course/FreeCourse";
-import PlusCourse from "../../components/Course/PlusCourse";
+import FreeCourse from "../../../components/Course/FreeCourse";
+import PlusCourse from "../../../components/Course/PlusCourse";
 
 
 export default function Home() {

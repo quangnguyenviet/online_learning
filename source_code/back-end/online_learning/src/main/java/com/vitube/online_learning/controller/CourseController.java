@@ -70,4 +70,14 @@ public class CourseController {
                 .build();
     }
 
+    @GetMapping("/instructor/{}instructorId")
+    public ApiResponse<List<CourseResponse>> getCoursesOfInstructor(@PathVariable String instructorId) {
+        List<CourseResponse> response = courseService.getCoursesOfInstructor(instructorId);
+        return ApiResponse.<List<CourseResponse>>builder()
+                .status(1000)
+                .data(response)
+                .build();
+    }
+
+
 }

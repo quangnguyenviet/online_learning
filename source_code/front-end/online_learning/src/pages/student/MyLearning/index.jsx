@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import GoToCourseBtn from "../../components/GoToCourseBtn";
+import GoToCourseBtn from "../../../components/GoToCourseBtn";
 
 export default function MyLearning() {
     const URL = "http://localhost:8080/online_learning/courses/learning";

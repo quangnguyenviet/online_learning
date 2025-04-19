@@ -1,6 +1,7 @@
 package com.vitube.online_learning.dto.response;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.Data;
 import lombok.Getter;
@@ -16,4 +17,5 @@ public class UserResponse {
     private String lastName;
     private String username;
     private Date dob;
+    private List<RoleResponse> role;
 }

@@ -47,6 +47,8 @@ export default function CourseDetail() {
                             </div>
                             <div className="col-3">
                                 <img src={"https://static.vecteezy.com/system/resources/thumbnails/045/132/934/small_2x/a-beautiful-picture-of-the-eiffel-tower-in-paris-the-capital-of-france-with-a-wonderful-background-in-wonderful-natural-colors-photo.jpg"} alt="anh" style={{width : "100%"}} />
+                                
+                                <div>{parseInt( course.price * ( (100 - course.discount) / 100), 10 )}VND</div>
 
                                 <RegisterBtn course={course} />
                             </div>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import GoToCourseBtn from "../../components/GoToCourseBtn";
+import GoToCourseBtn from "../../../components/GoToCourseBtn";
 import RegisterFreeCourseBtn from "./RegisterFreeCourseBtn";
+import RegisterProCourseBtn from "./RegisterProCourseBtn";
 
 export default function RegisterBtn(props) {
     const URL_CHECK_REGISTER = "http://localhost:8080/online_learning/registers/check";
@@ -68,9 +69,14 @@ export default function RegisterBtn(props) {
             ) : (
                 <>
                     {isRegistered ? (
-                        <GoToCourseBtn course={course} /> // ✅ dùng GoToCourseBtn thay vì button
+                        <GoToCourseBtn course={course} /> 
                     ) : (
-                        <RegisterFreeCourseBtn course={course} /> // ✅ dùng RegisterFreeCourseBtn thay vì button
+                        (course.price === 0 ? (
+                            <RegisterFreeCourseBtn course={course} /> 
+                        ) : (
+                            <RegisterProCourseBtn course={course} /> 
+                        ))
+                        
                     )}
                 </>
             )}

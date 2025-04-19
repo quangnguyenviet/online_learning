@@ -21,7 +21,7 @@ public class RegisterServiceImpl implements RegisterService {
     private final SecurityContextService securityContextService;
 
     @Override
-    public void registerCourse(RegisterRequest request) {
+    public void registerFreeCourse(RegisterRequest request) {
         User student;
         if (request.getStudentId() != null) {
             student = userRepository.findById(request.getStudentId()).get();
@@ -31,6 +31,7 @@ public class RegisterServiceImpl implements RegisterService {
         }
 
         Course course = courseRepository.findById(request.getCourseId()).get();
+
         Register register = new Register();
         register.setCourse(course);
         register.setStudent(student);

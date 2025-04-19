@@ -2,10 +2,14 @@ package com.vitube.online_learning.service.impl;
 
 import com.vitube.online_learning.dto.request.CourseRequest;
 import com.vitube.online_learning.dto.response.CourseResponse;
+import com.vitube.online_learning.dto.response.LearnWhatResponse;
 import com.vitube.online_learning.dto.response.LessonResponse;
+import com.vitube.online_learning.dto.response.RequireResponse;
 import com.vitube.online_learning.entity.Course;
 import com.vitube.online_learning.entity.User;
 import com.vitube.online_learning.mapper.CousreMapper;
+import com.vitube.online_learning.mapper.LearnWhatMapper;
+import com.vitube.online_learning.mapper.RequireMapper;
 import com.vitube.online_learning.repository.CourseRepository;
 import com.vitube.online_learning.repository.UserRepository;
 import com.vitube.online_learning.service.CourseService;
@@ -26,6 +30,41 @@ public class CourseServiceImpl implements CourseService {
     private final CousreMapper cousreMapper;
     private final SecurityContextService securityContextService;
     private final LessonService lessonService;
+    private final LearnWhatMapper learnWhatMapper;
+    private final RequireMapper requireMapper;
+
+    @Override
+    public CourseResponse courseToCourseResponse(Course course) {
+        CourseResponse response = cousreMapper.courseToCourseResponse(course);
+
+        List<LessonResponse> lessonResponses = new ArrayList<>();
+        course.getLessons().forEach(lesson -> {
+            lessonResponses.add(
+                    lessonService.lessonToLessonResponse(lesson)
+            );}
+        );
+        response.setLessons(lessonResponses);
+
+        List<LearnWhatResponse> learnWhatResponses = new ArrayList<>();
+        course.getLearnWhats().forEach(learnWhat -> {
+            learnWhatResponses.add(
+                    learnWhatMapper.learnWhatTooLearnWhatResponse(learnWhat)
+            );
+        });
+        response.setLearnWhats(learnWhatResponses);
+
+        List<RequireResponse> requireResponses = new ArrayList<>();
+        course.getRequires().forEach(require -> {
+            requireResponses.add(
+                    requireMapper.requireToRequireResponse(require)
+            );
+        });
+        response.setRequires(requireResponses);
+
+        response.setInstructorId(course.getInstructor().getId());
+        return response;
+
+    }
 
     @Override
     public CourseResponse createCourse(CourseRequest request) {
@@ -50,16 +89,7 @@ public class CourseServiceImpl implements CourseService {
     public CourseResponse getCourseById(String id) {
         Course course = courseRepository.findById(id).get();
 
-        CourseResponse response = cousreMapper.courseToCourseResponse(course);
-
-        List<LessonResponse> lessonResponses = new ArrayList<>();
-        course.getLessons().forEach(lesson -> {
-            lessonResponses.add(
-                lessonService.lessonToLessonResponse(lesson)
-            );}
-        );
-        response.setLessons(lessonResponses);
-        response.setInstructorId(course.getInstructor().getId());
+        CourseResponse response = courseToCourseResponse(course);
         return response;
     }
 
@@ -125,5 +155,31 @@ public class CourseServiceImpl implements CourseService {
            responses.add(response);
         });
         return responses;
+    }
+
+    @Override
+    public List<CourseResponse> getCoursesOfInstructor(String instructorId) {
+        User instructor = userRepository.findById(instructorId)
+                .orElseThrow(() -> new RuntimeException("Instructor not found"));
+        List<CourseResponse> responseList = new ArrayList<>();
+        instructor.getCourses().forEach(course -> {
+            CourseResponse response = cousreMapper.courseToCourseResponse(course);
+            response.setInstructorId(course.getInstructor().getId());
+            responseList.add(response);
+        });
+        return responseList;
+    }
+
+    @Override
+    public List<CourseResponse> getMyCourses() {
+        User instructor = securityContextService.getUser();
+        List<CourseResponse> responseList = new ArrayList<>();
+        instructor.getCourses().forEach(course -> {
+            CourseResponse response = cousreMapper.courseToCourseResponse(course);
+            response.setInstructorId(course.getInstructor().getId());
+            responseList.add(response);
+        });
+        return responseList;
+
     }
 }

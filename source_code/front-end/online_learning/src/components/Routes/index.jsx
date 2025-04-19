@@ -1,20 +1,27 @@
-import LayoutDefault from "../../layout/LayoutDefault";
-import About from "../../pages/About";
-import Contact from "../../pages/Contact";
+import LayoutDefault from "../../layout/StudentLayout";
+import About from "../../pages/student/About";
+import Contact from "../../pages/student/Contact";
 import Error404 from "../../pages/Error404";
-import Home from "../../pages/Home";
-import InforUser from "../../pages/InforUser";
+import Home from "../../pages/student/Home";
+import InforUser from "../../pages/student/InforUser";
 import Login from "../../pages/Login";
 import PrivateRouter from "../PrivateRouter";
 import Signup from "../../pages/Signup";
-import CourseDetail from "../../pages/CourseDetail";
-import MyLearning from "../../pages/MyLearning";
-import MyLearningDetail from "../../pages/MyLearning/MyLearningDetail";
-import UploadVideo from "../../pages/UploadVideo";
+import CourseDetail from "../../pages/student/CourseDetail";
+import MyLearning from "../../pages/student/MyLearning";
+import MyLearningDetail from "../../pages/student/MyLearning/MyLearningDetail";
+import UploadVideo from "../../pages/student/UploadVideo";
+import StudentLayout from "../../layout/StudentLayout";
+import InstructorLayout from "../../layout/InstructorLayout";
+import Dashboard from "../../pages/instructor/Dashboard";
+import InstructorRouter from "../InstructorRouter";
+import Courses from "../../pages/instructor/Courses";
+import { CourseDetail as ICourseDetail } from "../../pages/instructor/Courses/CourseDetail";
+import CourseList from "../../pages/instructor/Courses/CourseList";
 
 const ROUTES = [
     {
-        element: <LayoutDefault />,
+        element: <StudentLayout />,
         children : [
             {
                 path: "/",
@@ -51,12 +58,45 @@ const ROUTES = [
                     {
                         path: "/my-learning/:courseId",
                         element: <MyLearningDetail />
-                    }
+                    },
+                    
                 ]
             }
 
         ],
         
+    },
+    {
+        path: "/instructor",
+        element: <InstructorLayout />,
+        children: [
+            {
+                element: <InstructorRouter />,
+                children: [
+                    {
+                        path: "dashboard",
+                        element: <Dashboard />
+                    },
+                    {
+                        path: "courses",
+                        element: <Courses />,
+                        children: [
+                            {
+                                path: "",
+                                element: <CourseList />
+                                
+                            },
+                            {
+                                path: ":courseId",
+                                element: <ICourseDetail />
+                            }
+                        ]
+                    }
+                ]
+            }
+              
+            
+        ]
     },
     
     {

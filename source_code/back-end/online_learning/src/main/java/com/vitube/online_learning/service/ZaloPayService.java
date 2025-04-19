@@ -1,5 +1,7 @@
 package com.vitube.online_learning.service;
 
+import com.vitube.online_learning.entity.Course;
+import com.vitube.online_learning.repository.CourseRepository;
 import com.vitube.online_learning.utils.HMACUtil;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
@@ -14,8 +16,9 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ZaloPayService {
 
+    private final CourseRepository courseRepository;
     @Value("${zalopay.appId}")
-    private  String APP_ID;
+    private  int APP_ID;
     @Value("${zalopay.key1}")
     private String KEY1;
     private static final String CALLBACK_URL = "https://9396-2405-4803-ffab-a100-9537-3278-8781-aa68.ngrok-free.app/online_learning/zalopay/callback";
@@ -33,27 +36,32 @@ public class ZaloPayService {
         // Tạo embed_data chứa courseId
         Map<String, String> embedMap = new HashMap<>();
         embedMap.put("courseId", courseId);
+        embedMap.put("redirecturl", "http://localhost:3000/my-learning");
         JSONObject embedData = new JSONObject(embedMap);  // JSON string
 
         // Danh sách item (nếu có thể thêm sau), hiện tại để trống
         JSONArray items = new JSONArray();
+
+        Course course = courseRepository.findById(courseId).get();
+        long amount = course.getNewPrice();
 
         // Tạo đơn hàng
         Map<String, Object> order = new HashMap<>();
         order.put("app_id", APP_ID);
         order.put("app_trans_id", appTransId);
         order.put("app_user", appUser);
-        order.put("amount", 50000);
+        order.put("amount", amount);
         order.put("app_time", appTime);
         order.put("bank_code", "zalopayapp");
         order.put("description", "Spring Boot - Đơn hàng #" + randomId);
         order.put("embed_data", embedData.toString());
         order.put("item", items.toString());
-        order.put("callback_url", CALLBACK_URL);
+        order.put("callback_url", "https://68e9-2405-4803-f4f8-c8a0-845c-81bb-d4cb-804c.ngrok-free.app/online_learning/zalopay/callback");
 
         // Tính MAC
-        String data = APP_ID + "|" + appTransId + "|" + appUser + "|50000|" + appTime + "|" +
+        String data = APP_ID + "|" + appTransId + "|" + appUser + "|" + amount + "|" + appTime + "|" +
                 embedData.toString() + "|" + items.toString();
+
         String mac = HMACUtil.HMacHexStringEncode(HMACUtil.HMACSHA256, KEY1, data);
         order.put("mac", mac);
 
