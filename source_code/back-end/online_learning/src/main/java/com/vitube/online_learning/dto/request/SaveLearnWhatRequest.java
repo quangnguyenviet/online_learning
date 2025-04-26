@@ -10,7 +10,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SaveRequireRequest {
+public class SaveLearnWhatRequest {
     private List<String> delIdList;
     private List<Map<String, Object>> otherList;
 }

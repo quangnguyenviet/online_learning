@@ -19,6 +19,9 @@ public class Lesson {
     private String lessonKey;
     private String videoUrl;
 
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
     @ManyToOne
     @JoinColumn(name = "courseId")
     private Course course;

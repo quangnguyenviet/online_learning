@@ -11,8 +11,8 @@ public interface LessonService {
 //    LessonResponse createLesson(LessonRequest request) throws IOException;
     LessonResponse createLessonS3(LessonRequest request) throws IOException;
     List<LessonResponse> getLessonOfCourse(String courseId);
-
-
+    Void deleteLesson(String lessonId);
+    Void updateLesson(String lessonId, LessonRequest request) throws IOException;
 
 
     LessonResponse lessonToLessonResponse(Lesson lesson);

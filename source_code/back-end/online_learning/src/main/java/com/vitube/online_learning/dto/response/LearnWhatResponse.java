@@ -10,5 +10,6 @@ import lombok.*;
 @Builder
 public class LearnWhatResponse {
     private String id;
-    private String desc;
+    private String description;
+
 }

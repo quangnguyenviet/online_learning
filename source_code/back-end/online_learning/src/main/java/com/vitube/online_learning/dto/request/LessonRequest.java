@@ -12,4 +12,5 @@ public class LessonRequest {
     private String courseId;
     private String title;
     private MultipartFile file;
+    private String description;
 }

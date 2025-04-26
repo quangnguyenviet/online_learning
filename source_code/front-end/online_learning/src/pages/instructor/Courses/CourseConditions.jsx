@@ -1,6 +1,9 @@
 import { useRef, useState } from "react";
+import { saveConditions } from "utils/InstructorUtil/ConditionUtil";
+import { useParams } from "react-router-dom"; // Import useParams for getting URL parameters
 
 export function CourseConditions(props) {
+    const { courseId } = useParams(); // Get courseId from URL parameters
 
     let delIdRef = useRef([]);
 
@@ -12,7 +15,7 @@ export function CourseConditions(props) {
 
     const handleConditionEdit = (index, value) => {
         const updated = [...conditions];
-        updated[index].desc = value;
+        updated[index].description = value;
         updated[index].tag = "Y";
         setConditions(updated);
         setEditConditionIndex(null);
@@ -40,7 +43,7 @@ export function CourseConditions(props) {
 
         if (newCondition.trim() !== "") {
             let newConditionObject = {
-                desc: newCondition.trim(),
+                description: newCondition.trim(),
                 tag: "Y"
             }
 
@@ -52,13 +55,19 @@ export function CourseConditions(props) {
 
     const handleSave = () => {
 
-        const changeList = conditions
+        const otherList = conditions
             .filter(condition => condition.tag === "Y");
 
         const delIdList = delIdRef.current;
 
-        console.log("Edit List (full objects):", changeList);
-        console.log("Delete List (IDs):", delIdList);
+        saveConditions(courseId, {
+            otherList: otherList,
+            delIdList: delIdList
+        }).then(response => {
+            console.log(response);
+        }).catch(error => {
+            console.error("Error saving conditions:", error);
+        });
     }
 
     return (
@@ -70,13 +79,13 @@ export function CourseConditions(props) {
                         {editConditionIndex === index ? (
                             <input
                                 type="text"
-                                defaultValue={condition.desc}
+                                defaultValue={condition.description}
                                 onBlur={(e) => handleConditionEdit(index, e.target.value)}
                                 autoFocus
                             />
                         ) : (
                             <>
-                                <p className="condition">{condition.desc}</p>
+                                <p className="condition">{condition.description}</p>
                                 <button onClick={() => setEditConditionIndex(index)} style={{ marginLeft: "10px" }}>Sửa</button>
                                 <button onClick={() => handleConditionDelete(index)} style={{ marginLeft: "5px", color: "red" }}>Xoá</button>
                             </>

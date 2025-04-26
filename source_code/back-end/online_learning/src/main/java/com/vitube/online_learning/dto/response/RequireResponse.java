@@ -9,6 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 public class RequireResponse {
     private String id;
-    private String desc;
+    private String description;
     private String courseId;
 }

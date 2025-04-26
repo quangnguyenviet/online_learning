@@ -1,52 +1,74 @@
 // src/components/WillLearn.jsx
+import { saveWillLearn } from "utils/InstructorUtil/WillLearnUtil";
+import React, { useRef, useState } from "react";
+import { useParams } from "react-router-dom"; // Import useParams for getting URL parameters
 
-import React, { useState } from "react";
+export function WillLearn(props) {
+    const { courseId } = useParams(); // Get courseId from URL parameters
 
-export function WillLearn() {
-    const [learnings, setLearnings] = useState([
-        "Xây dựng trang web bằng React",
-        "Kết nối frontend với backend bằng REST API"
-    ]);
 
+    const [learnings, setLearnings] = useState(props.willLearns || []);
     const [editLearningIndex, setEditLearningIndex] = useState(null);
     const [newLearning, setNewLearning] = useState("");
     const [showAddLearning, setShowAddLearning] = useState(false);
 
+    const delIdRef = useRef([]);
+
     const handleLearningEdit = (index, value) => {
         const updated = [...learnings];
-        updated[index] = value;
+        updated[index].description = value;
+        updated[index].tag = "Y";
         setLearnings(updated);
         setEditLearningIndex(null);
     };
 
     const handleLearningDelete = (index) => {
-        setLearnings(learnings.filter((_, i) => i !== index));
+        setLearnings(learnings.filter((learning, i) => {
+            if (i === index && learning.id != null) {
+                delIdRef.current.push(learning.id);
+            }
+            return i !== index;
+        }));
     };
 
     const handleAddLearning = () => {
         if (newLearning.trim() !== "") {
-            setLearnings([...learnings, newLearning.trim()]);
+            const newLearningObj = {
+                description: newLearning.trim(),
+                tag: "Y"
+            };
+            setLearnings([...learnings, newLearningObj]);
             setNewLearning("");
             setShowAddLearning(false);
         }
+    };
+
+    const handleSave = () => {
+        const otherList = learnings.filter(learning => learning.tag === "Y");
+        const delIdList = delIdRef.current;
+
+        saveWillLearn(courseId, { otherList, delIdList })
+            .then(res => console.log("Saved", res))
+            .catch(err => console.error("Error:", err));
+        
     };
 
     return (
         <div style={{ marginBottom: "30px" }}>
             <h2>Bạn sẽ học được</h2>
             <ul>
-                {learnings.map((item, index) => (
+                {learnings.map((learning, index) => (
                     <li key={index} style={{ marginBottom: "8px" }}>
                         {editLearningIndex === index ? (
                             <input
                                 type="text"
-                                defaultValue={item}
+                                defaultValue={learning.description}
                                 onBlur={(e) => handleLearningEdit(index, e.target.value)}
                                 autoFocus
                             />
                         ) : (
                             <>
-                                {item}
+                                <p className="learning">{learning.description}</p>
                                 <button onClick={() => setEditLearningIndex(index)} style={{ marginLeft: "10px" }}>Sửa</button>
                                 <button onClick={() => handleLearningDelete(index)} style={{ marginLeft: "5px", color: "red" }}>Xoá</button>
                             </>
@@ -69,6 +91,9 @@ export function WillLearn() {
             ) : (
                 <button onClick={() => setShowAddLearning(true)}>+ Thêm mục tiêu</button>
             )}
+            <div>
+                <button onClick={handleSave}>save</button>
+            </div>
         </div>
     );
 }

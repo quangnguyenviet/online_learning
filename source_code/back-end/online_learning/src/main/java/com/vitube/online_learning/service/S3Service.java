@@ -74,4 +74,8 @@ public class S3Service {
         return presignedRequest.url().toString();
     }
 
+    public void deleteFile(String key) {
+        s3Client.deleteObject(builder -> builder.bucket(bucketName).key(key));
+    }
+
 }
