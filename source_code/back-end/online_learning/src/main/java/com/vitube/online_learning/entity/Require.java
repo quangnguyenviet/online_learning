@@ -16,7 +16,7 @@ public class Require {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    private String desc;
+    private String description;
 
     @ManyToOne
     @JoinColumn(name = "course_id")

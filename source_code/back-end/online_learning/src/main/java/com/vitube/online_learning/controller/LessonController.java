@@ -68,6 +68,9 @@ public class LessonController {
     @PostMapping("/signed-url")
     public ApiResponse<?> getSignedUrl(@RequestBody Map<String, String> body) {
         String filename = body.get("filename");
+        if (filename == null) {
+            throw new IllegalArgumentException("Filename is required");
+        }
         String response = s3Service.generatePresignedUrl(filename);
         return ApiResponse.builder()
                 .status(1000)

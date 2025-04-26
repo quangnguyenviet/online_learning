@@ -12,4 +12,6 @@ public class LessonResponse {
     private String title;
     private String lessonKey;
     private String videoUrl;
+    private String description;
+
 }

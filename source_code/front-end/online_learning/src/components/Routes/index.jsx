@@ -18,6 +18,7 @@ import InstructorRouter from "../InstructorRouter";
 import Courses from "../../pages/instructor/Courses";
 import { CourseDetail as ICourseDetail } from "../../pages/instructor/Courses/CourseDetail";
 import CourseList from "../../pages/instructor/Courses/CourseList";
+import AddCourse from "pages/instructor/Courses/AddCourse";
 
 const ROUTES = [
     {
@@ -89,6 +90,10 @@ const ROUTES = [
                             {
                                 path: ":courseId",
                                 element: <ICourseDetail />
+                            },
+                            {
+                                path: "add-new",
+                                element: <AddCourse />
                             }
                         ]
                     }
