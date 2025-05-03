@@ -24,7 +24,7 @@ public class Course {
     @JoinColumn(name = "instructor_id")
     private User instructor;
 
-    private long price;
+    private float price;
 
     private int discount;
 
@@ -35,7 +35,7 @@ public class Course {
     @OneToMany(mappedBy = "course")
     private Set<Register> registers;
 
-    @OneToMany(mappedBy = "course")
+    @OneToMany(mappedBy = "course", fetch = FetchType.EAGER)
     private Set<Lesson> lessons;
 
     @OneToMany(mappedBy = "course")

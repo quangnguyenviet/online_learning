@@ -26,8 +26,8 @@ public class CourseController {
     }
 
     @GetMapping
-    public ApiResponse<List<CourseResponse>> getAllCourses() {
-        List<CourseResponse> response = courseService.getAllCourse();
+    public ApiResponse<List<CourseResponse>> getAllCourses(@RequestParam(required = false) String key) {
+        List<CourseResponse> response = courseService.getAllCourse(key);
         return ApiResponse.<List<CourseResponse>>builder()
                 .status(1000)
                 .data(response)

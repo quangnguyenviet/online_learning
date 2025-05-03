@@ -1,0 +1,17 @@
+@use "var.scss" as v;
+.form-search{
+    button, input{
+        padding: 8px 16px;
+        border-radius: 4px;
+    }   
+    input{  
+       border: none;
+       margin-right: 8px;
+       border: 1px solid transparent;
+        &:focus{
+            border: 1px solid v.$color-orange;
+            outline: none;
+        }   
+    }
+
+}

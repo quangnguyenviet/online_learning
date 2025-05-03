@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { setPrice as setPriceUtil } from "utils/InstructorUtil/CourseUtil";
 
 export default function Price(props) {
+
     const { price: initialPrice, courseId } = props; // destructure props
     const [price, setPrice] = useState(initialPrice); // local price state
     const [newPrice, setNewPrice] = useState(initialPrice); // input field state
@@ -13,31 +15,23 @@ export default function Price(props) {
         }
 
         setUpdating(true);
-
-        fetch(`http://localhost:8080/api/courses/${courseId}/price`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ price: Number(newPrice) }),
-        })
+        setPriceUtil(courseId, newPrice) // call setPrice function from CourseUtil
             .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Failed to update price");
+
+                if(response.status === 1000){
+                    setPrice(newPrice); // update local price state
+                    alert("Cập nhật giá thành công");
                 }
-                return response.json();
-            })
-            .then(() => {
-                alert("Cập nhật giá thành công!");
-                setPrice(newPrice); // cập nhật giá mới vào view
+
             })
             .catch((error) => {
                 console.error("Error updating price:", error);
-                alert("Cập nhật giá thất bại!");
+                alert("Cập nhật giá thất bại");
             })
             .finally(() => {
-                setUpdating(false);
+                setUpdating(false); // reset loading state
             });
+
     };
 
     return (

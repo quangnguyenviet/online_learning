@@ -1,0 +1,75 @@
+@use '../../var' as v;
+
+.nav{
+    padding: 10px 40px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #A1DE99;
+    color: v.$color-orange;
+    &__logo{
+        display: flex;
+        align-items: center;
+        img{
+            width: 50px;
+            height: auto;
+        }
+        span{
+            font-size: 32px;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+    }
+    &__menu{
+        display: flex;
+        list-style: none;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      
+        li{
+            margin: 0 15px;
+        }
+    }
+    &__link{
+        text-decoration: none;
+                color: black;
+                font-size: v.$font-size;
+                &:hover{
+                    color: v.$color-orange;
+                }
+        &.active{
+            color: v.$color-orange;
+        }
+    }
+    &__auth{
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+      
+
+        .link-login,
+        .link-signup {
+            padding: 8px 15px;
+          text-decoration: none;
+          font-size: v.$font-size;
+          transition: color 0.3s ease;
+          color: black;
+        
+          
+        }
+        .link-login{
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+
+            color: black;
+        }
+        .link-signup{
+            border: 1px solid v.$color-orange;
+        }
+        
+        
+            
+           
+        
+    }
+}

@@ -34,10 +34,12 @@ public class SecurityConfig {
             "/zalopay/callback"
     };
     private final String[] PUBLIC_GET = {
+            "/courses/*",
             "/courses",
             "/courses/{id}",
             "/courses/free",
             "/instructor-require/{courseId}",
+
     };
 
     @Value("${jwt.singerKey}")

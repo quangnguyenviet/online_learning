@@ -30,6 +30,11 @@
 	<properties>
 		<java.version>21</java.version>
 	</properties>
+
+
+
+
+
 	<dependencies>
 
 <!--		spring data jpa-->
@@ -135,11 +140,28 @@
 <!--		</dependency>-->
 
 
+<!--	 lay do dai video-->
+		<dependency>
+			<groupId>net.bramp.ffmpeg</groupId>
+			<artifactId>ffmpeg</artifactId>
+			<version>0.8.0</version>
+		</dependency>
+
+
+
+
+
+
+
+
 
 
 
 
 	</dependencies>
+
+
+
 
 	<build>
 		<plugins>

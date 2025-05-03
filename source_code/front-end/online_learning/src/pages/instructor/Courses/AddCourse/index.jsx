@@ -1,95 +1,57 @@
 import { useState } from 'react';
+import { createNewCourse } from 'utils/InstructorUtil/CourseUtil';
 
 export default function AddCourse() {
-    const [title, setTitle] = useState('');
-    const [thumbnail, setThumbnail] = useState(null); // Ảnh khóa học
-    const [category, setCategory] = useState('');
-    const [price, setPrice] = useState('');
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleSubmit = (event) => {
+        event.preventDefault(); // prevent default form submission
 
-        // Tạo FormData để gửi file + text
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('thumbnail', thumbnail);
-        formData.append('category', category);
-        formData.append('price', price);
+        const formData = new FormData(event.target); // get form data
+        const title = formData.get('title'); // get course name
+        // const courseImage = formData.get('courseImage'); // get course image
+        const price = formData.get('price'); // get course price
 
-        // Gửi dữ liệu lên API ở đây
-        console.log("FormData submitted", {
-            title,
-            thumbnail,
-            category,
-            price
-        });
-
-        // TODO: gọi API POST để tạo khóa học
-    };
-
-    const handleThumbnailChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setThumbnail(file);
-        }
-    };
+        createNewCourse(title, price)
+            .then(response => {
+                console.log("Course created successfully:", response);
+            })
+            .catch(error => {
+                console.error("Error creating course:", error);
+                alert("Có lỗi xảy ra khi thêm khóa học!");
+            });
+    }
 
     return (
-        <div className="container mt-5">
-            <h2>Thêm Khóa Học Mới</h2>
-            <form onSubmit={handleSubmit} encType="multipart/form-data">
-                <div className="mb-3">
-                    <label className="form-label">Tên Khóa Học</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                        required
-                    />
+        <>
+            <h1>Thêm mới khóa học</h1>
+            <form className='formCreate' onSubmit={handleSubmit}>
+                <div className="row form-group mb-3">
+                    <div className="col-6">
+                        <label htmlFor="courseName">Tên khóa học</label>
+                        <input type="text" className="form-control" id="courseName" placeholder="Nhập tên khóa học"
+                        name='title' required
+                        />
+                    </div>
                 </div>
 
-                <div className="mb-3">
-                    <label className="form-label">Ảnh Khóa Học</label>
-                    <input
-                        type="file"
-                        className="form-control"
-                        onChange={handleThumbnailChange}
-                        accept="image/*"
-                        required
-                    />
+                <div className="row form-group mb-3">
+                    <div className="col-6">
+                        <label htmlFor="courseImage">Ảnh khóa học</label>
+                        <input type="file" className="form-control" id="courseImage" />
+                    </div>
                 </div>
 
-                <div className="mb-3">
-                    <label className="form-label">Danh Mục</label>
-                    <select
-                        className="form-select"
-                        value={category}
-                        onChange={(e) => setCategory(e.target.value)}
-                        required
-                    >
-                        <option value="">-- Chọn danh mục --</option>
-                        <option value="web">Lập Trình Web</option>
-                        <option value="mobile">Lập Trình Mobile</option>
-                        <option value="data">Khoa Học Dữ Liệu</option>
-                        <option value="design">Thiết Kế</option>
-                    </select>
+                <div className="row form-group mb-3">
+                    <div className="col-6">
+                        <label htmlFor="coursePrice">Giá khóa học</label>
+                        <input type="number" className="form-control" id="coursePrice" placeholder="Nhập giá (VNĐ)" 
+                        name='price'
+                        />
+                    </div>
                 </div>
 
-                <div className="mb-3">
-                    <label className="form-label">Giá Khóa Học (VNĐ)</label>
-                    <input
-                        type="number"
-                        className="form-control"
-                        value={price}
-                        onChange={(e) => setPrice(e.target.value)}
-                        required
-                        min="0"
-                    />
-                </div>
-
-                <button type="submit" className="btn btn-primary">Tạo Khóa Học</button>
+                <button type="submit" className="btn btn-primary">Thêm khóa học</button>
             </form>
-        </div>
+        </>
     );
 }

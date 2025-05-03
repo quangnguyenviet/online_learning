@@ -22,6 +22,8 @@ public class Lesson {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    private long duration;
+
     @ManyToOne
     @JoinColumn(name = "courseId")
     private Course course;
