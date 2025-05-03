@@ -1,17 +1,14 @@
-import FreeCourse from "../../../components/Course/FreeCourse";
-import PlusCourse from "../../../components/Course/PlusCourse";
+import Header from "components/Header";
+
+import Course from "components/Course";
 
 
 export default function Home() {
 
     return (
         <>
-            <div className="container">
-                <h1>welcome to my course</h1>
-                <FreeCourse />
-                <PlusCourse />
-            </div>
-           
+            <Header />
+            <Course />
         </>
     );
 }

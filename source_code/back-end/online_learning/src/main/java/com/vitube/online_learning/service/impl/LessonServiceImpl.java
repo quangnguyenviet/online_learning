@@ -11,10 +11,12 @@ import com.vitube.online_learning.repository.CourseRepository;
 import com.vitube.online_learning.repository.LessonRepository;
 import com.vitube.online_learning.service.LessonService;
 import com.vitube.online_learning.service.S3Service;
+import com.vitube.online_learning.utils.VideoUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -30,6 +32,7 @@ public class LessonServiceImpl implements LessonService {
     private final CourseRepository courseRepository;
     private final S3Service s3Service;
     private final LessonMapper lessonMapper;
+    private final VideoUtil videoUtil;
 
 //    @Override
 //    public LessonResponse createLesson(LessonRequest request) throws IOException {
@@ -62,19 +65,45 @@ public class LessonServiceImpl implements LessonService {
     public LessonResponse createLessonS3(LessonRequest request) throws IOException {
         String key = generateKey();
 
+        // Upload lên S3
+        String videoUrl = s3Service.uploadFile(request.getFile(), key);
+
+        File tempFile = File.createTempFile("video", ".mp4");
+        request.getFile().transferTo(tempFile); //
+
+// Ensure the file was transferred correctly
+        if (!tempFile.exists()) {
+            throw new RuntimeException("Temp file transfer failed.");
+        }
+
+        System.out.println("Temp file path: " + tempFile.getAbsolutePath());
+        System.out.println("File exists: " + tempFile.exists());
+
+
+// Now get duration
+        long durationInSeconds = videoUtil.getVideoDuration(tempFile);
+
+
+
+
+
+        // Tạo lesson
         Lesson lesson = Lesson.builder()
                 .title(request.getTitle())
-                .course(courseRepository.findById(request.getCourseId()).get())
+                .course(courseRepository.findById(request.getCourseId()).orElseThrow())
                 .lessonKey(key)
+                .videoUrl(videoUrl)
+                .duration(durationInSeconds)
                 .build();
 
-
-        String videoUrl = s3Service.uploadFile(request.getFile(), key);
-        lesson.setVideoUrl(videoUrl);
         lessonRepository.save(lesson);
-        return null;
 
+        // Xoá file tạm
+        tempFile.delete();
+
+        return null;
     }
+
 
     @Override
     public List<LessonResponse> getLessonOfCourse(String courseId) {

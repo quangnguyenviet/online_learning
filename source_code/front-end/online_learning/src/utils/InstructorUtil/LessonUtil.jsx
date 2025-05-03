@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8080/online_learning/lessons";
+// const BASE_URL = "http://localhost:8080/online_learning/lessons";
 const INSTRUCTOR_URL = "http://localhost:8080/online_learning/instructor-lesson";
 
 export async function uploadLesson({ file, title, courseId }) {
@@ -10,7 +10,7 @@ export async function uploadLesson({ file, title, courseId }) {
     formData.append("courseId", courseId);
 
     try {
-        const response = await fetch(BASE_URL, {
+        const response = await fetch(INSTRUCTOR_URL, {
             method: "POST",
             headers: {
                 Authorization: `Bearer ${token}`

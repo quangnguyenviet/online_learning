@@ -1,27 +1,24 @@
 import {useState, useEffect} from "react";
 import CourseList from "./CourseList";
+import {getCourses} from "utils/CoursesUtil";
 
 export default function PlusCourse() {
-    const url = "http://localhost:8080/online_learning/courses/plus";
 
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchCourses = async (url) => {
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
-                // console.log(data);
-                setCourses(data.data);
-            } catch (error) {
-                console.error("Error fetching courses:", error);
-            } finally {
+        getCourses("plus")
+            .then((response) => {
+                const data = response.data;
+                console.log(data);
+                setCourses(data);
                 setLoading(false);
-            }
-        };
-
-        fetchCourses(url);
+            })
+            .catch((error) => {
+                console.error("Error fetching courses:", error);
+                setLoading(false);
+            });
     }, []);
 
 

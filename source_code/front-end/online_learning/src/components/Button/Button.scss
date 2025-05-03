@@ -1,0 +1,15 @@
+@use "var.scss" as v;
+
+.button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: v.$color-orange;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.8s ease;
+  }
+  
+ 
+  

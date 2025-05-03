@@ -40,4 +40,24 @@ public class ILessonController {
                 .status(1000)
                 .build();
     }
+
+    @PostMapping
+    public ApiResponse<String> createLesson(@RequestParam("file") MultipartFile file,
+                                            @RequestParam("title") String title,
+                                            @RequestParam("courseId") String courseId
+    ) throws IOException {
+
+        lessonService.createLessonS3(
+                LessonRequest.builder()
+                        .file(file)
+                        .title(title)
+                        .courseId(courseId)
+                        .build()
+        );
+        return ApiResponse.<String>builder()
+                .status(1000)
+                .build();
+
+
+    }
 }

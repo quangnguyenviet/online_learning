@@ -18,6 +18,7 @@ import com.vitube.online_learning.service.SecurityContextService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,8 @@ public class CourseServiceImpl implements CourseService {
     private final RequireMapper requireMapper;
 
     @Override
-    public CourseResponse courseToCourseResponse(Course course) {
+    // type = 1 get details type = 0 get general
+    public CourseResponse courseToCourseResponse(Course course, int type) {
         CourseResponse response = cousreMapper.courseToCourseResponse(course);
 
         List<LessonResponse> lessonResponses = new ArrayList<>();
@@ -43,7 +45,7 @@ public class CourseServiceImpl implements CourseService {
                     lessonService.lessonToLessonResponse(lesson)
             );}
         );
-        response.setLessons(lessonResponses);
+        response.setNumber_of_lessons(course.getLessons().size());
 
         List<LearnWhatResponse> learnWhatResponses = new ArrayList<>();
         course.getLearnWhats().forEach(learnWhat -> {
@@ -51,7 +53,7 @@ public class CourseServiceImpl implements CourseService {
                     learnWhatMapper.learnWhatTooLearnWhatResponse(learnWhat)
             );
         });
-        response.setLearnWhats(learnWhatResponses);
+
 
         List<RequireResponse> requireResponses = new ArrayList<>();
         course.getRequires().forEach(require -> {
@@ -59,17 +61,34 @@ public class CourseServiceImpl implements CourseService {
                     requireMapper.requireToRequireResponse(require)
             );
         });
-        response.setRequires(requireResponses);
+
 
         response.setInstructorId(course.getInstructor().getId());
+
+
+        if (type == 0){
+            return response;
+        }
+        else{
+            response.setLessons(lessonResponses);
+            response.setLearnWhats(learnWhatResponses);
+            response.setRequires(requireResponses);
+        }
+
         return response;
 
     }
 
     @Override
     public CourseResponse createCourse(CourseRequest request) {
-        User instructor = userRepository.findById(request.getInstructorId())
-                .orElseThrow(() -> new RuntimeException("Instructor not found"));
+        User instructor;
+        if (request.getInstructorId() == null) {
+            instructor = securityContextService.getUser();
+        }
+        else{
+            instructor = userRepository.findById(request.getInstructorId())
+                    .orElseThrow(() -> new RuntimeException("Instructor not found"));
+        }
 
         Course course = Course.builder()
                 .title(request.getTitle())
@@ -89,7 +108,7 @@ public class CourseServiceImpl implements CourseService {
     public CourseResponse getCourseById(String id) {
         Course course = courseRepository.findById(id).get();
 
-        CourseResponse response = courseToCourseResponse(course);
+        CourseResponse response = courseToCourseResponse(course, 1);
         return response;
     }
 
@@ -104,18 +123,36 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<CourseResponse> getAllCourse() {
+    public List<CourseResponse> getAllCourse(String key) {
         List<CourseResponse> responseList = new ArrayList<>();
-        courseRepository.findAll().forEach(course -> {
-            User instructor = course.getInstructor();
-            responseList.add(CourseResponse.builder()
-                   .id(course.getId())
-                   .title(course.getTitle())
-                   .instructorId(instructor.getId())
-                   .price(course.getPrice())
-                   .build());
-        });
-        return responseList;
+        if (key == null){
+            courseRepository.findAll().forEach(course -> {
+                CourseResponse response = courseToCourseResponse(course, 0);
+
+            });
+            return responseList;
+        }
+        else if (key.equals("free")){
+            courseRepository.findAll().forEach(course -> {
+                if (course.getPrice() == 0 || course.getNewPrice() == 0){
+                    CourseResponse response = courseToCourseResponse(course, 0);
+                    responseList.add(response);
+                }
+            });
+            return responseList;
+        }
+        else if (key.equals("plus")){
+            courseRepository.findAll().forEach(course -> {
+                if (course.getPrice() != 0 && course.getNewPrice() != 0){
+                    CourseResponse response = courseToCourseResponse(course, 0);
+                    responseList.add(response);
+                }
+            });
+            return responseList;
+        }
+        else{
+            return null;
+        }
     }
 
     @Override
@@ -181,5 +218,13 @@ public class CourseServiceImpl implements CourseService {
         });
         return responseList;
 
+    }
+
+    @Override
+    public void setPrice(String courseId, Float price) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+        course.setPrice(price);
+        courseRepository.save(course);
     }
 }
