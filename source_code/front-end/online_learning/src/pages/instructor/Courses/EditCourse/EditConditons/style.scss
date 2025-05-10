@@ -1,0 +1,56 @@
+.edit-conditions {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.06);
+    margin: 0 auto;
+  
+    .section-title {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #333;
+    }
+  
+    .condition-list {
+      list-style: none;
+      padding-left: 0;
+    }
+  
+    .condition-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f8f9fa;
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+  
+      .condition-text {
+        flex-grow: 1;
+        margin-right: 15px;
+        font-size: 16px;
+      }
+  
+      .condition-input {
+        width: 100%;
+        padding: 6px 10px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+      }
+  
+      .btn {
+        white-space: nowrap;
+      }
+    }
+  
+    .add-condition-form {
+      margin-top: 15px;
+  
+      input {
+        width: 100%;
+        padding: 8px;
+      }
+    }
+  }
+  

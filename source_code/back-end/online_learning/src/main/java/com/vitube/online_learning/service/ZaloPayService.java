@@ -21,7 +21,8 @@ public class ZaloPayService {
     private  int APP_ID;
     @Value("${zalopay.key1}")
     private String KEY1;
-    private static final String CALLBACK_URL = "https://9396-2405-4803-ffab-a100-9537-3278-8781-aa68.ngrok-free.app/online_learning/zalopay/callback";
+//    ngrok http 8080
+    private static final String CALLBACK_URL = "https://4872-2405-4803-f52f-ed30-2896-3659-8b72-8e14.ngrok-free.app/online_learning/zalopay/callback";
     private final SecurityContextService securityContextService;
 
     public Map<String, Object> createOrder(String courseId) throws Exception {
@@ -56,7 +57,7 @@ public class ZaloPayService {
         order.put("description", "Spring Boot - Đơn hàng #" + randomId);
         order.put("embed_data", embedData.toString());
         order.put("item", items.toString());
-        order.put("callback_url", "https://68e9-2405-4803-f4f8-c8a0-845c-81bb-d4cb-804c.ngrok-free.app/online_learning/zalopay/callback");
+        order.put("callback_url", CALLBACK_URL);
 
         // Tính MAC
         String data = APP_ID + "|" + appTransId + "|" + appUser + "|" + amount + "|" + appTime + "|" +

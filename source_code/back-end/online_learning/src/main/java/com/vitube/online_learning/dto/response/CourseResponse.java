@@ -25,4 +25,5 @@ public class CourseResponse {
     private int number_of_lessons;
     private int hour;
     private int minute;
+    private int second;
 }

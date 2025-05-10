@@ -2,15 +2,19 @@ import { useState, useEffect } from "react";
 import './Course.scss';
 import CourseList from "./CourseList";
 import { getCourses } from "utils/CoursesUtil";
+import { useSelector } from "react-redux";
 
 export default function FreeCourse() {
 
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const query  = useSelector((state) => state.search);
+
+
     useEffect(() => {
     
-        getCourses("free")
+        getCourses({ type: "free"})
             .then((response) => {
                 const data = response.data;
                 setCourses(data);
@@ -33,7 +37,7 @@ export default function FreeCourse() {
                         <div className="row">
                             <CourseList courses={courses} />
                         </div>
-                    </div>
+                </div>
 
                 
             )}

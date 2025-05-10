@@ -22,8 +22,8 @@ export function getCourseById(courseId){
     }).then(response => response.json());
 }
 
-export function getCourses(key){
-    return fetch(`${BASE_URL}?key=${key}`, {
+export function getCourses(payload){
+    return fetch(`${BASE_URL}?type=${payload.type}&query=${payload.query}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

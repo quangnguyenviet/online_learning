@@ -3,6 +3,8 @@ package com.vitube.online_learning.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -22,4 +24,8 @@ public class Register {
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
+
+    private Float price;
+
+    private Date registerDate;
 }

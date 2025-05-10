@@ -13,7 +13,7 @@ public interface CourseService {
     CourseResponse getCourseById(String id);
     CourseResponse updateCourse(String id, CourseRequest request);
     void deleteCourse(String id);
-    List<CourseResponse> getAllCourse(String key);
+    List<CourseResponse> getCourses(String type, String query);
     List<CourseResponse> getFreeCourse();
     List<CourseResponse> getPlusCourse();
     List<CourseResponse> getLearningCourses();

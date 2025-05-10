@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./MyLearningDetail.scss";
+import { getSignedUrl } from "utils/LessonUtil";
 
 export default function MyLearningDetail() {
     const { courseId } = useParams();
-
     const URL = `http://localhost:8080/online_learning/lessons/${courseId}`;
+
     const [lessons, setLessons] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [videoUrl, setVideoUrl] = useState("");
 
     useEffect(() => {
         const fetchLessons = async () => {
@@ -22,6 +24,12 @@ export default function MyLearningDetail() {
                 const data = await response.json();
                 setLessons(data.data);
                 setLoading(false);
+
+                if (data.data.length > 0) {
+                    const firstKey = data.data[0].lessonKey;
+                    const firstUrl = await getSignedUrl(firstKey);
+                    setVideoUrl(firstUrl.data);
+                }
             } catch (error) {
                 console.error("Error:", error);
             }
@@ -30,53 +38,16 @@ export default function MyLearningDetail() {
         fetchLessons();
     }, [URL]);
 
-
     const handleView = (lessonKey) => {
-        fetch(`http://localhost:8080/online_learning/lessons/signed-url`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-            body: JSON.stringify({
-                filename: lessonKey,
-            })
-        })
-            .then((response) => response.json())
+        getSignedUrl(lessonKey)
             .then((data) => {
-                const modal = document.querySelector(".modal");
-                const video = modal.querySelector("video");
-                video.src = data.data;
-                modal.classList.remove("modal__inactive");
-                modal.classList.add("modal__active");
-
-                // Wait until the video is ready before playing
-                video.onloadedmetadata = () => {
-                    video.play().catch(err => {
-                        console.warn("Auto-play failed:", err);
-                    });
-                };
+                console.log(data);
+                setVideoUrl(data.data);
             })
             .catch((error) => {
                 console.error("Error:", error);
             });
-
-
-        // video.addEventListener("ended", () => {
-        //     modal.classList.add("modal__inactive");
-        //     video.src = ""; // Clear the video source when it ends
-        // });
-    }
-
-    const handleClose = () => {
-        const modal = document.querySelector(".modal");
-        const video = modal.querySelector("video");
-        modal.classList.add("modal__inactive");
-        video.src = ""; // Clear the video source when it ends
-        video.pause(); // Pause the video when closing the modal
-    }
-
-
+    };
 
     return (
         <>
@@ -84,39 +55,39 @@ export default function MyLearningDetail() {
             {loading ? (
                 <div>Loading...</div>
             ) : (
-                <>
-                    <div className="modal modal__inactive" onClick={handleClose}>
-                        <div className="modal__content" onClick={(e) => e.stopPropagation()}>
-                            <video width="100%" height="100%" controls>
-                                <source src="movie.mp4" type="video/mp4" />
-                                <source src="movie.ogg" type="video/ogg" />
-                                Your browser does not support the video tag.
-                            </video>
-
-                        </div>
-                    </div>
-
-                    <div className="lessons">
+                <div className="lessons">
+                    <div className="container">
                         <div className="row">
-                            {lessons.map((lessonlesson) => (
-                                <div className="col-md-3" key={lessonlesson.id}>
-                                    <div className="card mb-4 shadow-sm lesson-card" onClick={() => { handleView(lessonlesson.lessonKey) }}>
-                                        <div className="card-body">
-                                            <h5 className="card-title">{lessonlesson.title}</h5>
-                                            <p className="card-text">{lessonlesson.description}</p>
-
+                            <div className="col-9">
+                                {videoUrl && (
+                                    <div className="video-player mb-3">
+                                        <video width="100%" height="auto" controls autoPlay
+                                        key={videoUrl} >
+                                            <source src={videoUrl} type="video/mp4" />
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    </div>
+                                )}
+                            </div>
+                            <div className="col-3">
+                                {lessons.map((lesson) => (
+                                    <div
+                                        key={lesson.lessonKey}
+                                        className="card mb-2 shadow-sm lesson-card"
+                                        onClick={() => handleView(lesson.lessonKey)}
+                                        style={{ cursor: "pointer" }}
+                                    >
+                                        <div className="card-body d-flex flex-column align-items-center">
+                                            <h5 className="card-title">{lesson.title}</h5>
+                                            <p className="card-text">{lesson.description}</p>
                                         </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
                     </div>
-
-                </>
-
-
+                </div>
             )}
-
         </>
-    )
+    );
 }

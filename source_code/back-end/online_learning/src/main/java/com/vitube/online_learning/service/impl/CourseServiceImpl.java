@@ -6,6 +6,7 @@ import com.vitube.online_learning.dto.response.LearnWhatResponse;
 import com.vitube.online_learning.dto.response.LessonResponse;
 import com.vitube.online_learning.dto.response.RequireResponse;
 import com.vitube.online_learning.entity.Course;
+import com.vitube.online_learning.entity.Lesson;
 import com.vitube.online_learning.entity.User;
 import com.vitube.online_learning.mapper.CousreMapper;
 import com.vitube.online_learning.mapper.LearnWhatMapper;
@@ -16,12 +17,11 @@ import com.vitube.online_learning.service.CourseService;
 import com.vitube.online_learning.service.LessonService;
 import com.vitube.online_learning.service.SecurityContextService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @RequiredArgsConstructor
@@ -38,13 +38,25 @@ public class CourseServiceImpl implements CourseService {
     // type = 1 get details type = 0 get general
     public CourseResponse courseToCourseResponse(Course course, int type) {
         CourseResponse response = cousreMapper.courseToCourseResponse(course);
-
+        int hour = 0;
+        int minute = 0;
+        int second = 0;
+        long totalSecond = 0;
         List<LessonResponse> lessonResponses = new ArrayList<>();
-        course.getLessons().forEach(lesson -> {
+        for(Lesson lesson : course.getLessons()){
+            totalSecond += lesson.getDuration();
             lessonResponses.add(
                     lessonService.lessonToLessonResponse(lesson)
-            );}
-        );
+            );
+
+        }
+        hour = (int) (totalSecond / 3600);
+        minute = (int) ((totalSecond % 3600) / 60);
+        second = (int) (totalSecond % 60);
+        response.setHour(hour);
+        response.setMinute(minute);
+        response.setSecond(second);
+
         response.setNumber_of_lessons(course.getLessons().size());
 
         List<LearnWhatResponse> learnWhatResponses = new ArrayList<>();
@@ -123,36 +135,42 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<CourseResponse> getAllCourse(String key) {
+    public List<CourseResponse> getCourses(String type, String query) {
         List<CourseResponse> responseList = new ArrayList<>();
-        if (key == null){
-            courseRepository.findAll().forEach(course -> {
-                CourseResponse response = courseToCourseResponse(course, 0);
+        if (type == null || type.equals("")){
+            if (query != null){
+                courseRepository.findByTitleContaining(query).forEach(course -> {
+                    if (course.getTitle().toLowerCase().contains(query.toLowerCase())){
+                        CourseResponse response = courseToCourseResponse(course, 0);
+                        responseList.add(response);
+                    }
+                });
+            }
+            else{
+                courseRepository.findAll().forEach(course -> {
+                    CourseResponse response = courseToCourseResponse(course, 0);
+                    responseList.add(response);
+                });
+            }
 
-            });
-            return responseList;
         }
-        else if (key.equals("free")){
+        else if (type.equals("free")){
             courseRepository.findAll().forEach(course -> {
                 if (course.getPrice() == 0 || course.getNewPrice() == 0){
                     CourseResponse response = courseToCourseResponse(course, 0);
                     responseList.add(response);
                 }
             });
-            return responseList;
         }
-        else if (key.equals("plus")){
+        else if (type.equals("plus")){
             courseRepository.findAll().forEach(course -> {
                 if (course.getPrice() != 0 && course.getNewPrice() != 0){
                     CourseResponse response = courseToCourseResponse(course, 0);
                     responseList.add(response);
                 }
             });
-            return responseList;
         }
-        else{
-            return null;
-        }
+        return responseList;
     }
 
     @Override

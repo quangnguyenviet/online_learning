@@ -8,10 +8,10 @@ export default function PlusCourse() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        getCourses("plus")
+        getCourses({type: "plus"
+        })
             .then((response) => {
                 const data = response.data;
-                console.log(data);
                 setCourses(data);
                 setLoading(false);
             })
