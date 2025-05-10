@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import GoToCourseBtn from "../../../components/GoToCourseBtn";
+import CourseCard from "components/Course/CourseCard";
 
 export default function MyLearning() {
     const URL = "http://localhost:8080/online_learning/courses/learning";
@@ -46,21 +47,22 @@ export default function MyLearning() {
                 <div className="courses">
                     <div className="row">
                         {course.map((item) => (
-                            <div className="col-md-3" key={item.id}>
-                                <div className="card mb-4 shadow-sm">
-                                    <img
-                                        src={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9SRRmhH4X5N2e4QalcoxVbzYsD44C-sQv-w&s"}
-                                        alt={item.title}
-                                        className="card-img-top"
-                                    />
-                                    <div className="card-body">
-                                        <h5 className="card-title">{item.title}</h5>
-                                        <p className="card-text">{item.description}</p>
-                                        <p className="card-text">{item.category}</p>
-                                        <GoToCourseBtn course={item} />
-                                    </div>
-                                </div>
-                            </div>
+                            <CourseCard course={item} key={item.id} handleClick={handleClick} showPrice={false} />
+                            // <div className="col-md-3" key={item.id}>
+                            //     <div className="card mb-4 shadow-sm">
+                            //         <img
+                            //             src={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9SRRmhH4X5N2e4QalcoxVbzYsD44C-sQv-w&s"}
+                            //             alt={item.title}
+                            //             className="card-img-top"
+                            //         />
+                            //         <div className="card-body">
+                            //             <h5 className="card-title">{item.title}</h5>
+                            //             <p className="card-text">{item.description}</p>
+                            //             <p className="card-text">{item.category}</p>
+                            //             <GoToCourseBtn course={item} />
+                            //         </div>
+                            //     </div>
+                            // </div>
                         ))}
                     </div>
                 </div>

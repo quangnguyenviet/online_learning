@@ -1,0 +1,44 @@
+.register-box {
+    position: sticky;
+    top: 100px;
+    width: 300px;
+    border: 1px solid #ccc;
+    padding: 15px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    z-index: 1000;
+    height: fit-content;
+
+    &__image {
+        width: 100%;
+        border-radius: 5px;
+    }
+
+    &__price {
+        margin-top: 1rem;
+
+        &-value {
+            font-size: 18px;
+            color: red;
+        }
+    }
+
+    &__includes {
+        margin-top: 1rem;
+
+        ul {
+            padding-left: 1.2rem;
+            margin: 0;
+        }
+
+        li {
+            margin-bottom: 0.4rem;
+        }
+    }
+
+    &__button {
+        margin-top: 1rem;
+        text-align: center;
+    }
+}

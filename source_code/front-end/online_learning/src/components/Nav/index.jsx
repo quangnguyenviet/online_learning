@@ -1,31 +1,20 @@
 import { Link, NavLink } from 'react-router-dom';
 import './Nav.scss';
+import { FaUser } from 'react-icons/fa';
+import { logout } from 'utils/AuthUtil';
+
 function Nav() {
 
     const token = localStorage.getItem('token');
     const isLogin = token ? true : false;
 
     const handleLogout = () => {
-        fetch('http://localhost:8080/online_learning/auth/logout', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ token: token })
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data);
-                if (data.status === 1000) {
-                    localStorage.removeItem('token');
-                    window.location.reload();
-                }
-            })
-
+        logout();
     }
 
     return (
         <>
+            
             <nav className="nav fixed-top">
                 <div className="container-fluid">
                     <div className="row">
@@ -46,10 +35,16 @@ function Nav() {
                         <div className="col-3 nav__auth">
                             {isLogin ? (
                                 <>
-                                    <button className='btn btn-primary nav__btn--login'>
-                                        <Link to="/infor-user">Infor User</Link>
-                                    </button>
-                                    <button className='btn btn-light nav__btn--signup' onClick={handleLogout}>Logout</button>
+
+                                    <div className="user-menu-wrapper d-flex align-items-center justify-content-center flex-column">
+                                        <Link to="/infor-user"><FaUser className="user-icon" /></Link>
+                                        <ul className="nav__dropdown">
+                                            <li className="nav__link">Xin chào</li>
+                                            <li className="nav__link" onClick={handleLogout}>Đăng xuất</li>
+                                        </ul>
+                                    </div>
+
+                                    {/* <button className='btn btn-light nav__btn--signup' onClick={handleLogout}>Logout</button> */}
                                 </>
                             )
                                 : (

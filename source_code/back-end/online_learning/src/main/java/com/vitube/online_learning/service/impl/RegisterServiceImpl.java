@@ -35,6 +35,8 @@ public class RegisterServiceImpl implements RegisterService {
         Register register = new Register();
         register.setCourse(course);
         register.setStudent(student);
+
+
         registerRepository.save(register);
 
         student.getRegisters().add(register);

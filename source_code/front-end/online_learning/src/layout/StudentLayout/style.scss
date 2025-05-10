@@ -1,0 +1,5 @@
+@use "var.scss" as v;
+
+.main{
+    margin: v.$header-height 0;
+}

@@ -4,13 +4,17 @@ import Nav from "components/Nav";
 import "./style.scss"
 
 export default function StudentLayout() {
-    return(
+    return (
         <>
-            <Nav />
-            <main className="main">
-                <Outlet />
-            </main>
-            <Footer />
+            <div className="student">
+
+                <Nav />
+                <main className="main">
+                    <Outlet />
+                </main>
+                <Footer />
+            </div>
+
         </>
     )
 }

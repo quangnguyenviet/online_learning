@@ -19,6 +19,7 @@ import Courses from "../../pages/instructor/Courses";
 import { CourseDetail as ICourseDetail } from "../../pages/instructor/Courses/CourseDetail";
 import CourseList from "../../pages/instructor/Courses/CourseList";
 import AddCourse from "pages/instructor/Courses/AddCourse";
+import { EditCourse } from "pages/instructor/Courses/EditCourse";
 
 const ROUTES = [
     {
@@ -89,7 +90,7 @@ const ROUTES = [
                             },
                             {
                                 path: ":courseId",
-                                element: <ICourseDetail />
+                                element: <EditCourse />
                             },
                             {
                                 path: "add-new",

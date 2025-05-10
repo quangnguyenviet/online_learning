@@ -3,7 +3,6 @@ package com.vitube.online_learning.controller;
 import com.vitube.online_learning.dto.request.CourseRequest;
 import com.vitube.online_learning.dto.response.ApiResponse;
 import com.vitube.online_learning.dto.response.CourseResponse;
-import com.vitube.online_learning.repository.CourseRepository;
 import com.vitube.online_learning.service.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +25,10 @@ public class CourseController {
     }
 
     @GetMapping
-    public ApiResponse<List<CourseResponse>> getAllCourses(@RequestParam(required = false) String key) {
-        List<CourseResponse> response = courseService.getAllCourse(key);
+    public ApiResponse<List<CourseResponse>> getCourses(@RequestParam(required = false) String type,
+                                                        @RequestParam(required = false) String query
+                                                        ) {
+        List<CourseResponse> response = courseService.getCourses(type, query);
         return ApiResponse.<List<CourseResponse>>builder()
                 .status(1000)
                 .data(response)

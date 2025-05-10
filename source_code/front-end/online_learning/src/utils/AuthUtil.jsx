@@ -21,4 +21,25 @@ export async function authenticate(url, method = 'GET', data = null) {
       throw error;
     }
   }
+
+export function logout() {
+    const token = localStorage.getItem("token");
+    
+    fetch('http://localhost:8080/online_learning/auth/logout', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token: token })
+  })
+      .then((response) => response.json())
+      .then((data) => {
+          console.log(data);
+          if (data.status === 1000) {
+              localStorage.removeItem('token');
+              localStorage.removeItem("role");
+              window.location.reload();
+          }
+      })
+  }
   

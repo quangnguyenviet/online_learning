@@ -1,7 +1,15 @@
 import { Outlet, NavLink } from "react-router-dom";
+import { FaChalkboardTeacher, FaBook, FaUser, FaSignOutAlt, FaPlus } from "react-icons/fa";
 import "./InstructorLayout.scss";
+import { logout } from "utils/AuthUtil";
 
 export default function InstructorLayout() {
+
+    const handleLogout = () => {
+        console.log("Logout clicked");
+        logout();
+    }
+
     return (
         <div className="dashboard d-flex">
             {/* Sidebar bên trái */}
@@ -13,32 +21,52 @@ export default function InstructorLayout() {
                             to="/instructor/dashboard"
                             className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
                         >
+                            <FaChalkboardTeacher className="me-2" />
                             Dashboard
                         </NavLink>
                     </li>
-                    <li className="nav-item">
-                        <NavLink
-                            to="/instructor/courses"
-                            className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
+
+                    {/* Dropdown cho My Courses */}
+                    <li className="nav-item dropdown">
+                        <a
+                            href="#"
+                            className="nav-link dropdown-toggle"
+                            data-bs-toggle="dropdown"
                         >
+                            <FaBook className="me-2" />
                             My Courses
-                        </NavLink>
+                        </a>
+                        <ul className="dropdown-menu dropdown-menu-dark">
+                            <li>
+                                <NavLink to="/instructor/courses" className="dropdown-item">
+                                    Danh sách khóa học
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/instructor/courses/add-new" className="dropdown-item">
+                                    Thêm khóa học
+                                </NavLink>
+                            </li>
+                        </ul>
                     </li>
+
                     <li className="nav-item">
                         <NavLink
                             to="/instructor/profile"
                             className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
                         >
+                            <FaUser className="me-2" />
                             Profile
                         </NavLink>
                     </li>
-                    <li className="nav-item">
-                        <NavLink
-                            to="/logout"
-                            className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
+                    <li className="nav-item" onClick = {handleLogout} >
+                        <a onClick={handleLogout}
+                            
+                        className="nav-link "
                         >
+                            <FaSignOutAlt className="me-2" />
                             Logout
-                        </NavLink>
+                        </a>
                     </li>
                 </ul>
             </div>

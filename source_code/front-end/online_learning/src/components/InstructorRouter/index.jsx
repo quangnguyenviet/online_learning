@@ -9,7 +9,7 @@ export default function InstructorRouter() {
             {ROLE === 'INSTRUCTOR' ? (
                 <Outlet />
             ) : (
-                <Navigate to="/132423asdf" />
+                <Navigate to="/login" />
             )}
         </>
     );

@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 import java.util.Map;
 
 @RestController
@@ -73,14 +74,21 @@ public class  ZaloPayController {
             JSONObject dataJson = new JSONObject(data);
             String appTransId = dataJson.getString("app_trans_id");
 
+            Float amount = dataJson.getFloat("amount");
+            long appTime = dataJson.getLong("app_time");
+            Date registerDate = new Date(appTime);
+
+
             System.out.println("thanh toan thanh cong");
             String embedDataStr = dataJson.getString("embed_data"); // lấy chuỗi JSON từ key "embed_data"
             JSONObject embedDataJson = new JSONObject(embedDataStr); // chuyển thành JSONObject
             String courseId = embedDataJson.getString("courseId");   // lấy ra giá trị courseId
 
-
+            // them đăng ký
             registerService.registerFreeCourse(
                     RegisterRequest.builder()
+                            .price(amount)
+                            .registerDate(registerDate)
                             .courseId(courseId)
                             .studentId(dataJson.getString("app_user"))
                             .build()
