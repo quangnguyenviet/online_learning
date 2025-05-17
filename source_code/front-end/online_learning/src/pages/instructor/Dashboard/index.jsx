@@ -1,14 +1,17 @@
-import React from "react";
+import React, { use, useState, useEffect } from "react";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from "recharts";
 import "./style.scss";
+import CourseStatisticsTable from "./CourseStatisticsTable";
+import { getCourseStatistics } from "utils/InstructorUtil/StatisticUtil";
 
 const incomeData = [
   { month: "Jan", income: 1200000 },
   { month: "Feb", income: 1500000 },
   { month: "Mar", income: 1800000 },
   { month: "Apr", income: 1000000 },
+  { month: "May", income: 2200000 },
   { month: "May", income: 2200000 },
 ];
 
@@ -20,15 +23,35 @@ const registrationData = [
   { month: "May", registrations: 60 },
 ];
 
-const courseStats = [
-  { name: "Lập trình Python cơ bản", registrations: 45, income: 4500000 },
-  { name: "React cho người mới bắt đầu", registrations: 30, income: 3000000 },
-  { name: "Thiết kế Database", registrations: 25, income: 2500000 },
-];
 
 export default function InstructorDashboard() {
+  const [stats, setStats] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getCourseStatistics()
+      .then((result) => {
+        if (result) {
+          setStats(result);
+          setLoading(false);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching course statistics:", error);
+      });
+  }, []);
+  console.log(stats);
+
+
+
+
   return (
-    <div className="container my-4 instructor-dashboard">
+    <>
+    {loading ? (
+      loading
+    ) : (
+      <>
+        <div className="container my-4 instructor-dashboard">
       <h2 className="mb-4">Bảng điều khiển Giảng viên</h2>
 
       {/* Tổng quan */}
@@ -37,7 +60,7 @@ export default function InstructorDashboard() {
           <div className="card text-white bg-success mb-3">
             <div className="card-body">
               <h5 className="card-title">Tổng thu nhập</h5>
-              <p className="card-text">9,500,000 VNĐ</p>
+              <p className="card-text">{stats.totalIncome.toLocaleString()} VNĐ</p>
             </div>
           </div>
         </div>
@@ -45,15 +68,15 @@ export default function InstructorDashboard() {
           <div className="card text-white bg-primary mb-3">
             <div className="card-body">
               <h5 className="card-title">Số khóa học đã tạo</h5>
-              <p className="card-text">3</p>
+              <p className="card-text">{stats.totalCourses}</p>
             </div>
           </div>
         </div>
         <div className="col-md-4">
           <div className="card text-white bg-info mb-3">
             <div className="card-body">
-              <h5 className="card-title">Tổng học viên</h5>
-              <p className="card-text">100+</p>
+              <h5 className="card-title">Tổng số lượt đăng kí</h5>
+              <p className="card-text">{stats.totalRegistrations}</p>
             </div>
           </div>
         </div>
@@ -90,29 +113,12 @@ export default function InstructorDashboard() {
       </div>
 
       {/* Bảng thống kê khóa học */}
-      <div className="card mt-4">
-        <div className="card-body">
-          <h5 className="card-title mb-3">Thống kê khóa học</h5>
-          <table className="table table-bordered">
-            <thead className="thead-light">
-              <tr>
-                <th>Tên khóa học</th>
-                <th>Lượt đăng ký</th>
-                <th>Thu nhập (VNĐ)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {courseStats.map((course, idx) => (
-                <tr key={idx}>
-                  <td>{course.name}</td>
-                  <td>{course.registrations}</td>
-                  <td>{course.income.toLocaleString()}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <CourseStatisticsTable courseStats={stats.courseStats}/>
+
     </div>
+      </>
+    )}
+    </>
+    
   );
 }

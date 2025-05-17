@@ -13,4 +13,5 @@ public class AuthenticationResponse {
     private boolean isAuthenticated;
     private String token;
     private String role;
+    private String id;
 }

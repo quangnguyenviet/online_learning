@@ -84,6 +84,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     .token(generateToken(user))
                     .isAuthenticated(isAuthenticated)
                     .role(request.getRole())
+                    .id(user.getId())
                     .build();
         }
 

@@ -21,6 +21,8 @@ export default function Login() {
                 if (data.status === 1000) {
                     setData('token', data.data.token);
                     setData('role', data.data.role);
+                    console.log(data);
+                    setData('id', data.data.id);
                    
                     if (data.data.role === 'INSTRUCTOR') {
                         navigate('/instructor/dashboard');

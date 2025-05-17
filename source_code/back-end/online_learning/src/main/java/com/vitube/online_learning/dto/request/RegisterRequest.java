@@ -15,5 +15,5 @@ public class RegisterRequest {
     private String studentId;
     private String courseId;
     private float price;
-    private Date registerDate;
+    private Date registerDate = new Date();
 }

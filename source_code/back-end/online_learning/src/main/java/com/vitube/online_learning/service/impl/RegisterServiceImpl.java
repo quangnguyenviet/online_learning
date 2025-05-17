@@ -4,6 +4,7 @@ import com.vitube.online_learning.dto.request.RegisterRequest;
 import com.vitube.online_learning.entity.Course;
 import com.vitube.online_learning.entity.Register;
 import com.vitube.online_learning.entity.User;
+import com.vitube.online_learning.mapper.RegisterMapper;
 import com.vitube.online_learning.repository.CourseRepository;
 import com.vitube.online_learning.repository.RegisterRepository;
 import com.vitube.online_learning.repository.UserRepository;
@@ -19,9 +20,12 @@ public class RegisterServiceImpl implements RegisterService {
     private final RegisterRepository registerRepository;
     private final CourseRepository courseRepository;
     private final SecurityContextService securityContextService;
+    private final RegisterMapper registerMapper;
 
     @Override
-    public void registerFreeCourse(RegisterRequest request) {
+    public Register toEntity(RegisterRequest request) {
+        Register register = registerMapper.toEntity(request);
+
         User student;
         if (request.getStudentId() != null) {
             student = userRepository.findById(request.getStudentId()).get();
@@ -32,9 +36,25 @@ public class RegisterServiceImpl implements RegisterService {
 
         Course course = courseRepository.findById(request.getCourseId()).get();
 
-        Register register = new Register();
         register.setCourse(course);
         register.setStudent(student);
+
+        return register;
+    }
+
+    @Override
+    public void createRegisterData(RegisterRequest request) {
+        User student;
+        if (request.getStudentId() != null) {
+            student = userRepository.findById(request.getStudentId()).get();
+        }
+        else {
+            student = securityContextService.getUser();
+        }
+
+        Course course = courseRepository.findById(request.getCourseId()).get();
+
+        Register register = toEntity(request);
 
 
         registerRepository.save(register);
