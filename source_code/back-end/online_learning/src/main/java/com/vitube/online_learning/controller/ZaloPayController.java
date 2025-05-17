@@ -30,6 +30,7 @@ public class  ZaloPayController {
     @Value("${zalopay.key2}")
     private String KEY_2;
 
+//    ngrok http 8080
 
     @PostMapping("/create-order")
     public ResponseEntity<String> createOrder(@RequestParam String courseId) throws Exception {
@@ -85,7 +86,7 @@ public class  ZaloPayController {
             String courseId = embedDataJson.getString("courseId");   // lấy ra giá trị courseId
 
             // them đăng ký
-            registerService.registerFreeCourse(
+            registerService.createRegisterData(
                     RegisterRequest.builder()
                             .price(amount)
                             .registerDate(registerDate)

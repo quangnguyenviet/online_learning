@@ -38,7 +38,9 @@ export function logout() {
           if (data.status === 1000) {
               localStorage.removeItem('token');
               localStorage.removeItem("role");
-              window.location.reload();
+              localStorage.removeItem("id");
+              window.location.href = '/login';
+              
           }
       })
   }

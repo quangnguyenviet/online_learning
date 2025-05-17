@@ -6,7 +6,6 @@ import { logout } from "utils/AuthUtil";
 export default function InstructorLayout() {
 
     const handleLogout = () => {
-        console.log("Logout clicked");
         logout();
     }
 

@@ -4,7 +4,7 @@ export default function RegisterFreeCourseBtn(props) {
     const { course } = props;
     
     const handleRegister = () => {
-        fetch("http://localhost:8080/online_learning/registers/free", {
+        fetch("http://localhost:8080/online_learning/registers", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
