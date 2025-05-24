@@ -3,7 +3,7 @@ import { setPrice as setPriceUtil } from "utils/InstructorUtil/CourseUtil";
 import { FaMoneyBillWave, FaEdit } from "react-icons/fa";
 import "./style.scss";
 
-export default function EditPrice({ price: initialPrice, courseId }) {
+export default function EditPrice({ price: initialPrice, courseId, data }) {
     const [price, setPrice] = useState(initialPrice);
     const [newPrice, setNewPrice] = useState(initialPrice);
     const [updating, setUpdating] = useState(false);
@@ -33,28 +33,43 @@ export default function EditPrice({ price: initialPrice, courseId }) {
 
     return (
         <div className="edit-price-container">
-            <h2><FaMoneyBillWave className="me-2 icon-green" />Giá Khóa Học</h2>
-            <p className="current-price">
-                <strong>Hiện tại:</strong> {price.toLocaleString()} VNĐ
-            </p>
+            <div className="section">
+                <h2><FaMoneyBillWave className="icon-green" /> Tên khóa học</h2>
+                <div className="input-group">
+                    <span className="input-group-text"><FaEdit /></span>
+                    <input type="text" className="form-control" name="title" defaultValue={data.title} />
+                </div>
+            </div>
 
-            <div className="input-group">
-                <span className="input-group-text"><FaEdit /></span>
-                <input
-                    type="number"
-                    className="form-control"
-                    value={newPrice}
-                    onChange={(e) => setNewPrice(e.target.value)}
-                    min="0"
-                    placeholder="Nhập giá mới"
-                />
-                <button
-                    className="btn btn-success"
-                    onClick={handleUpdatePrice}
-                    disabled={updating || Number(newPrice) === Number(price)}
-                >
-                    {updating ? "Đang cập nhật..." : "Cập nhật"}
-                </button>
+            <div className="section">
+                <h2><FaMoneyBillWave className="icon-green" /> Mô tả ngắn</h2>
+                <div className="input-group">
+                    <span className="input-group-text"><FaEdit /></span>
+                    <input type="text" className="form-control" name="short_desc" defaultValue={data.short_desc} />
+                </div>
+            </div>
+
+            <div className="section">
+                <h2><FaMoneyBillWave className="icon-green" /> Giá khóa học</h2>
+                <p className="current-price"><strong>Hiện tại:</strong> {price.toLocaleString()} VNĐ</p>
+                <div className="input-group">
+                    <span className="input-group-text"><FaEdit /></span>
+                    <input
+                        type="number"
+                        className="form-control"
+                        value={newPrice}
+                        onChange={(e) => setNewPrice(e.target.value)}
+                        min="0"
+                        placeholder="Nhập giá mới"
+                    />
+                    <button
+                        className="btn btn-success"
+                        onClick={handleUpdatePrice}
+                        disabled={updating || Number(newPrice) === Number(price)}
+                    >
+                        {updating ? "Đang cập nhật..." : "Cập nhật"}
+                    </button>
+                </div>
             </div>
         </div>
     );

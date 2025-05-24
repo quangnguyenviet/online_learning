@@ -6,11 +6,13 @@ import org.springframework.web.multipart.MultipartFile;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class LessonRequest {
+@NoArgsConstructor
+public class LessonRequest extends BaseRequest {
     private String courseId;
     private String title;
     private MultipartFile file;
     private String description;
+    private Integer order;
+    private String tag;
 }

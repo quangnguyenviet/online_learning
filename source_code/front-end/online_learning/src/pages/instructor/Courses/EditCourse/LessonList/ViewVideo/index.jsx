@@ -1,9 +1,10 @@
-import 'pages/instructor/Courses/ViewVideo.scss';
+import 'pages/instructor/Courses/EditCourse/LessonList/ViewVideo/ViewVideo.scss';
 
 export default function ViewVideo(props) {
-    const { lessonKey } = props;
+    const { lessonKey, children } = props;
 
     const handleView = () => {
+
 
         fetch(`http://localhost:8080/online_learning/lessons/signed-url`, {
             method: "POST",
@@ -56,12 +57,15 @@ export default function ViewVideo(props) {
 
                         </div>
                     </div>
-            <button
-                onClick={handleView}
+            {/* <button
+                
                 style={{ color: "blue" }}
             >
                 View
-            </button>
+            </button> */}
+            <div onClick={handleView}>
+                {children}
+            </div>
         </>
     );
 }

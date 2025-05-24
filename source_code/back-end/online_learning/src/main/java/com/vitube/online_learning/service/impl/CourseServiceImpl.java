@@ -15,11 +15,17 @@ import com.vitube.online_learning.repository.CourseRepository;
 import com.vitube.online_learning.repository.UserRepository;
 import com.vitube.online_learning.service.CourseService;
 import com.vitube.online_learning.service.LessonService;
+import com.vitube.online_learning.service.S3Service;
 import com.vitube.online_learning.service.SecurityContextService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -33,6 +39,7 @@ public class CourseServiceImpl implements CourseService {
     private final LessonService lessonService;
     private final LearnWhatMapper learnWhatMapper;
     private final RequireMapper requireMapper;
+    private final S3Service s3Service;
 
     @Override
     // type = 1 get details type = 0 get general
@@ -82,17 +89,31 @@ public class CourseServiceImpl implements CourseService {
             return response;
         }
         else{
+            Collections.sort(lessonResponses);
+
             response.setLessons(lessonResponses);
             response.setLearnWhats(learnWhatResponses);
             response.setRequires(requireResponses);
         }
+
+        response.setShort_desc(course.getShortDesc());
 
         return response;
 
     }
 
     @Override
-    public CourseResponse createCourse(CourseRequest request) {
+    public CourseResponse createCourse(CourseRequest request, MultipartFile image) {
+        String key = generateKey();
+        String imageUrl = "";
+        try {
+            imageUrl = s3Service.uploadPublicFile(image, key);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+
+
         User instructor;
         if (request.getInstructorId() == null) {
             instructor = securityContextService.getUser();
@@ -102,11 +123,10 @@ public class CourseServiceImpl implements CourseService {
                     .orElseThrow(() -> new RuntimeException("Instructor not found"));
         }
 
-        Course course = Course.builder()
-                .title(request.getTitle())
-                .instructor(instructor)
-                .price(request.getPrice())
-                .build();
+
+        Course course = cousreMapper.requestToCourse(request);
+        course.setInstructor(instructor);
+        course.setImageUrl(imageUrl);
 
         Course saved = courseRepository.save(course);
 
@@ -126,7 +146,22 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseResponse updateCourse(String id, CourseRequest request) {
-        return null;
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+
+        if (request.getTag().equals("GENERAL")){
+            course.setTitle(request.getTitle());
+            course.setShortDesc(request.getShortDesc());
+            course.setPrice(request.getPrice());
+        }
+
+
+        Course saved = courseRepository.save(course);
+
+        CourseResponse response = cousreMapper.courseToCourseResponse(saved);
+        response.setInstructorId(course.getInstructor().getId());
+
+        return response;
     }
 
     @Override
@@ -230,8 +265,7 @@ public class CourseServiceImpl implements CourseService {
         User instructor = securityContextService.getUser();
         List<CourseResponse> responseList = new ArrayList<>();
         instructor.getCourses().forEach(course -> {
-            CourseResponse response = cousreMapper.courseToCourseResponse(course);
-            response.setInstructorId(course.getInstructor().getId());
+            CourseResponse response = courseToCourseResponse(course, 1);
             responseList.add(response);
         });
         return responseList;
@@ -244,5 +278,12 @@ public class CourseServiceImpl implements CourseService {
                 .orElseThrow(() -> new RuntimeException("Course not found"));
         course.setPrice(price);
         courseRepository.save(course);
+    }
+
+
+    public static String generateKey() {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss");
+        return now.format(formatter);
     }
 }

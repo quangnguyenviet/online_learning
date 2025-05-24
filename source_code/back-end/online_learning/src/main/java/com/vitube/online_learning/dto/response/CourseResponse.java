@@ -26,4 +26,8 @@ public class CourseResponse {
     private int hour;
     private int minute;
     private int second;
+    private String imageUrl;
+    private Boolean published;
+
+
 }

@@ -3,6 +3,7 @@ package com.vitube.online_learning.controller.instructor;
 import com.vitube.online_learning.dto.response.ApiResponse;
 import com.vitube.online_learning.dto.response.CourseStatisticResponse;
 import com.vitube.online_learning.dto.response.StatisticResponse;
+import com.vitube.online_learning.entity.InstructorStatic;
 import com.vitube.online_learning.service.StatisticService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,9 +21,17 @@ public class IStatisticController {
     private final StatisticService statisticService;
 
     @GetMapping("/course")
-    public ApiResponse<StatisticResponse> getStatistic(@RequestParam String instructorId) {
+    public ApiResponse<StatisticResponse> getStatisticForCourse(@RequestParam String instructorId) {
         StatisticResponse response = statisticService.getCourseStatistic(instructorId);
         return ApiResponse.<StatisticResponse>builder()
+                .status(1000)
+                .data(response)
+                .build();
+    }
+    @GetMapping
+    public ApiResponse<?> getInstructorStatistic(@RequestParam String instructorId) {
+        List<InstructorStatic> response = statisticService.getInstructorStatistic(instructorId);
+        return ApiResponse.<List<InstructorStatic>>builder()
                 .status(1000)
                 .data(response)
                 .build();

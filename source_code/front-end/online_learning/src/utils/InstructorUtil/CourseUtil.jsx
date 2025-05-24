@@ -27,15 +27,36 @@ export function setPrice(courseId, price) {
     }).then(response => response.json());
 }
 
-export function createNewCourse(title, price) {
+export function createNewCourse(data) {
     const token = localStorage.getItem("token");
+
+    const formData = new FormData();
+    formData.append('image', data.image);
+    // xoa image khoi data
+    delete data.image;
+
+    formData.append('request', new Blob([JSON.stringify(data)], { type: 'application/json' }));
 
     return fetch(`${COURSE_URL}`, {
         method: 'POST',
         headers: {
+            'Authorization': `Bearer ${token}`
+        },
+        body: formData
+    }).then(response => response.json());
+}
+
+export function updateCourse(courseId, data){
+    const token = localStorage.getItem("token");
+    
+    console.log(data);
+
+    return fetch(`${COURSE_URL}/${courseId}`, {
+        method: 'PUT',
+        headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ title, price })
+        body: JSON.stringify(data)
     }).then(response => response.json());
 }

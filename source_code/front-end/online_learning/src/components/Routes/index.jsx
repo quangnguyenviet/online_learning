@@ -6,7 +6,6 @@ import Home from "../../pages/student/Home";
 import InforUser from "../../pages/student/InforUser";
 import Login from "../../pages/Login";
 import PrivateRouter from "../PrivateRouter";
-import Signup from "../../pages/Signup";
 import CourseDetail from "../../pages/student/CourseDetail";
 import MyLearning from "../../pages/student/MyLearning";
 import MyLearningDetail from "../../pages/student/MyLearning/MyLearningDetail";
@@ -16,11 +15,19 @@ import InstructorLayout from "../../layout/InstructorLayout";
 import Dashboard from "../../pages/instructor/Dashboard";
 import InstructorRouter from "../InstructorRouter";
 import Courses from "../../pages/instructor/Courses";
-import { CourseDetail as ICourseDetail } from "../../pages/instructor/Courses/CourseDetail";
-import CourseList from "../../pages/instructor/Courses/CourseList";
+import CourseList from "../../pages/instructor/Courses/CourseList/index.jsx";
 import AddCourse from "pages/instructor/Courses/AddCourse";
 import { EditCourse } from "pages/instructor/Courses/EditCourse";
-
+import ViewDetail from "pages/instructor/Courses/CourseList/ViewDetail";
+import Profile from "pages/instructor/Profile";
+import Notification from "pages/instructor/Notification";
+import NotificationDetail from "pages/instructor/Notification/NotificationDetail";
+import InstructorPayment from "pages/admin/InstructorPayment";
+import AdminLayout from "layout/AdminLayout";
+import { User } from "pages/admin/User";
+import AdminLogin from "pages/admin/AdminLogin";
+import Signup from "pages/student/SignUp";
+import SignupInstructor from "pages/instructor/SignUp";
 const ROUTES = [
     {
         element: <StudentLayout />,
@@ -90,11 +97,26 @@ const ROUTES = [
                             },
                             {
                                 path: ":courseId",
-                                element: <EditCourse />
+                                // element: <EditCourse />
+                                element : <ViewDetail />
                             },
                             {
                                 path: "add-new",
                                 element: <AddCourse />
+                            }
+                        ]
+                    },
+                    {
+                        path: "profile",
+                        element: <Profile />
+                    },
+                    {
+                        path: "notifications",
+                        element: <Notification />,
+                        children: [
+                            {
+                                path: ":id",
+                                element : <NotificationDetail />
                             }
                         ]
                     }
@@ -104,7 +126,25 @@ const ROUTES = [
             
         ]
     },
-    
+    {
+        path: "/admin",
+        element: <AdminLayout />,
+        children: [
+            
+            {
+                path: "users",
+                element: <User />
+            },
+            {
+                path: "payments",
+                element: <InstructorPayment />
+            }
+        ]
+    },
+    {
+        path: "/admin/login",
+        element: <AdminLogin />
+    },
     {
         path: "*",
         element: <Error404 />
@@ -116,7 +156,17 @@ const ROUTES = [
     },
     {
         path: "/signup",
-        element: <Signup />
+        // element: <Signup />
+        children: [
+            {
+                path : "student",
+                element: <Signup />
+            },
+            {
+                path: "instructor",
+                element: <SignupInstructor />
+            }
+        ]
     }
 ];
 export default ROUTES;

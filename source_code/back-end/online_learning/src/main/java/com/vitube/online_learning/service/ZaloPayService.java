@@ -22,7 +22,7 @@ public class ZaloPayService {
     @Value("${zalopay.key1}")
     private String KEY1;
 //    ngrok http 8080
-    private static final String CALLBACK_URL = "https://4ea6-2405-4803-f553-8d00-5ca8-8344-9a5d-28a7.ngrok-free.app/online_learning/zalopay/callback";
+    private static final String CALLBACK_URL = "https://0079-2405-4803-f553-8d00-3402-de2d-a2dc-fdcf.ngrok-free.app/online_learning/zalopay/callback";
     private final SecurityContextService securityContextService;
 
     public Map<String, Object> createOrder(String courseId) throws Exception {

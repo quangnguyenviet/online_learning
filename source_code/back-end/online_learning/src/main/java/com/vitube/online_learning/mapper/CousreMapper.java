@@ -1,5 +1,6 @@
 package com.vitube.online_learning.mapper;
 
+import com.vitube.online_learning.dto.request.CourseRequest;
 import com.vitube.online_learning.dto.response.CourseResponse;
 import com.vitube.online_learning.entity.Course;
 import org.mapstruct.Mapper;
@@ -10,4 +11,7 @@ public interface CousreMapper {
     @Mapping(target = "instructorId", ignore = true)
     @Mapping(target = "lessons", ignore = true)
     CourseResponse courseToCourseResponse(Course course);
+
+    @Mapping(target = "instructor", ignore = true)
+    Course requestToCourse(CourseRequest request);
 }

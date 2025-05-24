@@ -6,7 +6,6 @@ const BASE_URL = "http://localhost:8080/online_learning/instructor-learn-what";
 
 export function saveWillLearn(courseId, willLearns) {
     const token = localStorage.getItem("token");
-    console.log(token);
     return fetch(`${BASE_URL}/${courseId}`, {
         method: 'PATCH',
         headers: {

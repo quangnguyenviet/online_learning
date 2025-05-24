@@ -1,7 +1,5 @@
 package com.vitube.online_learning.service.impl;
 
-import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
 import com.vitube.online_learning.dto.request.LessonRequest;
 import com.vitube.online_learning.dto.response.LessonResponse;
 import com.vitube.online_learning.entity.Course;
@@ -14,7 +12,6 @@ import com.vitube.online_learning.service.S3Service;
 import com.vitube.online_learning.utils.VideoUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +19,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -66,7 +62,7 @@ public class LessonServiceImpl implements LessonService {
         String key = generateKey();
 
         // Upload lên S3
-        String videoUrl = s3Service.uploadFile(request.getFile(), key);
+        String videoUrl = s3Service.uploadPrivate(request.getFile(), key);
 
         File tempFile = File.createTempFile("video", ".mp4");
         request.getFile().transferTo(tempFile); //
@@ -94,14 +90,17 @@ public class LessonServiceImpl implements LessonService {
                 .lessonKey(key)
                 .videoUrl(videoUrl)
                 .duration(durationInSeconds)
+                .description(request.getDescription())
+                .idx(request.getOrder())
                 .build();
 
-        lessonRepository.save(lesson);
+        Lesson addedLesson = lessonRepository.save(lesson);
 
         // Xoá file tạm
         tempFile.delete();
 
-        return null;
+        return lessonToLessonResponse(addedLesson);
+
     }
 
 
@@ -125,21 +124,24 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public Void updateLesson(String lessonId, LessonRequest request) throws IOException {
-        String key = generateKey();
-
         Lesson lesson = lessonRepository.findById(lessonId).get();
-        lesson.setTitle(request.getTitle());
-        lesson.setDescription(request.getDescription());
-
-        if (request.getFile() != null) {
-            String videoUrl = s3Service.uploadFile(request.getFile(), key);
-            lesson.setVideoUrl(videoUrl);
-
-            String oldKey = lesson.getLessonKey();
-            s3Service.deleteFile(oldKey);
-            lesson.setLessonKey(key);
+        if (request.getTag() != null && request.getTag().equals("UPDATE_INDEX")) {
+            lesson.setIdx(request.getOrder());
         }
+        else{
+            String key = generateKey();
+            lesson.setTitle(request.getTitle());
+            lesson.setDescription(request.getDescription());
 
+            if (request.getFile() != null) {
+                String videoUrl = s3Service.uploadPrivate(request.getFile(), key);
+                lesson.setVideoUrl(videoUrl);
+
+                String oldKey = lesson.getLessonKey();
+                s3Service.deletePrivateFile(oldKey);
+                lesson.setLessonKey(key);
+            }
+        }
 
         lessonRepository.save(lesson);
 
@@ -149,6 +151,7 @@ public class LessonServiceImpl implements LessonService {
 
     public LessonResponse lessonToLessonResponse(Lesson lesson) {
         LessonResponse lessonResponse = lessonMapper.lessonToLessonResponse(lesson);
+        lessonResponse.setDurationInSeconds(lesson.getDuration());
         return lessonResponse;
     }
 }

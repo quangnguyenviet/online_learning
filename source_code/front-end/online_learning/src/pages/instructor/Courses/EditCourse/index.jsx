@@ -27,14 +27,16 @@ export function EditCourse() {
 
     return (
         <div style={{ padding: "20px", margin: "auto" }}>
-            <h1>Chỉnh sửa khóa học</h1>
+            {/* <h1>Chỉnh sửa khóa học</h1> */}
             {loading === true ? (
                 <h2>loading</h2>
             ) : (
                 <>
-
+                    <h2>{data.title}</h2>
                     {/* Giá khóa học */}
-                    <EditPrice price={data.price} courseId={data.id}/>
+
+            
+                    <EditPrice data = {data} price={data.price} courseId={data.id}/>
 
                     <hr />
 

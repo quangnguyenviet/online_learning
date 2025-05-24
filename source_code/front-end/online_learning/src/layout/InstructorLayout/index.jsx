@@ -1,5 +1,5 @@
 import { Outlet, NavLink } from "react-router-dom";
-import { FaChalkboardTeacher, FaBook, FaUser, FaSignOutAlt, FaPlus } from "react-icons/fa";
+import { FaChalkboardTeacher, FaBook, FaUser, FaSignOutAlt, FaPlus, FaBell } from "react-icons/fa";
 import "./InstructorLayout.scss";
 import { logout } from "utils/AuthUtil";
 
@@ -35,9 +35,9 @@ export default function InstructorLayout() {
                             <FaBook className="me-2" />
                             My Courses
                         </a>
-                        <ul className="dropdown-menu dropdown-menu-dark">
+                        <ul className="dropdown-menu dropdown-menu-dark w-100">
                             <li>
-                                <NavLink to="/instructor/courses" className="dropdown-item">
+                                <NavLink to="/instructor/courses" end className="dropdown-item">
                                     Danh sách khóa học
                                 </NavLink>
                             </li>
@@ -56,6 +56,15 @@ export default function InstructorLayout() {
                         >
                             <FaUser className="me-2" />
                             Profile
+                        </NavLink>
+                    </li>
+                    <li className="nav-item">
+                        <NavLink
+                            to="/instructor/notifications"
+                            className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
+                        >
+                            <FaBell className="me-2" />
+                            Thông báo
                         </NavLink>
                     </li>
                     <li className="nav-item" onClick = {handleLogout} >

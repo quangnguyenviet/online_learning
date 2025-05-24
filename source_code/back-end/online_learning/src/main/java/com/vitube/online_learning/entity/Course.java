@@ -20,6 +20,10 @@ public class Course {
 
     private String title;
 
+    private String imageUrl;
+
+    private Boolean published;
+
     @ManyToOne
     @JoinColumn(name = "instructor_id")
     private User instructor;

@@ -1,17 +1,18 @@
 package com.vitube.online_learning.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class CourseRequest {
+@Data
+public class CourseRequest extends BaseRequest {
     private String title;
     private String instructorId;
     private float price;
     private double discount;
+    private String shortDesc;
+    private Boolean published = false; // mặc định là false
 }

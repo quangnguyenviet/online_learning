@@ -1,16 +1,14 @@
 package com.vitube.online_learning.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "course_statistic")
+@Table(name = "instructor_statistic")
 @Getter
 @Setter
-public class CourseStatistic {
+public class InstructorStatic {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
@@ -19,7 +17,9 @@ public class CourseStatistic {
     private int totalRegistrations;
     private float totalEarnings;
 
-    @ManyToOne
-    @JoinColumn(name = "instructor_id")
-    private User instructor;
+    private String instructorId;
+
+//    @ManyToOne
+//    @JoinColumn(name = "instructor_id")
+//    private User instructor;
 }
