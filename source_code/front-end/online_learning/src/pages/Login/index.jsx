@@ -10,75 +10,57 @@ export default function Login() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Xử lý đăng nhập ở đây
         const formData = new FormData(e.target);
         const data = Object.fromEntries(formData.entries());
-        console.log(data);
-        
 
         authenticate(URL_AUTH, 'POST', data)
             .then((data) => {
                 if (data.status === 1000) {
                     setData('token', data.data.token);
                     setData('role', data.data.role);
-                    console.log(data);
                     setData('id', data.data.id);
-                   
-                    if (data.data.role === 'INSTRUCTOR') {
-                        navigate('/instructor/dashboard');
-                    }
-                    else {
-                        navigate('/');
-                    }
+                    navigate(data.data.role === 'INSTRUCTOR' ? '/instructor/dashboard' : '/');
                 }
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
-
-
-        // fetch('http://localhost:8080/online_learning/auth/login', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify(data)
-        // })
-        //     .then((response) => response.json())
-        //     .then((data) => {
-        //         if (data.status === 1000) {
-
-        //             setData('token', data.data.token);
-        //             if (data.data.role === 'student') {
-        //                 navigate('/');
-        //             }
-        //             if (data.data.role === 'instructor') {
-        //                 navigate('/instructor/dashboard');
-        //             }
-                    
-        //         }
-        //     })
-
     };
 
     return (
-        <>
-            <div className="login">
-                <form onSubmit={handleSubmit} className="login__form">
-                    <h1>login</h1>
-                    <p>Please enter your login and password!</p>
-                    <input type="text" name="username" placeholder="Username" required />
-                    <input type="password" name="password" placeholder="Password" required />
-                    <div>
-                        <input type="checkbox" name="role" value="INSTRUCTOR" id="role" /> <label htmlFor="role">I am an intructor</label>
-                    </div>
+        <div className="login-container">
+            <form onSubmit={handleSubmit} className="login-form">
+                <h2>Đăng nhập hệ thống</h2>
+                <p>Vui lòng nhập tên đăng nhập và mật khẩu</p>
 
-                    <a className="forgot" href="#">Forgot password?</a>
+                <div className="form-group">
+                    <input type="text" name="username" placeholder="Tên đăng nhập" required />
+                </div>
 
-                    <input type="submit" value="Login" />
-                    <p>Don't have an account? <Link to="/signup">Signup</Link></p>
-                </form>
-            </div>
-        </>
+                <div className="form-group">
+                    <input type="password" name="password" placeholder="Mật khẩu" required />
+                </div>
+
+                <div className="form-group checkbox-group">
+                    <input type="checkbox" name="role" value="INSTRUCTOR" id="role" />
+                    <label htmlFor="role">Tôi là giảng viên</label>
+                </div>
+
+                <div className="form-actions">
+                    <button type="submit">Đăng nhập</button>
+                </div>
+
+                <div className="form-footer">
+                    <a href="#">Quên mật khẩu?</a>
+                    {/* <p>Chưa có tài khoản?</p> */}
+                    <ul className="signup-links">
+                        <li><Link to="/signup/student">Đăng ký học sinh</Link></li>
+                        <li><Link to="/signup/instructor">Đăng ký giảng viên</Link></li>
+                    </ul>
+
+                    {/* <p><Link to="/" className="back-home">← Quay về trang chủ</Link></p> */}
+                </div>
+            </form>
+        </div>
     );
-};
+}

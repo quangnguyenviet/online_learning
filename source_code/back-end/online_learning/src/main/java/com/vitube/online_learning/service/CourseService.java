@@ -3,13 +3,14 @@ package com.vitube.online_learning.service;
 import com.vitube.online_learning.dto.request.CourseRequest;
 import com.vitube.online_learning.dto.response.CourseResponse;
 import com.vitube.online_learning.entity.Course;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface CourseService {
     CourseResponse courseToCourseResponse(Course course, int type);
 
-    CourseResponse createCourse(CourseRequest request);
+    CourseResponse createCourse(CourseRequest request, MultipartFile image);
     CourseResponse getCourseById(String id);
     CourseResponse updateCourse(String id, CourseRequest request);
     void deleteCourse(String id);

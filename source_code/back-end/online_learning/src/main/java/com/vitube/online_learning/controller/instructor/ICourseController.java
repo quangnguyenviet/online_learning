@@ -1,12 +1,14 @@
 package com.vitube.online_learning.controller.instructor;
 
 import com.vitube.online_learning.dto.request.CourseRequest;
+import com.vitube.online_learning.dto.request.LessonRequest;
 import com.vitube.online_learning.dto.request.UpdateCoursePrice;
 import com.vitube.online_learning.dto.response.ApiResponse;
 import com.vitube.online_learning.dto.response.CourseResponse;
 import com.vitube.online_learning.service.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -35,9 +37,28 @@ public class ICourseController {
                 .build();
     }
 
-    @PostMapping
+    /*@PostMapping
     public ApiResponse<?> createCourse(@RequestBody CourseRequest request) {
         courseService.createCourse(request);
+        return ApiResponse.builder()
+                .status(1000)
+                .build();
+    }*/
+    @PostMapping
+    public ApiResponse<?> createCourse(@RequestPart("request") CourseRequest request,
+                                       @RequestPart("image") MultipartFile image
+                                       ) {
+        courseService.createCourse(request, image);
+        return ApiResponse.builder()
+                .status(1000)
+                .build();
+    }
+
+
+    @PutMapping("/{courseId}")
+    public ApiResponse<?> updateCourse(@PathVariable String courseId,
+            @RequestBody CourseRequest request) {
+        courseService.updateCourse(courseId, request);
         return ApiResponse.builder()
                 .status(1000)
                 .build();

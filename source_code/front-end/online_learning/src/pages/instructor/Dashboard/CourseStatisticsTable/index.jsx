@@ -3,8 +3,6 @@ import { getCourseStatistics } from "utils/InstructorUtil/StatisticUtil"
 
 export default function CourseStatisticsTable({courseStats}) {
 
-    console.log(courseStats);
-
     
     
 
@@ -22,7 +20,7 @@ export default function CourseStatisticsTable({courseStats}) {
                             </tr>
                         </thead>
                         <tbody>
-                            {courseStats.map((course, idx) => (
+                            {courseStats && courseStats.map((course, idx) => (
                                 <tr key={idx}>
                                     <td>{course.title}</td>
                                     <td>{course.totalRegistrations}</td>

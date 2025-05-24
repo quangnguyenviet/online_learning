@@ -9,6 +9,7 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
@@ -16,13 +17,11 @@ import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequ
 
 import java.io.IOException;
 import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Service
 public class S3Service {
-    @Value("${aws.bucketName}")
-    private String bucketName;
+    @Value("${aws.videoBucketName}")
+    private String videoBucketName;
 
     @Value("${aws.accessKey}")
     private String accessKey;
@@ -33,24 +32,48 @@ public class S3Service {
     @Value("${aws.region}")
     private String region;
 
+    @Value("${aws.imageBucketName}")
+    private String imageBucketName;
+
     private final S3Client s3Client;
 
+
+    // s3 vaanx nhận cấu hình nhờ có spring boot tự cấu hình rồi
     public S3Service(S3Client s3Client) {
         this.s3Client = s3Client;
     }
 
-    public String uploadFile(MultipartFile file, String key) throws IOException {
+    public String uploadPrivate(MultipartFile file, String key) throws IOException {
 
 
         PutObjectRequest putRequest = PutObjectRequest.builder()
-                .bucket(bucketName)
+                .bucket(videoBucketName)
                 .key(key)
                 .contentType(file.getContentType())
                 .build();
 
         s3Client.putObject(putRequest, RequestBody.fromBytes(file.getBytes()));
 
-        return String.format("https://%s.s3.amazonaws.com/%s", bucketName, key);
+        return String.format("https://%s.s3.amazonaws.com/%s", videoBucketName, key);
+    }
+    /**
+     * Upload file to public bucket (truy cập trực tiếp qua URL)
+     */
+    public String uploadPublicFile(MultipartFile file, String key) throws IOException {
+
+        System.out.printf("Uploading to bucket: %s, region: %s, key: %s\n", imageBucketName, region, key);
+
+        System.out.println("Content type: " + file.getContentType());
+
+        PutObjectRequest putRequest = PutObjectRequest.builder()
+                .bucket(imageBucketName)
+                .key(key)
+                .contentType(file.getContentType())
+                .build();
+
+        s3Client.putObject(putRequest, RequestBody.fromBytes(file.getBytes()));
+
+        return String.format("https://%s.s3.%s.amazonaws.com/%s", imageBucketName, region, key);
     }
 
     public String generatePresignedUrl(String fileName) {
@@ -61,7 +84,7 @@ public class S3Service {
                 .build();
 
         GetObjectRequest getObjectRequest = GetObjectRequest.builder()
-                .bucket(bucketName)
+                .bucket(videoBucketName)
                 .key(fileName)
                 .build();
 
@@ -74,8 +97,11 @@ public class S3Service {
         return presignedRequest.url().toString();
     }
 
-    public void deleteFile(String key) {
-        s3Client.deleteObject(builder -> builder.bucket(bucketName).key(key));
+    public void deletePrivateFile(String key) {
+        s3Client.deleteObject(builder -> builder.bucket(videoBucketName).key(key));
+    }
+    public void deletePublicFile(String key) {
+        s3Client.deleteObject(builder -> builder.bucket(imageBucketName).key(key));
     }
 
 }

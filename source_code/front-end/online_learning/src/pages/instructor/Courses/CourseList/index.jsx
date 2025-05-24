@@ -27,6 +27,7 @@ export default function CourseList() {
         navigate('/instructor/courses/add-new'); // Sử dụng navigate để chuyển hướng
     };
 
+    console.log("Courses:", courses);
     return (
         <>
             <div className="d-flex justify-content-between align-items-center mb-4">

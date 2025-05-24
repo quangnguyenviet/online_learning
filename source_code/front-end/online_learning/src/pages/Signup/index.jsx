@@ -1,52 +1,49 @@
 import './Signup.scss';
 
 export default function Signup() {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
 
-    const handleSubmit = (e) => {
-        console.log(e.target);
-        e.preventDefault();
-        const formData = new FormData(e.target);
-        const data = Object.fromEntries(formData.entries());
-        fetch('http://localhost:8080/online_learning/users', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 1000) {
-                alert('User created successfully!');
-            } else {
-                alert('Error creating user: ' + data.message);
-            }
-        })
-    }
+    fetch('http://localhost:8080/online_learning/users', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === 1000) {
+          alert('Đăng ký thành công!');
+        } else {
+          alert('Đăng ký thất bại: ' + data.message);
+        }
+      });
+  };
 
-    return (
-        <>
-            <form className="form-signup" onSubmit={handleSubmit}>
+  return (
+    <div className="signup-container">
+      <form className="signup-form" onSubmit={handleSubmit}>
+        <h2>Tạo tài khoản mới</h2>
+        <p>Vui lòng nhập thông tin bên dưới để đăng ký</p>
 
-                <div className="content">
-                    <h2>Signup</h2>
-                    <div className="form-group">
-                        <label htmlFor="username">Username</label>
-                        <input type="text" className="form-control" id="username" placeholder="Enter username" name='username' />
+        <div className="form-group">
+          <label htmlFor="username">Tên đăng nhập</label>
+          <input type="text" id="username" name="username" placeholder="Nhập tên đăng nhập" required />
+        </div>
 
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="email">Email address</label>
-                        <input type="email" className="form-control" id="email" placeholder="Enter email" name='email' />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="password">Password</label>
-                        <input type="password" className="form-control" id="password" placeholder="Password" name='password'/>
-                    </div>
-                    <button type='submit' className='btn btn-primary'>Sign up</button>
-                </div>
+        <div className="form-group">
+          <label htmlFor="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="Nhập email" required />
+        </div>
 
-            </form>
-        </>
-    );
+        <div className="form-group">
+          <label htmlFor="password">Mật khẩu</label>
+          <input type="password" id="password" name="password" placeholder="Nhập mật khẩu" required />
+        </div>
+
+        <button type="submit" className="btn-submit">Đăng ký</button>
+      </form>
+    </div>
+  );
 }

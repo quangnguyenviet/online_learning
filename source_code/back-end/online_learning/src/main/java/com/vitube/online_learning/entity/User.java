@@ -49,6 +49,6 @@ public class User {
     @OneToMany(mappedBy = "student")
     private Set<Order> orders;
 
-    @OneToMany(mappedBy = "instructor")
-    private Set<CourseStatistic> courseStatistics;
+//    @OneToMany(mappedBy = "instructor")
+//    private Set<InstructorStatic> instructorStatics;
 }

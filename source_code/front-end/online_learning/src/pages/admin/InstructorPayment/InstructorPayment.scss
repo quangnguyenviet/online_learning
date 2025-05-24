@@ -1,0 +1,63 @@
+.payment-container {
+  padding: 30px;
+
+  h2 {
+    margin-bottom: 20px;
+    color: #343a40;
+  }
+
+  .payment-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th, td {
+      padding: 12px;
+      border: 1px solid #dee2e6;
+      text-align: center;
+    }
+
+    th {
+      background-color: #f1f3f5;
+      font-weight: bold;
+    }
+
+    .paid {
+      color: green;
+      font-weight: bold;
+    }
+
+    .unpaid {
+      color: red;
+      font-weight: bold;
+    }
+
+    button {
+      background-color: #0d6efd;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #0b5ed7;
+      }
+    }
+  }
+}
+.payment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+
+  h2 {
+    margin: 0;
+  }
+
+  select {
+    padding: 6px 10px;
+    font-size: 16px;
+    border-radius: 4px;
+  }
+}

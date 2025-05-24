@@ -1,7 +1,10 @@
 import { saveWillLearn } from "utils/InstructorUtil/WillLearnUtil";
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./style.scss";
+import Swal from 'sweetalert2'
+import { ModalContext } from "pages/instructor/Courses/CourseList/ViewDetail"; 
+import { setData } from "service/localStorageService";
 
 export function EditWillLearn(props) {
     const { courseId } = useParams();
@@ -12,10 +15,14 @@ export function EditWillLearn(props) {
     const [showAddLearning, setShowAddLearning] = useState(false);
     const delIdRef = useRef([]);
 
+    const context = useContext(ModalContext);
+    const setShowModal = context.setShowModal;
+    const setData = context.setData;
+
     const handleLearningEdit = (index, value) => {
         const updated = [...learnings];
         updated[index].description = value;
-        updated[index].tag = "Y";
+        updated[index].tag = "Y"; // nhãn Y đánh dấu đây là phần tử cần cập nhật hoặc thêm vào
         setLearnings(updated);
         setEditLearningIndex(null);
     };
@@ -31,7 +38,7 @@ export function EditWillLearn(props) {
 
     const handleAddLearning = () => {
         if (newLearning.trim() !== "") {
-            setLearnings([...learnings, { description: newLearning.trim(), tag: "Y" }]);
+            setLearnings([...learnings, { description: newLearning.trim(), tag: "Y" }]); // thêm mới phần tử với nhãn Y
             setNewLearning("");
             setShowAddLearning(false);
         }
@@ -42,7 +49,25 @@ export function EditWillLearn(props) {
         const delIdList = delIdRef.current;
 
         saveWillLearn(courseId, { otherList, delIdList })
-            .then(res => console.log("Saved", res))
+            .then(res => {
+                if(res.status === 1000){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Thành công',
+                        text: 'Cập nhật thành công!',
+                        confirmButtonText: 'OK'
+                    });
+                    setData((prevData) => {
+                        const updatedData = { ...prevData };
+                        updatedData.learnWhats = learnings;
+                        console.log("Updated data:", updatedData);
+                        return updatedData;
+                    });
+                    console.log("Updated learnings:", learnings);
+                    
+                    setShowModal(false);
+                }
+            })
             .catch(err => console.error("Error:", err));
     };
 

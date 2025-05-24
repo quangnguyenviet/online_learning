@@ -2,6 +2,9 @@ import { useRef, useState } from "react";
 import { saveConditions } from "utils/InstructorUtil/ConditionUtil";
 import { useParams } from "react-router-dom";
 import "./style.scss";
+import Swal from 'sweetalert2';
+import { ModalContext } from "pages/instructor/Courses/CourseList/ViewDetail"; // Import the ModalContext
+import { useContext } from "react";
 
 export function EditConditions(props) {
     const { courseId } = useParams();
@@ -11,6 +14,9 @@ export function EditConditions(props) {
     const [newCondition, setNewCondition] = useState("");
     const [showAddCondition, setShowAddCondition] = useState(false);
     const [conditions, setConditions] = useState(props.conditions);
+    const context = useContext(ModalContext);
+    const setShowModal = context.setShowModal;
+    const setData = context.setData;
 
     const handleConditionEdit = (index, value) => {
         const updated = [...conditions];
@@ -47,7 +53,34 @@ export function EditConditions(props) {
         saveConditions(courseId, {
             otherList,
             delIdList
-        }).then(console.log).catch(console.error);
+        }).then(res => {
+            if (res.status === 1000) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công',
+                    text: 'Cập nhật thành công!',
+                    confirmButtonText: 'OK'
+                });
+                setData((prevData) => {
+                    const updatedData = { ...prevData };
+                    updatedData.requires = conditions;
+                    console.log("Updated data:", updatedData);
+                    return updatedData;
+                });
+                console.log("Updated conditions:", otherList);
+
+                setShowModal(false);
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: res.message,
+                    confirmButtonText: 'OK'
+                });
+            }
+        }
+        )
+        .catch(console.error);
     };
 
     return (

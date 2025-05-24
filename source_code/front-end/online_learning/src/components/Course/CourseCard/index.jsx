@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { FaBook, FaRegClock } from 'react-icons/fa';
-
+import "./CourseCard.scss";
 export default function CourseCard(props) {
     const ROLE = localStorage.getItem("role");
 
@@ -15,15 +15,14 @@ export default function CourseCard(props) {
                 style={{ cursor: 'pointer' }}
             >
                 <img
-                    src="https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D"
+                    src={course.imageUrl || "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTm3R3-To53B_Si_auM8ivKyijnhACF6BPYwA&s"}
                     className="card-img-top course__image"
                     alt={course.title}
                 />
                 <div className="card-body d-flex flex-column">
                     <h5 className="card-title course__title">{course.title}</h5>
                     <p className="course__desc text-muted truncate-2-lines">
-                        Khóa học giúp bạn nắm vững kiến thức nền tảng về lập trình web.
-                        Khóa học giúp bạn nắm vững kiến thức nền tảng về lập trình web.Khóa học giúp bạn nắm vững kiến thức nền tảng về lập trình web.
+                        {course.short_desc || "Mô tả khóa học chưa có"}
                     </p>
                     {showPrice == true && (
                         <p className="course__price fw-bold">{course.price}VND</p>

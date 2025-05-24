@@ -15,14 +15,14 @@ import java.util.List;
 public class CourseController {
     private final CourseService courseService;
 
-    @PostMapping
-    public ApiResponse<CourseResponse> createCourse(@RequestBody CourseRequest request) {
-        CourseResponse response = courseService.createCourse(request);
-        return ApiResponse.<CourseResponse>builder()
-                .status(1000)
-                .data(response)
-                .build();
-    }
+//    @PostMapping
+//    public ApiResponse<CourseResponse> createCourse(@RequestBody CourseRequest request) {
+//        CourseResponse response = courseService.createCourse(request);
+//        return ApiResponse.<CourseResponse>builder()
+//                .status(1000)
+//                .data(response)
+//                .build();
+//    }
 
     @GetMapping
     public ApiResponse<List<CourseResponse>> getCourses(@RequestParam(required = false) String type,

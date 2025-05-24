@@ -18,6 +18,7 @@ public class Lesson {
     private String title;
     private String lessonKey;
     private String videoUrl;
+    private Integer idx;
 
     @Column(columnDefinition = "TEXT")
     private String description;

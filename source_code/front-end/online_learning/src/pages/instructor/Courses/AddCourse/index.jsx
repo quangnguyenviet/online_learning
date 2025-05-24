@@ -1,19 +1,43 @@
 import { useState } from 'react';
 import { createNewCourse } from 'utils/InstructorUtil/CourseUtil';
+import './AddCourse.scss'; // import SCSS
+import Swal from 'sweetalert2';
 
 export default function AddCourse() {
 
     const handleSubmit = (event) => {
-        event.preventDefault(); // prevent default form submission
+        event.preventDefault();
 
-        const formData = new FormData(event.target); // get form data
-        const title = formData.get('title'); // get course name
-        // const courseImage = formData.get('courseImage'); // get course image
-        const price = formData.get('price'); // get course price
+        const formData = new FormData(event.target);
+        const title = formData.get('title');
+        const price = formData.get('price');
+        const image = formData.get('courseImage');
+        const shortDesc = formData.get('shortDesc');
+        const data = {
+            title: title,
+            price: price,
+            image: image,
+            shortDesc: shortDesc,
+        };
 
-        createNewCourse(title, price)
+        createNewCourse(data)
             .then(response => {
-                console.log("Course created successfully:", response);
+                if (response.status === 1000) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Thêm khóa học thành công!',
+                        text: 'Khóa học đã được thêm vào hệ thống.',
+                    }).then(() => {
+                        window.location.href = '/instructor/courses';
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Thêm khóa học thất bại!',
+                        text: response.message,
+                    });
+                }
+                
             })
             .catch(error => {
                 console.error("Error creating course:", error);
@@ -22,36 +46,56 @@ export default function AddCourse() {
     }
 
     return (
-        <>
-            <h1>Thêm mới khóa học</h1>
-            <form className='formCreate' onSubmit={handleSubmit}>
-                <div className="row form-group mb-3">
-                    <div className="col-6">
-                        <label htmlFor="courseName">Tên khóa học</label>
-                        <input type="text" className="form-control" id="courseName" placeholder="Nhập tên khóa học"
-                        name='title' required
-                        />
-                    </div>
+        <div className="add-course-container">
+            <h1 className="form-title">Thêm mới khóa học</h1>
+            <form className="add-course-form" onSubmit={handleSubmit}>
+                <div className="form-group">
+                    <label htmlFor="courseName">Tên khóa học</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        id="courseName"
+                        name="title"
+                        placeholder="Nhập tên khóa học"
+                        required
+                    />
                 </div>
 
-                <div className="row form-group mb-3">
-                    <div className="col-6">
-                        <label htmlFor="courseImage">Ảnh khóa học</label>
-                        <input type="file" className="form-control" id="courseImage" />
-                    </div>
+                <div className="form-group">
+                    <label htmlFor="courseImage">Ảnh khóa học</label>
+                    <input
+                        type="file"
+                        className="form-control"
+                        id="courseImage"
+                        name="courseImage"
+                    />
                 </div>
 
-                <div className="row form-group mb-3">
-                    <div className="col-6">
-                        <label htmlFor="coursePrice">Giá khóa học</label>
-                        <input type="number" className="form-control" id="coursePrice" placeholder="Nhập giá (VNĐ)" 
-                        name='price'
-                        />
-                    </div>
+                <div className="form-group">
+                    <label htmlFor="coursePrice">Giá khóa học</label>
+                    <input
+                        type="number"
+                        className="form-control"
+                        id="coursePrice"
+                        name="price"
+                        placeholder="Nhập giá (VNĐ)"
+                    />
                 </div>
 
-                <button type="submit" className="btn btn-primary">Thêm khóa học</button>
+               {/* mo ta ngan */}
+                <div className="form-group">
+                    <label htmlFor="courseDescription">Mô tả ngắn</label>
+                    <textarea
+                        className="form-control"
+                        id="courseDescription"
+                        name="shortDesc"
+                        rows="3"
+                        placeholder="Nhập mô tả ngắn cho khóa học"
+                    ></textarea>
+                </div>
+
+                <button type="submit" className="btn-submit">Thêm khóa học</button>
             </form>
-        </>
+        </div>
     );
 }
