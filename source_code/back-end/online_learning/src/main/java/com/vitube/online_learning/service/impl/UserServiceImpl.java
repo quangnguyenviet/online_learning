@@ -5,23 +5,26 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.vitube.online_learning.dto.response.RoleResponse;
-import com.vitube.online_learning.entity.Role;
-import com.vitube.online_learning.mapper.RoleMapper;
-import com.vitube.online_learning.repository.RoleRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.cloudinary.api.exceptions.ApiException;
+import com.vitube.online_learning.enums.ErrorCode;
+import com.vitube.online_learning.exception.AppException;
+import com.vitube.online_learning.utils.ValidateUtil;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.vitube.online_learning.dto.request.UserRequest;
+import com.vitube.online_learning.dto.response.RoleResponse;
 import com.vitube.online_learning.dto.response.UserResponse;
+import com.vitube.online_learning.entity.Role;
 import com.vitube.online_learning.entity.User;
+import com.vitube.online_learning.mapper.RoleMapper;
 import com.vitube.online_learning.mapper.UserMapper;
+import com.vitube.online_learning.repository.RoleRepository;
 import com.vitube.online_learning.repository.UserRepository;
 import com.vitube.online_learning.service.UserService;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -41,10 +44,12 @@ public class UserServiceImpl implements UserService {
         if (role != null) {
             Role role1 = roleRepository.getById(role);
             if (role1 != null) {
-                Set<Role> roles = new HashSet<>();
-                roles.add(role1);
-                newUser.setRoles(roles);
+                newUser.setRole(role1);
             }
+        }
+        else{
+            Role userRole = roleRepository.getReferenceById("USER");
+            newUser.setRole(userRole);
         }
 
         return newUser;
@@ -53,20 +58,29 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse userToUserREsponse(User user) {
         UserResponse userResponse = userMapper.userToUserResponse(user);
-        Set<Role> roles = user.getRoles();
-        List<RoleResponse> roleResponses = new ArrayList<RoleResponse>();
-        for (Role role : roles) {
-            RoleResponse roleResponse = roleMapper.roleToRoleResponse(role);
-            roleResponses.add(roleResponse);
-        }
-        userResponse.setRole(roleResponses);
-        return userResponse;
+        userResponse.setRole(user.getRole().getName());
 
+        return userResponse;
     }
 
     @Override
     public UserResponse createUser(UserRequest request) {
         User user = userRequestToUser(request);
+        if (!ValidateUtil.isValidEmail(user.getEmail())) {
+            throw new AppException(ErrorCode.INVALID_EMAIL);
+        }
+        if (!ValidateUtil.isValidUsername(user.getUsername())) {
+            throw new AppException(ErrorCode.INVALID_USERNAME);
+        }
+        if (!ValidateUtil.isValidPassword(user.getPassword())) {
+            throw new AppException(ErrorCode.INVALID_PASSWORD);
+        }
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new AppException(ErrorCode.USERNAME_EXIST);
+        }
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new AppException(ErrorCode.EMAIL_EXIST);
+        }
         userRepository.save(user);
         return userToUserREsponse(user);
     }

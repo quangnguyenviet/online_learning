@@ -9,16 +9,11 @@ import com.vitube.online_learning.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
+    Boolean existsByUsername(String username);
+    Boolean existsByEmail(String email);
     User findByUsername(String username);
-//    @Query("SELECT u FROM User u JOIN u.roles r WHERE u.username = :username AND r.name = :role")
+    //    @Query("SELECT u FROM User u JOIN u.roles r WHERE u.username = :username AND r.name = :role")
 
-
-    @Query(value = "SELECT u.* FROM user u " +
-            "JOIN user_roles ur ON u.id = ur.user_id " +
-            "JOIN role r ON r.name = ur.roles_name " +
-            "WHERE u.username = :username AND r.name = :role;",
-            nativeQuery = true)
+    @Query("SELECT u FROM User u WHERE u.username = :username AND u.role.name = :role")
     User findByUsernameAndRole(@Param("username") String username, @Param("role") String role);
-
-
 }

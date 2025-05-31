@@ -1,9 +1,9 @@
 package com.vitube.online_learning.dto.request;
 
-import lombok.*;
-
 import java.util.List;
 import java.util.Map;
+
+import lombok.*;
 
 @Getter
 @Setter

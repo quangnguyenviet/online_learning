@@ -1,8 +1,8 @@
 package com.vitube.online_learning.dto.response;
 
-import lombok.*;
-
 import java.util.List;
+
+import lombok.*;
 
 @Getter
 @Setter

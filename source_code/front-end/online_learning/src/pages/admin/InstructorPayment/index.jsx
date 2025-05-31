@@ -1,22 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./InstructorPayment.scss";
+import { getPaymentData } from "utils/AdminUtil/InstructorPaymentUtil";
 
-const dummyData = {
-  "05/2025": [
-    { id: 1, name: "Nguyễn Văn A", total: 15000000, paid: false },
-    { id: 2, name: "Trần Thị B", total: 12000000, paid: true },
-  ],
-  "04/2025": [
-    { id: 1, name: "Nguyễn Văn A", total: 10000000, paid: true },
-    { id: 3, name: "Phạm Văn C", total: 8000000, paid: false },
-  ],
-};
 
-const months = Object.keys(dummyData);
 
 export default function InstructorPayment() {
-  const [selectedMonth, setSelectedMonth] = useState(months[0]);
-  const [paymentsData, setPaymentsData] = useState(dummyData);
+  const [selectedMonth, setSelectedMonth] = useState([]);
+  const [paymentsData, setPaymentsData] = useState([]);
+  const [months, setMonths] = useState([]);
+
+  useEffect(() => {
+    setPaymentsData( getPaymentData() );
+    setMonths(Object.keys(paymentsData)[0] || "05/2025");
+  }, []);
 
   const handleMarkPaid = (id) => {
     setPaymentsData((prev) => ({

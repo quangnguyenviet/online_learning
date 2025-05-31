@@ -1,5 +1,14 @@
 package com.vitube.online_learning.service.impl;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.vitube.online_learning.dto.request.LessonRequest;
 import com.vitube.online_learning.dto.response.LessonResponse;
 import com.vitube.online_learning.entity.Course;
@@ -10,47 +19,40 @@ import com.vitube.online_learning.repository.LessonRepository;
 import com.vitube.online_learning.service.LessonService;
 import com.vitube.online_learning.service.S3Service;
 import com.vitube.online_learning.utils.VideoUtil;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class LessonServiceImpl implements LessonService {
     private final LessonRepository lessonRepository;
-//    private final Cloudinary cloudinary;
+    //    private final Cloudinary cloudinary;
     private final CourseRepository courseRepository;
     private final S3Service s3Service;
     private final LessonMapper lessonMapper;
     private final VideoUtil videoUtil;
 
-//    @Override
-//    public LessonResponse createLesson(LessonRequest request) throws IOException {
-//        MultipartFile file = request.getFile();
-//        Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap(
-//                "resource_type", "video"
-//        ));
-//
-//        String videoUrl = (String) uploadResult.get("secure_url");
-//
-//        Lesson lesson = Lesson.builder()
-//                .title(request.getTitle())
-//                .videoUrl(videoUrl)
-//                .course(courseRepository.findById(request.getCourseId()).get())
-//                .build();
-//         lessonRepository.save(lesson);
-//
-//        return LessonResponse.builder()
-//                .videoUrl(videoUrl)
-//                .build();
-//
-//    }
+    //    @Override
+    //    public LessonResponse createLesson(LessonRequest request) throws IOException {
+    //        MultipartFile file = request.getFile();
+    //        Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap(
+    //                "resource_type", "video"
+    //        ));
+    //
+    //        String videoUrl = (String) uploadResult.get("secure_url");
+    //
+    //        Lesson lesson = Lesson.builder()
+    //                .title(request.getTitle())
+    //                .videoUrl(videoUrl)
+    //                .course(courseRepository.findById(request.getCourseId()).get())
+    //                .build();
+    //         lessonRepository.save(lesson);
+    //
+    //        return LessonResponse.builder()
+    //                .videoUrl(videoUrl)
+    //                .build();
+    //
+    //    }
     public static String generateKey() {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss");
@@ -67,7 +69,7 @@ public class LessonServiceImpl implements LessonService {
         File tempFile = File.createTempFile("video", ".mp4");
         request.getFile().transferTo(tempFile); //
 
-// Ensure the file was transferred correctly
+        // Ensure the file was transferred correctly
         if (!tempFile.exists()) {
             throw new RuntimeException("Temp file transfer failed.");
         }
@@ -75,13 +77,8 @@ public class LessonServiceImpl implements LessonService {
         System.out.println("Temp file path: " + tempFile.getAbsolutePath());
         System.out.println("File exists: " + tempFile.exists());
 
-
-// Now get duration
+        // Now get duration
         long durationInSeconds = videoUtil.getVideoDuration(tempFile);
-
-
-
-
 
         // Tạo lesson
         Lesson lesson = Lesson.builder()
@@ -100,9 +97,7 @@ public class LessonServiceImpl implements LessonService {
         tempFile.delete();
 
         return lessonToLessonResponse(addedLesson);
-
     }
-
 
     @Override
     public List<LessonResponse> getLessonOfCourse(String courseId) {
@@ -127,8 +122,7 @@ public class LessonServiceImpl implements LessonService {
         Lesson lesson = lessonRepository.findById(lessonId).get();
         if (request.getTag() != null && request.getTag().equals("UPDATE_INDEX")) {
             lesson.setIdx(request.getOrder());
-        }
-        else{
+        } else {
             String key = generateKey();
             lesson.setTitle(request.getTitle());
             lesson.setDescription(request.getDescription());
@@ -147,7 +141,6 @@ public class LessonServiceImpl implements LessonService {
 
         return null;
     }
-
 
     public LessonResponse lessonToLessonResponse(Lesson lesson) {
         LessonResponse lessonResponse = lessonMapper.lessonToLessonResponse(lesson);

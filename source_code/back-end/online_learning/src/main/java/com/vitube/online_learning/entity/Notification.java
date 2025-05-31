@@ -1,6 +1,7 @@
 package com.vitube.online_learning.entity;
 
 import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,4 @@ public class Notification {
     // khai bao not null
     @Column(nullable = false)
     private String userId;
-
-
 }

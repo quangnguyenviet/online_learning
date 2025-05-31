@@ -35,13 +35,12 @@ public class ApplicationInitConfig {
             roleRepository.save(userRole);
             roleRepository.save(adminRole);
             if (userRepository.findByUsername("admin") == null) {
-                Set<Role> roles = new HashSet<Role>();
-                roles.add(adminRole);
-
+                Role role = new Role();
+                role.setName(RoleEnum.ADMIN.name());
                 User adminAccount = User.builder()
                         .username("admin")
                         .password(passwordEncoder.encode("admin"))
-                        .roles(roles)
+                        .role(role)
                         .build();
 
                 userRepository.save(adminAccount);

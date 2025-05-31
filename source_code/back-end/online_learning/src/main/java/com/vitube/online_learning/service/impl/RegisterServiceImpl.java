@@ -1,5 +1,7 @@
 package com.vitube.online_learning.service.impl;
 
+import org.springframework.stereotype.Service;
+
 import com.vitube.online_learning.dto.request.RegisterRequest;
 import com.vitube.online_learning.entity.Course;
 import com.vitube.online_learning.entity.Register;
@@ -10,8 +12,8 @@ import com.vitube.online_learning.repository.RegisterRepository;
 import com.vitube.online_learning.repository.UserRepository;
 import com.vitube.online_learning.service.RegisterService;
 import com.vitube.online_learning.service.SecurityContextService;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -29,8 +31,7 @@ public class RegisterServiceImpl implements RegisterService {
         User student;
         if (request.getStudentId() != null) {
             student = userRepository.findById(request.getStudentId()).get();
-        }
-        else {
+        } else {
             student = securityContextService.getUser();
         }
 
@@ -47,8 +48,7 @@ public class RegisterServiceImpl implements RegisterService {
         User student;
         if (request.getStudentId() != null) {
             student = userRepository.findById(request.getStudentId()).get();
-        }
-        else {
+        } else {
             student = securityContextService.getUser();
         }
 
@@ -56,14 +56,12 @@ public class RegisterServiceImpl implements RegisterService {
 
         Register register = toEntity(request);
 
-
         registerRepository.save(register);
 
         student.getRegisters().add(register);
         course.getRegisters().add(register);
         userRepository.save(student);
         courseRepository.save(course);
-
     }
 
     @Override
@@ -78,5 +76,4 @@ public class RegisterServiceImpl implements RegisterService {
 
         return false; // Chưa đăng ký khóa học
     }
-
 }

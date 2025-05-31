@@ -1,6 +1,7 @@
 package com.vitube.online_learning.entity;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.*;
@@ -37,8 +38,12 @@ public class User {
     @Column
     private Date dob;
 
-    @ManyToMany
-    private Set<Role> roles;
+    private String bankName;
+    private String accountNumber;
+    private String accountName;
+
+    @ManyToOne
+    private Role role;
 
     @OneToMany(mappedBy = "instructor")
     private Set<Course> courses;
@@ -46,9 +51,12 @@ public class User {
     @OneToMany(mappedBy = "student")
     private Set<Register> registers;
 
-    @OneToMany(mappedBy = "student")
-    private Set<Order> orders;
+    @OneToMany(mappedBy = "instructor")
+    private List<InstructorStatic> instructorStatics;
 
-//    @OneToMany(mappedBy = "instructor")
-//    private Set<InstructorStatic> instructorStatics;
+//    @OneToMany(mappedBy = "student")
+//    private Set<Order> orders;
+
+    //    @OneToMany(mappedBy = "instructor")
+    //    private Set<InstructorStatic> instructorStatics;
 }

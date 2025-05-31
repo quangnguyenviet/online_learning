@@ -76,3 +76,41 @@
         }
     }
 }
+
+.back-to-home {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 6px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+}
+
+.form-footer {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+
+  p {
+    margin: 8px 0;
+    color: #555;
+
+    a {
+      color: #0077cc;
+      text-decoration: none;
+      font-weight: 500;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

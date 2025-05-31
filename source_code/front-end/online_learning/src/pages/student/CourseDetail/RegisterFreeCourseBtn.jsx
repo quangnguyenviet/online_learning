@@ -1,3 +1,5 @@
+import Swal from "sweetalert2";
+
 export default function RegisterFreeCourseBtn(props) {
     const URL_CHECK_REGISTER = "http://localhost:8080/online_learning/registers/check";
     const token = localStorage.getItem("token");
@@ -19,7 +21,16 @@ export default function RegisterFreeCourseBtn(props) {
             .then((data) => {
                 console.log(data);
                 if (data.status === 1000) {
-                    alert("Đăng ký khóa học thành công!");
+                    Swal.fire({
+                        icon: "success",
+                        title: "Đăng ký khóa học thành công",
+                        text: "Bạn đã đăng ký khóa học thành công!",
+
+                    }
+                    ).then(() => {
+                        window.location.reload();
+                    });
+
                 } else {
                     alert("Đăng ký khóa học thất bại!");
                 }

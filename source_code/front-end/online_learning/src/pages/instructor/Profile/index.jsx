@@ -1,7 +1,22 @@
+import { useEffect, useState } from "react";
 import "./Profile.scss";
+import { getMyInfor } from "utils/MyInforUtil";
 
 export default function Profile() {
+
+  const [infor, setInfor] = useState([]);
+
+  useEffect(() => {
+    getMyInfor()
+    .then(data => {
+      console.log("Thông tin cá nhân:", data);
+      setInfor(data.data);
+      
+    })
+  }, []);
+
   return (
+    
     <div className="profile-container">
       <h1 className="form-title">Thông tin cá nhân</h1>
       <form className="profile-form">
@@ -13,6 +28,7 @@ export default function Profile() {
             id="fullName"
             name="fullName"
             placeholder="Nhập họ và tên"
+            defaultValue={infor.getFullName}
             required
           />
         </div>
@@ -25,6 +41,7 @@ export default function Profile() {
             id="email"
             name="email"
             placeholder="Nhập email"
+            defaultValue={infor.email}
             required
           />
         </div>
@@ -37,6 +54,7 @@ export default function Profile() {
             id="phone"
             name="phone"
             placeholder="Nhập số điện thoại"
+            defaultValue={infor.phone}
             required
           />
         </div>
@@ -51,6 +69,7 @@ export default function Profile() {
             id="accountName"
             name="accountName"
             placeholder="Nhập tên tài khoản ngân hàng"
+            defaultValue={infor.accountName}
             required
           />
         </div>
@@ -62,6 +81,7 @@ export default function Profile() {
             className="form-control"
             id="accountNumber"
             name="accountNumber"
+            defaultValue={infor.accountNumber}
             placeholder="Nhập số tài khoản"
             required
           />
@@ -75,6 +95,7 @@ export default function Profile() {
             id="bankName"
             name="bankName"
             placeholder="Nhập tên ngân hàng"
+            defaultValue={infor.bankName}
             required
           />
         </div>
