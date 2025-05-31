@@ -8,7 +8,7 @@ public interface RegisterService {
     Register toEntity(RegisterRequest request);
     // convertor
 
-
     void createRegisterData(RegisterRequest request);
+
     boolean isRegistered(String courseId);
 }

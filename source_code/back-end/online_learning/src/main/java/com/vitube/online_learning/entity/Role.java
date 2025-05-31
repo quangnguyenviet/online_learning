@@ -19,6 +19,6 @@ public class Role {
 
     private String description;
 
-    @ManyToMany
-    private Set<Permission> permissions;
+    @OneToMany(mappedBy = "role")
+    private Set<User> users;
 }

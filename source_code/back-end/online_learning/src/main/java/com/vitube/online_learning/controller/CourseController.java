@@ -1,13 +1,14 @@
 package com.vitube.online_learning.controller;
 
-import com.vitube.online_learning.dto.request.CourseRequest;
+import java.util.List;
+
+import org.springframework.web.bind.annotation.*;
+
 import com.vitube.online_learning.dto.response.ApiResponse;
 import com.vitube.online_learning.dto.response.CourseResponse;
 import com.vitube.online_learning.service.CourseService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/courses")
@@ -15,19 +16,18 @@ import java.util.List;
 public class CourseController {
     private final CourseService courseService;
 
-//    @PostMapping
-//    public ApiResponse<CourseResponse> createCourse(@RequestBody CourseRequest request) {
-//        CourseResponse response = courseService.createCourse(request);
-//        return ApiResponse.<CourseResponse>builder()
-//                .status(1000)
-//                .data(response)
-//                .build();
-//    }
+    //    @PostMapping
+    //    public ApiResponse<CourseResponse> createCourse(@RequestBody CourseRequest request) {
+    //        CourseResponse response = courseService.createCourse(request);
+    //        return ApiResponse.<CourseResponse>builder()
+    //                .status(1000)
+    //                .data(response)
+    //                .build();
+    //    }
 
     @GetMapping
-    public ApiResponse<List<CourseResponse>> getCourses(@RequestParam(required = false) String type,
-                                                        @RequestParam(required = false) String query
-                                                        ) {
+    public ApiResponse<List<CourseResponse>> getCourses(
+            @RequestParam(required = false) String type, @RequestParam(required = false) String query) {
         List<CourseResponse> response = courseService.getCourses(type, query);
         return ApiResponse.<List<CourseResponse>>builder()
                 .status(1000)
@@ -38,10 +38,7 @@ public class CourseController {
     @GetMapping("/{id}")
     public ApiResponse<CourseResponse> getCourseById(@PathVariable String id) {
         CourseResponse response = courseService.getCourseById(id);
-        return ApiResponse.<CourseResponse>builder()
-                .status(1000)
-                .data(response)
-                .build();
+        return ApiResponse.<CourseResponse>builder().status(1000).data(response).build();
     }
 
     @GetMapping("/free")
@@ -79,6 +76,4 @@ public class CourseController {
                 .data(response)
                 .build();
     }
-
-
 }

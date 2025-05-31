@@ -1,5 +1,8 @@
 // src/utils/fetchApi.js
 
+const BASE_URL = 'http://localhost:8080/online_learning';
+const URL_SIGNUP = `${BASE_URL}/users`;
+
 export async function authenticate(url, method = 'GET', data = null) {
     const options = {
       method,
@@ -44,4 +47,21 @@ export function logout() {
           }
       })
   }
+
+  export function signup(data = null) {
+    return fetch(URL_SIGNUP, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .catch((error) => {
+        console.error('Error during signup:', error);
+        throw error;
+      });
+  }
+
+
   

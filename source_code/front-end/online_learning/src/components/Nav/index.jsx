@@ -53,7 +53,7 @@ function Nav() {
                                             Đăng nhập
                                         </Link>
 
-                                        <Link to="/signup" className="link-signup">
+                                        <Link to="/signup/student" className="link-signup">
                                             Đăng ký
                                         </Link>
                                     </>

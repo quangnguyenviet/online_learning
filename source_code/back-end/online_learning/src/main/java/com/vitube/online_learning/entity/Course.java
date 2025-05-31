@@ -1,10 +1,10 @@
 package com.vitube.online_learning.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
-
-import java.util.List;
 import java.util.Set;
+
+import jakarta.persistence.*;
+
+import lombok.*;
 
 @Table(name = "course")
 @Entity
@@ -42,8 +42,8 @@ public class Course {
     @OneToMany(mappedBy = "course", fetch = FetchType.EAGER)
     private Set<Lesson> lessons;
 
-    @OneToMany(mappedBy = "course")
-    private Set<Order> orders;
+//    @OneToMany(mappedBy = "course")
+//    private Set<Order> orders;
 
     @OneToMany(mappedBy = "course")
     private Set<LearnWhat> learnWhats;
@@ -56,6 +56,4 @@ public class Course {
 
     @OneToMany(mappedBy = "course")
     private Set<Require> requires;
-
-
 }

@@ -1,7 +1,7 @@
 package com.vitube.online_learning.entity;
 
-
 import jakarta.persistence.*;
+
 import lombok.*;
 
 @Getter
@@ -21,5 +21,4 @@ public class Require {
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
-
 }

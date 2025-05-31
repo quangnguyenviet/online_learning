@@ -8,7 +8,6 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.UUID;
 
-import com.vitube.online_learning.enums.RoleEnum;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,6 +27,7 @@ import com.vitube.online_learning.entity.InvalidToken;
 import com.vitube.online_learning.entity.Role;
 import com.vitube.online_learning.entity.User;
 import com.vitube.online_learning.enums.ErrorCode;
+import com.vitube.online_learning.enums.RoleEnum;
 import com.vitube.online_learning.exception.AppException;
 import com.vitube.online_learning.repository.InvalidTokenRepository;
 import com.vitube.online_learning.repository.UserRepository;
@@ -62,7 +62,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        if (request.getRole() == null) {
+        if (request.getRole() == null || request.getRole().isEmpty()) {
             User user = userRepository.findByUsername(request.getUsername());
             if (user == null) {
                 throw new AppException(ErrorCode.USER_NOT_EXIST);
@@ -73,8 +73,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     .role(RoleEnum.USER.name())
                     .isAuthenticated(isAuthenticated)
                     .build();
-        }
-        else{
+        } else {
             User user = userRepository.findByUsernameAndRole(request.getUsername(), request.getRole());
             if (user == null) {
                 throw new AppException(ErrorCode.USER_NOT_EXIST);
@@ -87,7 +86,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     .id(user.getId())
                     .build();
         }
-
     }
 
     @Override
@@ -174,7 +172,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                         Instant.now().plus(VALID_DURATION, ChronoUnit.SECONDS).toEpochMilli()))
                 .subject(user.getUsername())
                 .jwtID(UUID.randomUUID().toString())
-                .claim("scope", buildScope(user.getRoles()))
+                .claim("scope", user.getRole().getName())
                 .build();
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
 
@@ -189,13 +187,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
     }
 
-    private String buildScope(Set<Role> roles) {
-        StringBuilder scope = new StringBuilder("");
-        roles.forEach(role -> {
-            scope.append(role.getName() + " ");
-        });
-        return scope.toString().trim();
-    }
+//    private String buildScope(Set<Role> roles) {
+//        StringBuilder scope = new StringBuilder("");
+//        roles.forEach(role -> {
+//            scope.append(role.getName() + " ");
+//        });
+//        return scope.toString().trim();
+//    }
 
     private SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {
         JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());

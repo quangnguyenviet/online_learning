@@ -1,9 +1,7 @@
 package com.vitube.online_learning.utils;
 
-
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import java.util.Base64;
 
 public class HMACUtil {
     public static final String HMACSHA256 = "HmacSHA256";

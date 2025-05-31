@@ -1,25 +1,27 @@
 package com.vitube.online_learning.controller;
 
-import com.vitube.online_learning.dto.request.RegisterRequest;
-import com.vitube.online_learning.service.RegisterService;
-import com.vitube.online_learning.service.ZaloPayService;
-import com.vitube.online_learning.utils.HMACUtil;
-import lombok.RequiredArgsConstructor;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
+import java.util.Map;
+
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Date;
-import java.util.Map;
+import com.vitube.online_learning.dto.request.RegisterRequest;
+import com.vitube.online_learning.service.RegisterService;
+import com.vitube.online_learning.service.ZaloPayService;
+import com.vitube.online_learning.utils.HMACUtil;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/zalopay")
 @RequiredArgsConstructor
-public class  ZaloPayController {
+public class ZaloPayController {
 
     private final ZaloPayService zaloPayService;
     private final RegisterService registerService;
@@ -30,7 +32,7 @@ public class  ZaloPayController {
     @Value("${zalopay.key2}")
     private String KEY_2;
 
-//    ngrok http 8080
+    //    ngrok http 8080
 
     @PostMapping("/create-order")
     public ResponseEntity<String> createOrder(@RequestParam String courseId) throws Exception {
@@ -56,7 +58,6 @@ public class  ZaloPayController {
         return response;
     }
 
-
     @PostMapping("/callback")
     public ResponseEntity<String> handleCallback(@RequestBody Map<String, Object> payload) {
         try {
@@ -79,22 +80,18 @@ public class  ZaloPayController {
             long appTime = dataJson.getLong("app_time");
             Date registerDate = new Date(appTime);
 
-
             System.out.println("thanh toan thanh cong");
             String embedDataStr = dataJson.getString("embed_data"); // lấy chuỗi JSON từ key "embed_data"
             JSONObject embedDataJson = new JSONObject(embedDataStr); // chuyển thành JSONObject
-            String courseId = embedDataJson.getString("courseId");   // lấy ra giá trị courseId
+            String courseId = embedDataJson.getString("courseId"); // lấy ra giá trị courseId
 
             // them đăng ký
-            registerService.createRegisterData(
-                    RegisterRequest.builder()
-                            .price(amount)
-                            .registerDate(registerDate)
-                            .courseId(courseId)
-                            .studentId(dataJson.getString("app_user"))
-                            .build()
-            );
-
+            registerService.createRegisterData(RegisterRequest.builder()
+                    .price(amount)
+                    .registerDate(registerDate)
+                    .courseId(courseId)
+                    .studentId(dataJson.getString("app_user"))
+                    .build());
 
             // Trả về cho ZaloPay biết rằng bạn đã xử lý callback thành công
             return ResponseEntity.ok("{\"return_code\":1, \"return_message\":\"Success\"}");
@@ -105,5 +102,4 @@ public class  ZaloPayController {
                     .body("{\"return_code\":0, \"return_message\":\"Server Error\"}");
         }
     }
-
 }

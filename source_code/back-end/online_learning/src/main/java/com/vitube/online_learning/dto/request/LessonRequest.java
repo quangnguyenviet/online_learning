@@ -1,7 +1,8 @@
 package com.vitube.online_learning.dto.request;
 
-import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import lombok.*;
 
 @Getter
 @Setter

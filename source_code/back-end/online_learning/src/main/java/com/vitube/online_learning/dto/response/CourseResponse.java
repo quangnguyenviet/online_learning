@@ -1,12 +1,11 @@
 package com.vitube.online_learning.dto.response;
 
-import com.vitube.online_learning.entity.User;
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -28,6 +27,4 @@ public class CourseResponse {
     private int second;
     private String imageUrl;
     private Boolean published;
-
-
 }

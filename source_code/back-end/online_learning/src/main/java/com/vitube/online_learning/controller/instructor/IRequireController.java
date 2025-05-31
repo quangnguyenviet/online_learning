@@ -1,13 +1,15 @@
 package com.vitube.online_learning.controller.instructor;
 
+import java.util.List;
+
+import org.springframework.web.bind.annotation.*;
+
 import com.vitube.online_learning.dto.request.SaveRequireRequest;
 import com.vitube.online_learning.dto.response.ApiResponse;
 import com.vitube.online_learning.dto.response.RequireResponse;
 import com.vitube.online_learning.service.RequireService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/instructor-require")
@@ -26,12 +28,12 @@ public class IRequireController {
     }
 
     @PatchMapping("/{courseId}")
-    public ApiResponse<RequireResponse> saveRequire(@RequestBody SaveRequireRequest request, @PathVariable String courseId) {
+    public ApiResponse<RequireResponse> saveRequire(
+            @RequestBody SaveRequireRequest request, @PathVariable String courseId) {
         RequireResponse response = requireService.saveRequire(request, courseId);
         return ApiResponse.<RequireResponse>builder()
                 .status(1000)
                 .data(response)
                 .build();
     }
-
 }
