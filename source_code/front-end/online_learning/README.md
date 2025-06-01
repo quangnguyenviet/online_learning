@@ -6,7 +6,7 @@
 
 - **Node.js** >= 16.x
 - **npm** >= 8.x hoặc **yarn**
-- Đã cài đặt backend API (tham khảo tài liệu backend nếu có)
+- Đã cài đặt backend API
 
 ## Hướng dẫn cài đặt và chạy dự án
 
@@ -25,12 +25,6 @@ Sử dụng npm:
 npm install
 ```
 
-Hoặc yarn:
-
-```bash
-yarn install
-```
-
 ### 3. Cấu hình môi trường
 
 - Nếu có file `.env.example`, hãy copy thành `.env` và chỉnh sửa các biến phù hợp (ví dụ API endpoint).
@@ -41,22 +35,9 @@ yarn install
 ```bash
 npm start
 ```
-Hoặc:
-```bash
-yarn start
-```
 
 - Truy cập [http://localhost:3000](http://localhost:3000) trên trình duyệt để sử dụng ứng dụng.
 
-### 5. Build production
-
-```bash
-npm run build
-```
-Hoặc:
-```bash
-yarn build
-```
 
 ## Một số lưu ý
 
@@ -64,14 +45,7 @@ yarn build
 - Nếu gặp lỗi về SCSS, kiểm tra lại đường dẫn import và cài đặt đúng các package liên quan (`sass`, `node-sass`).
 - Để sử dụng đầy đủ icon, hãy đảm bảo đã cài đặt các package như `react-icons` và/hoặc FontAwesome.
 
-## Các lệnh hữu ích
 
-| Lệnh                | Chức năng                |
-|---------------------|-------------------------|
-| `npm start`         | Chạy dev server         |
-| `npm run build`     | Build production        |
-| `npm install`       | Cài dependencies        |
-| `npm run lint`      | Kiểm tra code style     |
 
 ## Thư mục chính
 
@@ -81,11 +55,5 @@ yarn build
 - `src/pages/` - Các trang chính
 - `src/_var.scss` - Biến SCSS toàn cục
 
-## Liên hệ
-
-- Tác giả: [Tên của bạn]
-- Email: [Email của bạn]
-
----
 
 Chúc bạn cài đặt và sử dụng thành công!

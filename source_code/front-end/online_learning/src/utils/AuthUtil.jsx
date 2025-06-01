@@ -25,7 +25,7 @@ export async function authenticate(url, method = 'GET', data = null) {
     }
   }
 
-export function logout() {
+export function logout(redirectUrl = '/login') {
     const token = localStorage.getItem("token");
     
     fetch('http://localhost:8080/online_learning/auth/logout', {
@@ -42,7 +42,7 @@ export function logout() {
               localStorage.removeItem('token');
               localStorage.removeItem("role");
               localStorage.removeItem("id");
-              window.location.href = '/login';
+              window.location.href = redirectUrl;
               
           }
       })

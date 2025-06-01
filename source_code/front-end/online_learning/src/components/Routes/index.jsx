@@ -28,6 +28,7 @@ import { User } from "pages/admin/User";
 import AdminLogin from "pages/admin/AdminLogin";
 import Signup from "pages/student/SignUp";
 import SignupInstructor from "pages/instructor/SignUp";
+import { Logout } from "components/Logout";
 const ROUTES = [
     {
         element: <StudentLayout />,
@@ -153,6 +154,10 @@ const ROUTES = [
     {
         path: "/login",
         element: <Login />
+    },
+    {
+        path: "/logout",
+        element: <Logout />
     },
     {
         path: "/signup",
