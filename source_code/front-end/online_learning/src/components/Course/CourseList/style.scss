@@ -1,0 +1,25 @@
+@use '../../../_var.scss' as v;
+
+.course-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  justify-content: center;
+  align-items: stretch;
+  width: 100%;
+  margin: 0 auto;
+  padding: 8px 0;
+}
+
+@media (max-width: 900px) {
+  .course-list {
+    gap: 16px;
+  }
+}
+@media (max-width: 600px) {
+  .course-list {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+}

@@ -32,6 +32,7 @@ export default function MyLearningDetail() {
                 }
             } catch (error) {
                 console.error("Error:", error);
+                setLoading(false);
             }
         };
 
@@ -41,7 +42,6 @@ export default function MyLearningDetail() {
     const handleView = (lessonKey) => {
         getSignedUrl(lessonKey)
             .then((data) => {
-                console.log(data);
                 setVideoUrl(data.data);
             })
             .catch((error) => {
@@ -50,44 +50,47 @@ export default function MyLearningDetail() {
     };
 
     return (
-        <>
-            <h1>My Learning Detail</h1>
-            {loading ? (
-                <div>Loading...</div>
-            ) : (
-                <div className="lessons">
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-9">
-                                {videoUrl && (
-                                    <div className="video-player mb-3">
-                                        <video width="100%" height="auto" controls autoPlay
-                                        key={videoUrl} >
-                                            <source src={videoUrl} type="video/mp4" />
-                                            Your browser does not support the video tag.
-                                        </video>
-                                    </div>
-                                )}
-                            </div>
-                            <div className="col-3">
+        <section className="my-learning-detail-section">
+            <div className="my-learning-detail__container">
+                <h2 className="my-learning-detail__title">
+                    <i className="fas fa-play-circle"></i> Nội dung khóa học
+                </h2>
+                {loading ? (
+                    <div className="my-learning-detail__loading">Đang tải...</div>
+                ) : (
+                    <div className="my-learning-detail__content">
+                        <div className="my-learning-detail__video">
+                            {videoUrl && (
+                                <div className="video-player">
+                                    <video width="100%" height="auto" controls autoPlay key={videoUrl}>
+                                        <source src={videoUrl} type="video/mp4" />
+                                        Trình duyệt của bạn không hỗ trợ video.
+                                    </video>
+                                </div>
+                            )}
+                        </div>
+                        <aside className="my-learning-detail__lessons">
+                            <h3 className="my-learning-detail__lessons-title">Danh sách bài học</h3>
+                            <div className="my-learning-detail__lesson-list">
                                 {lessons.map((lesson) => (
                                     <div
                                         key={lesson.lessonKey}
-                                        className="card mb-2 shadow-sm lesson-card"
+                                        className="lesson-card"
                                         onClick={() => handleView(lesson.lessonKey)}
-                                        style={{ cursor: "pointer" }}
+                                        tabIndex={0}
+                                        role="button"
                                     >
-                                        <div className="card-body d-flex flex-column align-items-center">
-                                            <h5 className="card-title">{lesson.title}</h5>
-                                            <p className="card-text">{lesson.description}</p>
+                                        <div className="lesson-card__body">
+                                            <h5 className="lesson-card__title">{lesson.title}</h5>
+                                            <p className="lesson-card__desc">{lesson.description}</p>
                                         </div>
                                     </div>
                                 ))}
                             </div>
-                        </div>
+                        </aside>
                     </div>
-                </div>
-            )}
-        </>
+                )}
+            </div>
+        </section>
     );
 }

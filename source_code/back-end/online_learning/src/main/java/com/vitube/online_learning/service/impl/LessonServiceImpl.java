@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -22,65 +23,56 @@ import com.vitube.online_learning.utils.VideoUtil;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Lớp triển khai các phương thức liên quan đến bài học.
+ */
 @Service
 @RequiredArgsConstructor
 public class LessonServiceImpl implements LessonService {
     private final LessonRepository lessonRepository;
-    //    private final Cloudinary cloudinary;
     private final CourseRepository courseRepository;
     private final S3Service s3Service;
     private final LessonMapper lessonMapper;
     private final VideoUtil videoUtil;
 
-    //    @Override
-    //    public LessonResponse createLesson(LessonRequest request) throws IOException {
-    //        MultipartFile file = request.getFile();
-    //        Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap(
-    //                "resource_type", "video"
-    //        ));
-    //
-    //        String videoUrl = (String) uploadResult.get("secure_url");
-    //
-    //        Lesson lesson = Lesson.builder()
-    //                .title(request.getTitle())
-    //                .videoUrl(videoUrl)
-    //                .course(courseRepository.findById(request.getCourseId()).get())
-    //                .build();
-    //         lessonRepository.save(lesson);
-    //
-    //        return LessonResponse.builder()
-    //                .videoUrl(videoUrl)
-    //                .build();
-    //
-    //    }
+    /**
+     * Tạo khóa duy nhất cho bài học.
+     *
+     * @return Chuỗi khóa duy nhất.
+     */
     public static String generateKey() {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss");
         return now.format(formatter);
     }
 
+    /**
+     * Tạo bài học mới và tải video lên S3.
+     *
+     * @param request Yêu cầu tạo bài học.
+     * @return Đối tượng phản hồi bài học.
+     * @throws IOException Lỗi xảy ra khi xử lý tệp video.
+     */
     @Override
     public LessonResponse createLessonS3(LessonRequest request) throws IOException {
         String key = generateKey();
 
-        // Upload lên S3
+        // Upload video lên S3
         String videoUrl = s3Service.uploadPrivate(request.getFile(), key);
 
+        // Tạo tệp tạm để lấy thông tin video
         File tempFile = File.createTempFile("video", ".mp4");
-        request.getFile().transferTo(tempFile); //
+        request.getFile().transferTo(tempFile);
 
-        // Ensure the file was transferred correctly
+        // Đảm bảo tệp được chuyển thành công
         if (!tempFile.exists()) {
             throw new RuntimeException("Temp file transfer failed.");
         }
 
-        System.out.println("Temp file path: " + tempFile.getAbsolutePath());
-        System.out.println("File exists: " + tempFile.exists());
-
-        // Now get duration
+        // Lấy thời lượng video
         long durationInSeconds = videoUtil.getVideoDuration(tempFile);
 
-        // Tạo lesson
+        // Tạo bài học
         Lesson lesson = Lesson.builder()
                 .title(request.getTitle())
                 .course(courseRepository.findById(request.getCourseId()).orElseThrow())
@@ -93,12 +85,18 @@ public class LessonServiceImpl implements LessonService {
 
         Lesson addedLesson = lessonRepository.save(lesson);
 
-        // Xoá file tạm
+        // Xóa tệp tạm
         tempFile.delete();
 
         return lessonToLessonResponse(addedLesson);
     }
 
+    /**
+     * Lấy danh sách bài học của một khóa học.
+     *
+     * @param courseId ID của khóa học.
+     * @return Danh sách phản hồi bài học.
+     */
     @Override
     public List<LessonResponse> getLessonOfCourse(String courseId) {
         List<LessonResponse> responses = new ArrayList<>();
@@ -107,9 +105,16 @@ public class LessonServiceImpl implements LessonService {
         course.getLessons().forEach(lesson -> {
             responses.add(lessonMapper.lessonToLessonResponse(lesson));
         });
+        Collections.sort(responses);
         return responses;
     }
 
+    /**
+     * Xóa bài học theo ID.
+     *
+     * @param lessonId ID của bài học.
+     * @return Đối tượng phản hồi (null).
+     */
     @Override
     public Void deleteLesson(String lessonId) {
         Lesson lesson = lessonRepository.findById(lessonId).get();
@@ -117,6 +122,14 @@ public class LessonServiceImpl implements LessonService {
         return null;
     }
 
+    /**
+     * Cập nhật thông tin bài học.
+     *
+     * @param lessonId ID của bài học.
+     * @param request Yêu cầu cập nhật bài học.
+     * @return Đối tượng phản hồi (null).
+     * @throws IOException Lỗi xảy ra khi xử lý tệp video.
+     */
     @Override
     public Void updateLesson(String lessonId, LessonRequest request) throws IOException {
         Lesson lesson = lessonRepository.findById(lessonId).get();
@@ -142,6 +155,12 @@ public class LessonServiceImpl implements LessonService {
         return null;
     }
 
+    /**
+     * Chuyển đổi đối tượng Lesson thành LessonResponse.
+     *
+     * @param lesson Đối tượng bài học.
+     * @return Đối tượng phản hồi bài học.
+     */
     public LessonResponse lessonToLessonResponse(Lesson lesson) {
         LessonResponse lessonResponse = lessonMapper.lessonToLessonResponse(lesson);
         lessonResponse.setDurationInSeconds(lesson.getDuration());

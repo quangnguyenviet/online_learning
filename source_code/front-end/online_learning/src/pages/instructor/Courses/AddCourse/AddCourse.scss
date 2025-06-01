@@ -1,18 +1,25 @@
+@use 'var.scss' as v;
+
 .add-course-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 2rem;
+    max-width: 540px;
+    margin: 36px auto;
+    padding: 2.2rem 1.5rem 2rem 1.5rem;
     background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 14px;
+    box-shadow: 0 4px 24px rgba(0, 80, 158, 0.09);
 }
 
 .form-title {
     text-align: center;
     margin-bottom: 2rem;
-    font-size: 1.8rem;
+    font-size: 2rem;
     font-weight: bold;
-    color: #333;
+    color: v.$primary-color;
+    letter-spacing: 1px;
+    .icon-title {
+        color: v.$primary-light;
+        margin-right: 10px;
+    }
 }
 
 .add-course-form {
@@ -24,37 +31,57 @@
 .form-group {
     display: flex;
     flex-direction: column;
-}
-
-label {
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: #444;
+    label {
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: v.$primary-dark;
+        .required {
+            color: #dc3545;
+            margin-left: 2px;
+        }
+    }
 }
 
 .form-control {
-    padding: 0.5rem 1rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    padding: 0.6rem 1rem;
+    border: 1.5px solid #cbe7f6;
+    border-radius: 6px;
     font-size: 1rem;
-
+    background: #f8fafc;
+    transition: border 0.2s;
     &:focus {
-        border-color: #007bff;
+        border-color: v.$primary-color;
         outline: none;
+        background: #fff;
     }
 }
 
 .btn-submit {
-    background-color: #007bff;
+    background: linear-gradient(90deg, v.$primary-light 0%, v.$primary-color 100%);
     color: #fff;
-    padding: 0.75rem;
-    font-size: 1rem;
+    padding: 0.85rem;
+    font-size: 1.08rem;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
+    font-weight: 700;
     cursor: pointer;
-    transition: background 0.3s ease;
-
+    transition: background 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(0,80,158,0.07);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     &:hover {
-        background-color: #0056b3;
+        background: v.$primary-dark;
+        color: #fff;
+    }
+}
+
+@media (max-width: 600px) {
+    .add-course-container {
+        padding: 1rem 2vw;
+    }
+    .form-title {
+        font-size: 1.2rem;
     }
 }

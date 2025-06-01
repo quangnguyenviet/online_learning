@@ -16,10 +16,14 @@ public interface InstructorPaymentRepository extends JpaRepository<InstructorPay
         u.first_name,
         u.last_name,
         u.email,
+        u.account_number,
+        u.account_name,
+        u.bank_name,
         s.month,
         s.year,
         s.total_earnings,
-        p.paid_at
+        p.paid_at,
+        p.id AS statisticId
     FROM instructor_statistic s
     JOIN user u ON s.instructor_id = u.id
     LEFT JOIN instructor_payment p ON p.statistic_id = s.id

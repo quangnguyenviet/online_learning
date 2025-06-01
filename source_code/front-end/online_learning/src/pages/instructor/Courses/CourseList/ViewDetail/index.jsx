@@ -54,7 +54,6 @@ export default function ViewDetail() {
         setShowModal(true);
     }
 
-    console.log("data", data.lessons);
 
     const handleTogglePublish = () => {
 
@@ -76,8 +75,6 @@ export default function ViewDetail() {
                     </button>
                 </div>
 
-
-
                 <section className="section">
                     <div className="section-header">
                         <h2><FaBookOpen className="icon icon-blue" /> Thông tin chung</h2>
@@ -96,12 +93,9 @@ export default function ViewDetail() {
                         <button className="btn-edit" onClick={handleWillLearnEdit}><FaEdit /> Sửa</button>
                     </div>
                     <ul className="section-list">
-                        {data.learnWhats && data.learnWhats.map((item, index) => {
-                            return (
-                                <li key={index}>✅{item.description}</li>
-                            )
-                        }
-                        )}
+                        {data.learnWhats && data.learnWhats.map((item, index) => (
+                            <li key={index}>✅ {item.description}</li>
+                        ))}
                     </ul>
                 </section>
 
@@ -111,13 +105,9 @@ export default function ViewDetail() {
                         <button className="btn-edit" onClick={handleConditionsEdit}><FaEdit /> Sửa</button>
                     </div>
                     <ul className="section-list">
-                        {data.requires && data.requires.map((item, index) => {
-                            return (
-                                <li key={index}>🔒{item.description}</li>
-                            )
-                        }
-                        )}
-
+                        {data.requires && data.requires.map((item, index) => (
+                            <li key={index}>🔒 {item.description}</li>
+                        ))}
                     </ul>
                 </section>
 
@@ -125,40 +115,22 @@ export default function ViewDetail() {
                     <div className="section-header">
                         <h2><FaListAlt className="icon icon-purple" /> Danh sách bài học</h2>
                     </div>
-                    <ul className="section-list">
-                        {/* {data.lessons && data.lessons.map((item, index) => {
-                            return (
-                                <li key={index}>📄{item.title}</li>
-                            )
-                        })} */}
+                    <div className="section-list lessons-list">
                         {data.lessons && <LessonList lessons={data.lessons} />}
-                    </ul>
+                    </div>
                 </section>
-
 
                 <CustomModal
                     title=""
                     isOpen={showModal}
                     onClose={() => setShowModal(false)}
                 >
-                    {tag === "general" && (
-                        <EditGeneral data={data} />
-                    )}
-                    {tag === "conditions" && (
-                        <EditConditions conditions={data.requires} />
-                    )}
-                    {tag === "willLearn" && (
-                        <EditWillLearn willLearns={data.learnWhats} />
-                    )}
-                    {tag === "lesson" && (
-                        <LessonList lessons={data.lessons} />
-                    )}
+                    {tag === "general" && <EditGeneral data={data} />}
+                    {tag === "conditions" && <EditConditions conditions={data.requires} />}
+                    {tag === "willLearn" && <EditWillLearn willLearns={data.learnWhats} />}
+                    {tag === "lesson" && <LessonList lessons={data.lessons} />}
                 </CustomModal>
             </div>
-        </ ModalContext.Provider>
-
-
-
-
+        </ModalContext.Provider>
     );
 }

@@ -20,26 +20,43 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import lombok.experimental.NonFinal;
 
+/**
+ * Lớp cấu hình bảo mật cho ứng dụng.
+ * Bao gồm các thiết lập liên quan đến xác thực, phân quyền, CORS, và mã hóa mật khẩu.
+ */
 @Configuration
-@EnableWebSecurity // optional
-@EnableMethodSecurity // enable method security
+@EnableWebSecurity // Kích hoạt bảo mật web
+@EnableMethodSecurity // Kích hoạt bảo mật ở cấp độ phương thức
 public class SecurityConfig {
 
+    // Các endpoint công khai cho phương thức POST
     private final String[] PUBLIC_ENPOINTS = {
-        "/users", "/auth/login", "/auth/introspect", "/auth/logout", "/auth/refresh-token", "/zalopay/callback"
-    };
-    private final String[] PUBLIC_GET = {
-        "/courses/*", "/courses", "/courses/{id}", "/courses/free", "/instructor-require/{courseId}",
+            "/users", "/auth/login", "/auth/introspect", "/auth/logout", "/auth/refresh-token", "/zalopay/callback"
     };
 
+    // Các endpoint công khai cho phương thức GET
+    private final String[] PUBLIC_GET = {
+            "/courses/*", "/courses", "/courses/{id}", "/courses/free", "/instructor-require/{courseId}",
+    };
+
+    // Khóa ký JWT được lấy từ file cấu hình
     @Value("${jwt.singerKey}")
     @NonFinal
     private String SIGNER_KEY;
 
+    // Bộ giải mã JWT tùy chỉnh
     @Autowired
     @Lazy
     private MyJwtDecoder myJwtDecoder;
 
+    /**
+     * Cấu hình chuỗi bộ lọc bảo mật.
+     * Thiết lập các quy tắc phân quyền, xử lý token JWT, và tắt CSRF.
+     *
+     * @param http Đối tượng HttpSecurity để cấu hình.
+     * @return Chuỗi bộ lọc bảo mật đã được cấu hình.
+     * @throws Exception Nếu xảy ra lỗi trong quá trình cấu hình.
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -48,35 +65,29 @@ public class SecurityConfig {
                     .permitAll()
                     .requestMatchers(HttpMethod.GET, PUBLIC_GET)
                     .permitAll()
-//                    .requestMatchers("/users/**")
-//                    .hasAuthority("SCOPE_ADMIN")
                     .anyRequest()
                     .authenticated();
         });
 
         http.oauth2ResourceServer(oauth2 -> {
             oauth2.jwt(jwt -> {
-                        jwt.decoder(myJwtDecoder); // config decoder for jwt token
+                        jwt.decoder(myJwtDecoder); // Cấu hình bộ giải mã cho token JWT
                     })
                     .authenticationEntryPoint(new JwtAuthenticationEntryPoint());
         });
 
         http.csrf(request -> {
-            request.disable(); // turn off csrf
+            request.disable(); // Tắt CSRF
         });
 
         return http.build();
     }
 
-    //    @Bean
-    //    JwtDecoder jwtDecoder(){
-    //        SecretKeySpec secretKeySpec = new SecretKeySpec(SIGNER_KEY.getBytes(), "HS512");
-    //        return NimbusJwtDecoder
-    //                .withSecretKey(secretKeySpec)
-    //                .macAlgorithm(MacAlgorithm.HS512)
-    //                .build();
-    //    }
-
+    /**
+     * Cấu hình CORS để cho phép các yêu cầu từ frontend.
+     *
+     * @return Đối tượng CorsConfigurationSource đã được cấu hình.
+     */
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -90,6 +101,11 @@ public class SecurityConfig {
         return source;
     }
 
+    /**
+     * Cấu hình bộ mã hóa mật khẩu.
+     *
+     * @return Đối tượng PasswordEncoder sử dụng thuật toán BCrypt.
+     */
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);

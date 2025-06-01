@@ -17,6 +17,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+/**
+ * Lớp triển khai các phương thức liên quan đến ZaloPay.
+ */
 @Service
 @RequiredArgsConstructor
 public class ZaloPayServiceImpl implements ZaloPayService {
@@ -27,33 +30,43 @@ public class ZaloPayServiceImpl implements ZaloPayService {
 
     @Value("${zalopay.key1}")
     private String KEY1;
-    //    ngrok http 8080
+
+    // URL callback khi thanh toán hoàn tất
     private static final String CALLBACK_URL =
-            "https://6ab4-2405-4803-f586-6ad0-bd14-c02d-1314-b359.ngrok-free.app/online_learning/zalopay/callback";
+            "https://77fb-2405-4803-f586-6ad0-892f-7309-1740-d908.ngrok-free.app/online_learning/zalopay/callback";
     private final SecurityContextService securityContextService;
 
+    /**
+     * Tạo đơn hàng ZaloPay.
+     *
+     * @param courseId ID của khóa học.
+     * @return Thông tin đơn hàng dưới dạng Map.
+     * @throws Exception Lỗi xảy ra khi tạo đơn hàng.
+     */
     public Map<String, Object> createOrder(String courseId) throws Exception {
+        // Tạo ID giao dịch ngẫu nhiên
         Random rand = new Random();
         int randomId = rand.nextInt(1000000);
         String appTransId = new SimpleDateFormat("yyMMdd").format(new Date()) + "_" + randomId;
         long appTime = System.currentTimeMillis();
 
-        // Lấy username từ context
+        // Lấy username từ ngữ cảnh bảo mật
         String appUser = securityContextService.getUser().getId();
 
-        // Tạo embed_data chứa courseId
+        // Tạo embed_data chứa thông tin khóa học
         Map<String, String> embedMap = new HashMap<>();
         embedMap.put("courseId", courseId);
         embedMap.put("redirecturl", "http://localhost:3000/my-learning");
-        JSONObject embedData = new JSONObject(embedMap); // JSON string
+        JSONObject embedData = new JSONObject(embedMap); // Chuỗi JSON
 
-        // Danh sách item (nếu có thể thêm sau), hiện tại để trống
+        // Danh sách item (hiện tại để trống)
         JSONArray items = new JSONArray();
 
+        // Lấy thông tin khóa học từ cơ sở dữ liệu
         Course course = courseRepository.findById(courseId).get();
         long amount = course.getNewPrice();
 
-        // Tạo đơn hàng
+        // Tạo thông tin đơn hàng
         Map<String, Object> order = new HashMap<>();
         order.put("app_id", APP_ID);
         order.put("app_trans_id", appTransId);
@@ -66,7 +79,7 @@ public class ZaloPayServiceImpl implements ZaloPayService {
         order.put("item", items.toString());
         order.put("callback_url", CALLBACK_URL);
 
-        // Tính MAC
+        // Tính MAC (Message Authentication Code)
         String data = APP_ID + "|" + appTransId + "|" + appUser + "|" + amount + "|" + appTime + "|"
                 + embedData.toString() + "|" + items.toString();
 

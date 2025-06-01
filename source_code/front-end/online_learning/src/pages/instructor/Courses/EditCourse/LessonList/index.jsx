@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import "./style.scss";
 
 export function LessonList(props) {
+
     const { courseId } = useParams();
     const [lessons, setLessons] = useState(props.lessons || []);
     const [isUploading, setIsUploading] = useState(false);

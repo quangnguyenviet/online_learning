@@ -12,8 +12,17 @@ import com.vitube.online_learning.repository.LearnWhatRepository;
 
 import lombok.RequiredArgsConstructor;
 
-
+/**
+ * Interface cung cấp các phương thức liên quan đến nội dung học.
+ */
 public interface LearnWhatService {
 
+    /**
+     * Lưu nội dung học vào khóa học.
+     *
+     * @param request Yêu cầu lưu nội dung học.
+     * @param courseId ID của khóa học.
+     * @return Đối tượng phản hồi sau khi lưu nội dung học.
+     */
     public Object saveLearnWhat(SaveLearnWhatRequest request, String courseId);
 }

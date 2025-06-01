@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import './Course.scss';
-import CourseList from "./CourseList";
+import './style.scss';
+import CourseList from "components/Course/CourseList";
 import { getCourses } from "utils/CoursesUtil";
 import { useSelector } from "react-redux";
 

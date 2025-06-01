@@ -1,7 +1,35 @@
-$base-color: #A1DE99;
+$base-color: #74ebd5;
 $font-size: 22px;
 
-$color-green: #62e39e;
+$color-green: #74ebd5;
 $color-orange: #ff8c00;
 
+$header-height: 70px;
+
+
+// Màu chủ đạo
+$primary-color: #00509e;
+$primary-light: #7abaff;
+$primary-dark: #003f7e;
+
+// Màu phụ
+$secondary-color: #17a2b8;
+$secondary-light: #e3f6fa;
+
+// Màu thành công, cảnh báo, lỗi
+$success-color: #28a745;
+$warning-color: #ffc107;
+$error-color: #dc3545;
+
+// Màu nền, chữ
+$background-color: #f8fafc;
+$text-color: #222;
+$text-light: #888;
+
+// Màu bảng, border
+$table-header-bg: #f0f4fa;
+$table-border: #e0e6f0;
+
+// Các biến khác
+$font-size: 22px;
 $header-height: 70px;

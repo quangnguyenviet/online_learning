@@ -12,6 +12,10 @@ import com.vitube.online_learning.service.S3Service;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Lớp điều khiển xử lý các yêu cầu liên quan đến bài học.
+ * Bao gồm các API để lấy danh sách bài học, tạo bài học mới, và tạo URL có chữ ký để tải lên file video.
+ */
 @RestController
 @RequestMapping("/lessons")
 @RequiredArgsConstructor
@@ -19,49 +23,13 @@ public class LessonController {
     private final LessonService lessonService;
     private final S3Service s3Service;
 
-    //    @PostMapping
-    //    public ApiResponse<?> createLesson(
-    //            @RequestParam("courseId") String courseId, // Nhận courseId
-    //            @RequestParam("title") String title, // Nhận title
-    //            @RequestParam("file") MultipartFile file // Nhận file video
-    //    ) throws IOException {
-    //
-    //        // Tạo đối tượng LessonRequest từ các tham số đã nhận
-    //        LessonRequest request = LessonRequest.builder()
-    //                .courseId(courseId)
-    //                .file(file)
-    //                .title(title)
-    //                .build();
-    //
-    //        // Gọi service để tạo bài học
-    //        LessonResponse response = lessonService.createLesson(request);
-    //
-    //        return ApiResponse.builder()
-    //                .status(1000)
-    //                .data(response)
-    //                .build();
-    //    }
-
-    //    @PostMapping
-    //    public ApiResponse<String> createLesson(@RequestParam("file") MultipartFile file,
-    //                                               @RequestParam("title") String title,
-    //                                               @RequestParam("courseId") String courseId
-    //                                               ) throws IOException {
-    //
-    //        lessonService.createLessonS3(
-    //            LessonRequest.builder()
-    //                    .file(file)
-    //                    .title(title)
-    //                    .courseId(courseId)
-    //                    .build()
-    //        );
-    //        return ApiResponse.<String>builder()
-    //                .status(1000)
-    //                .build();
-    //
-    //
-    //    }
-
+    /**
+     * API tạo URL có chữ ký để tải lên file video.
+     * Nhận tên file từ yêu cầu và trả về URL có chữ ký.
+     *
+     * @param body Đối tượng chứa tên file.
+     * @return Phản hồi API chứa URL có chữ ký.
+     */
     @PostMapping("/signed-url")
     public ApiResponse<?> getSignedUrl(@RequestBody Map<String, String> body) {
         String filename = body.get("filename");
@@ -72,6 +40,12 @@ public class LessonController {
         return ApiResponse.builder().status(1000).data(response).build();
     }
 
+    /**
+     * API lấy danh sách bài học của một khóa học.
+     *
+     * @param courseId ID của khóa học.
+     * @return Phản hồi API chứa danh sách bài học.
+     */
     @GetMapping("/{courseId}")
     public ApiResponse<List<LessonResponse>> getLessons(@PathVariable("courseId") String courseId) {
         List<LessonResponse> responses = lessonService.getLessonOfCourse(courseId);

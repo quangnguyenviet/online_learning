@@ -1,14 +1,120 @@
+@use '../../../_var.scss' as v;
+
 .instructor-dashboard {
-  h2 {
-    font-weight: 600;
-  }
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 36px 0 48px 0;
+  background: v.$background-color;
+  min-height: 70vh;
 
-  .card-title {
+  &__loading {
+    text-align: center;
+    color: v.$primary-dark;
     font-size: 1.2rem;
-    font-weight: 500;
+    padding: 40px 0;
   }
 
-  .table th, .table td {
-    vertical-align: middle;
+  &__title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: v.$primary-color;
+    margin-bottom: 32px;
+    text-align: center;
+
+    i {
+      margin-right: 10px;
+      color: v.$primary-light;
+    }
+  }
+}
+
+.dashboard-summary {
+  display: flex;
+  gap: 32px;
+  justify-content: center;
+  margin-bottom: 36px;
+
+  &__card {
+    flex: 1 1 220px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(0, 80, 158, 0.08);
+    padding: 28px 18px;
+    text-align: center;
+    min-width: 180px;
+    transition: box-shadow 0.2s;
+    border: 2px solid transparent;
+
+    &:hover {
+      box-shadow: 0 8px 32px rgba(0, 80, 158, 0.16);
+      border: 2px solid v.$primary-light;
+    }
+
+    .summary-label {
+      font-size: 1.1rem;
+      color: v.$primary-dark;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .summary-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: v.$primary-color;
+
+      span {
+        font-size: 1rem;
+        color: v.$primary-dark;
+        font-weight: 500;
+        margin-left: 4px;
+      }
+    }
+  }
+
+  .summary-income {
+    background: linear-gradient(90deg, #e0ffe7 0%, #b7f5c7 100%);
+  }
+  .summary-courses {
+    background: linear-gradient(90deg, #e0f0ff 0%, #b7d7f5 100%);
+  }
+  .summary-registrations {
+    background: linear-gradient(90deg, #e0f7ff 0%, #b7eaf5 100%);
+  }
+}
+
+.dashboard-charts {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 36px;
+  flex-wrap: wrap;
+
+  .dashboard-chart {
+    flex: 1 1 400px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(0, 80, 158, 0.08);
+    padding: 18px 12px 12px 12px;
+    min-width: 320px;
+
+    h5 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: v.$primary-dark;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  .dashboard-summary,
+  .dashboard-charts {
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .dashboard-summary__card,
+  .dashboard-chart {
+    min-width: unset;
   }
 }
