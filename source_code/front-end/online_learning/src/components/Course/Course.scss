@@ -1,12 +1,51 @@
-@use 'var.scss' as v;
-.course{
-    padding: 10px 0;
-    &__image{
-        width: 100%;
-        aspect-ratio: 4/3;
-        
+@use '../../_var.scss' as v;
+
+.course-section {
+  background: v.$background-color;
+  padding: 36px 0 48px 0;
+  min-height: 60vh;
+
+  &__container {
+    // max-width: 1200px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 16px;
+    // box-shadow: 0 4px 24px rgba(0,80,158,0.07);
+    // padding: 32px 18px 28px 18px;
+  }
+
+  &__title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: v.$primary-color;
+    margin-bottom: 28px;
+    text-align: center;
+    letter-spacing: 0.5px;
+    i {
+      margin-right: 10px;
+      color: v.$primary-light;
     }
-    .section-title{
-        color: v.$color-orange;
-    }
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    justify-content: center;
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 900px) {
+  .course-section__container {
+    padding: 16px 2px 12px 2px;
+  }
+  .course-section__title {
+    font-size: 1.3rem;
+  }
+  .course-section__list {
+    gap: 12px;
+    flex-direction: column;
+    align-items: stretch;
+  }
 }

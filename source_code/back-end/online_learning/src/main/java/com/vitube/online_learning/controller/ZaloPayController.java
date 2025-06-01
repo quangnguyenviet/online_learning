@@ -18,6 +18,10 @@ import com.vitube.online_learning.utils.HMACUtil;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Lớp điều khiển xử lý các yêu cầu liên quan đến thanh toán qua ZaloPay.
+ * Bao gồm các API để tạo đơn hàng và xử lý callback từ ZaloPay.
+ */
 @RestController
 @RequestMapping("/zalopay")
 @RequiredArgsConstructor
@@ -32,8 +36,14 @@ public class ZaloPayController {
     @Value("${zalopay.key2}")
     private String KEY_2;
 
-    //    ngrok http 8080
-
+    /**
+     * API tạo đơn hàng thanh toán qua ZaloPay.
+     * Nhận ID khóa học từ yêu cầu và gửi thông tin đơn hàng đến ZaloPay.
+     *
+     * @param courseId ID của khóa học cần thanh toán.
+     * @return Phản hồi từ ZaloPay chứa thông tin đơn hàng.
+     * @throws Exception Nếu xảy ra lỗi trong quá trình tạo đơn hàng.
+     */
     @PostMapping("/create-order")
     public ResponseEntity<String> createOrder(@RequestParam String courseId) throws Exception {
         Map<String, Object> requestData = zaloPayService.createOrder(courseId);
@@ -58,6 +68,13 @@ public class ZaloPayController {
         return response;
     }
 
+    /**
+     * API xử lý callback từ ZaloPay.
+     * Xác thực thông tin callback và lưu thông tin đăng ký khóa học vào hệ thống.
+     *
+     * @param payload Dữ liệu callback từ ZaloPay.
+     * @return Phản hồi xác nhận xử lý callback thành công hoặc thất bại.
+     */
     @PostMapping("/callback")
     public ResponseEntity<String> handleCallback(@RequestBody Map<String, Object> payload) {
         try {
@@ -85,7 +102,7 @@ public class ZaloPayController {
             JSONObject embedDataJson = new JSONObject(embedDataStr); // chuyển thành JSONObject
             String courseId = embedDataJson.getString("courseId"); // lấy ra giá trị courseId
 
-            // them đăng ký
+            // Thêm thông tin đăng ký khóa học
             registerService.createRegisterData(RegisterRequest.builder()
                     .price(amount)
                     .registerDate(registerDate)

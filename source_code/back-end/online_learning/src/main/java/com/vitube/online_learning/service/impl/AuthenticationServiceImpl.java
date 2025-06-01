@@ -39,6 +39,9 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * Lớp triển khai các phương thức liên quan đến xác thực.
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -47,7 +50,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     PasswordEncoder passwordEncoder;
     InvalidTokenRepository invalidTokenRepository;
     UserRepository userRepository;
-    //    @NonFinal
+
     @Value("${jwt.singerKey}")
     @NonFinal
     String SIGNER_KEY;
@@ -60,6 +63,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @NonFinal
     long REFRESH_DURATION;
 
+    /**
+     * Xác thực người dùng dựa trên thông tin đăng nhập.
+     *
+     * @param request Yêu cầu xác thực.
+     * @return Phản hồi xác thực.
+     */
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         if (request.getRole() == null || request.getRole().isEmpty()) {
@@ -88,6 +97,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
     }
 
+    /**
+     * Kiểm tra tính hợp lệ của token.
+     *
+     * @param request Yêu cầu introspect.
+     * @return Phản hồi introspect.
+     * @throws JOSEException Lỗi liên quan đến xử lý token.
+     * @throws ParseException Lỗi phân tích token.
+     */
     @Override
     public IntrospectRespone introspect(IntrospectRequest request) throws JOSEException, ParseException {
         String token = request.getToken();
@@ -106,16 +123,22 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     .get();
             valid = false;
         } catch (NoSuchElementException e) {
-            // token is not in the invalidToken table
+            // token không tồn tại trong bảng invalidToken
         }
 
         return IntrospectRespone.builder().valid(valid).build();
     }
 
+    /**
+     * Đăng xuất người dùng bằng cách vô hiệu hóa token.
+     *
+     * @param request Yêu cầu đăng xuất.
+     * @return Đối tượng phản hồi (null).
+     */
     @Override
     public Object logout(LogoutRequest request) {
         try {
-            SignedJWT signedJWT = SignedJWT.parse(request.getToken()); // may get ParseException
+            SignedJWT signedJWT = SignedJWT.parse(request.getToken()); // có thể xảy ra ParseException
             String jtid = signedJWT.getJWTClaimsSet().getJWTID();
             Date expiration = new Date(signedJWT
                     .getJWTClaimsSet()
@@ -136,6 +159,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return null;
     }
 
+    /**
+     * Làm mới token cho người dùng.
+     *
+     * @param request Yêu cầu làm mới token.
+     * @return Phản hồi xác thực với token mới.
+     */
     @Override
     public AuthenticationResponse refreshToken(RefreshRequest request) {
         try {
@@ -162,6 +191,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
     }
 
+    /**
+     * Tạo token mới cho người dùng.
+     *
+     * @param user Đối tượng người dùng.
+     * @return Token dưới dạng chuỗi.
+     */
     private String generateToken(User user) {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
 
@@ -182,30 +217,31 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             jwsObject.sign(new MACSigner(SIGNER_KEY.getBytes()));
             return jwsObject.serialize();
         } catch (JOSEException e) {
-            log.error("Cannot create token");
+            log.error("Không thể tạo token");
             throw new RuntimeException(e);
         }
     }
 
-//    private String buildScope(Set<Role> roles) {
-//        StringBuilder scope = new StringBuilder("");
-//        roles.forEach(role -> {
-//            scope.append(role.getName() + " ");
-//        });
-//        return scope.toString().trim();
-//    }
-
+    /**
+     * Xác minh token và kiểm tra tính hợp lệ.
+     *
+     * @param token Token cần xác minh.
+     * @param isRefresh Xác định token có phải token làm mới hay không.
+     * @return Đối tượng SignedJWT đã được xác minh.
+     * @throws JOSEException Lỗi liên quan đến xử lý token.
+     * @throws ParseException Lỗi phân tích token.
+     */
     private SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {
         JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
         SignedJWT signedJWT = SignedJWT.parse(token);
 
         Date expiration = (isRefresh)
                 ? (new Date(signedJWT
-                        .getJWTClaimsSet()
-                        .getIssueTime()
-                        .toInstant()
-                        .plus(REFRESH_DURATION, ChronoUnit.SECONDS)
-                        .toEpochMilli()))
+                .getJWTClaimsSet()
+                .getIssueTime()
+                .toInstant()
+                .plus(REFRESH_DURATION, ChronoUnit.SECONDS)
+                .toEpochMilli()))
                 : (signedJWT.getJWTClaimsSet().getExpirationTime());
 
         var verified = signedJWT.verify(verifier);
@@ -217,7 +253,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     .get();
             valid = false;
         } catch (NoSuchElementException e) {
-            // token is not in the invalidToken table
+            // token không tồn tại trong bảng invalidToken
         }
         if (!valid) {
             throw new AppException(ErrorCode.INVALID_TOKEN);

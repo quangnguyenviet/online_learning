@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { createNewCourse } from 'utils/InstructorUtil/CourseUtil';
-import './AddCourse.scss'; // import SCSS
+import './AddCourse.scss';
 import Swal from 'sweetalert2';
 
 export default function AddCourse() {
@@ -37,7 +37,6 @@ export default function AddCourse() {
                         text: response.message,
                     });
                 }
-                
             })
             .catch(error => {
                 console.error("Error creating course:", error);
@@ -47,10 +46,12 @@ export default function AddCourse() {
 
     return (
         <div className="add-course-container">
-            <h1 className="form-title">Thêm mới khóa học</h1>
+            <h1 className="form-title">
+                <i className="fas fa-plus-circle icon-title"></i> Thêm mới khóa học
+            </h1>
             <form className="add-course-form" onSubmit={handleSubmit}>
                 <div className="form-group">
-                    <label htmlFor="courseName">Tên khóa học</label>
+                    <label htmlFor="courseName">Tên khóa học <span className="required">*</span></label>
                     <input
                         type="text"
                         className="form-control"
@@ -68,21 +69,23 @@ export default function AddCourse() {
                         className="form-control"
                         id="courseImage"
                         name="courseImage"
+                        accept="image/*"
                     />
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="coursePrice">Giá khóa học</label>
+                    <label htmlFor="coursePrice">Giá khóa học <span className="required">*</span></label>
                     <input
                         type="number"
                         className="form-control"
                         id="coursePrice"
                         name="price"
                         placeholder="Nhập giá (VNĐ)"
+                        min="0"
+                        required
                     />
                 </div>
 
-               {/* mo ta ngan */}
                 <div className="form-group">
                     <label htmlFor="courseDescription">Mô tả ngắn</label>
                     <textarea
@@ -94,7 +97,9 @@ export default function AddCourse() {
                     ></textarea>
                 </div>
 
-                <button type="submit" className="btn-submit">Thêm khóa học</button>
+                <button type="submit" className="btn-submit">
+                    <i className="fas fa-save"></i> Thêm khóa học
+                </button>
             </form>
         </div>
     );

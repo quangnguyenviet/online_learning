@@ -1,70 +1,91 @@
-# Getting Started with Create React App
+# Turtle Online Learning - Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Đây là source code **frontend** cho hệ thống học trực tuyến Turtle Online Learning, sử dụng ReactJS.
 
-## Available Scripts
+## Yêu cầu hệ thống
 
-In the project directory, you can run:
+- **Node.js** >= 16.x
+- **npm** >= 8.x hoặc **yarn**
+- Đã cài đặt backend API (tham khảo tài liệu backend nếu có)
 
-### `npm start`
+## Hướng dẫn cài đặt và chạy dự án
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 1. Clone source code
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```bash
+git clone <repo-url>
+cd source_code/front-end/online_learning
+```
 
-### `npm test`
+### 2. Cài đặt dependencies
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Sử dụng npm:
 
-### `npm run build`
+```bash
+npm install
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Hoặc yarn:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+yarn install
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 3. Cấu hình môi trường
 
-### `npm run eject`
+- Nếu có file `.env.example`, hãy copy thành `.env` và chỉnh sửa các biến phù hợp (ví dụ API endpoint).
+- Mặc định, API backend chạy ở `http://localhost:8080/online_learning/`. Nếu khác, hãy sửa lại trong code hoặc file env.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### 4. Chạy dự án
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```bash
+npm start
+```
+Hoặc:
+```bash
+yarn start
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- Truy cập [http://localhost:3000](http://localhost:3000) trên trình duyệt để sử dụng ứng dụng.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### 5. Build production
 
-## Learn More
+```bash
+npm run build
+```
+Hoặc:
+```bash
+yarn build
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Một số lưu ý
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- Đảm bảo backend đã chạy trước khi sử dụng frontend.
+- Nếu gặp lỗi về SCSS, kiểm tra lại đường dẫn import và cài đặt đúng các package liên quan (`sass`, `node-sass`).
+- Để sử dụng đầy đủ icon, hãy đảm bảo đã cài đặt các package như `react-icons` và/hoặc FontAwesome.
 
-### Code Splitting
+## Các lệnh hữu ích
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+| Lệnh                | Chức năng                |
+|---------------------|-------------------------|
+| `npm start`         | Chạy dev server         |
+| `npm run build`     | Build production        |
+| `npm install`       | Cài dependencies        |
+| `npm run lint`      | Kiểm tra code style     |
 
-### Analyzing the Bundle Size
+## Thư mục chính
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- `src/` - Source code React
+- `public/` - File tĩnh
+- `src/components/` - Các component dùng chung
+- `src/pages/` - Các trang chính
+- `src/_var.scss` - Biến SCSS toàn cục
 
-### Making a Progressive Web App
+## Liên hệ
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- Tác giả: [Tên của bạn]
+- Email: [Email của bạn]
 
-### Advanced Configuration
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Chúc bạn cài đặt và sử dụng thành công!

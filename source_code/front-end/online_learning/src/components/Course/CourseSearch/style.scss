@@ -1,0 +1,40 @@
+@use '../../../_var.scss' as v;
+
+.course-search-section {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,80,158,0.07);
+  padding: 28px 18px 24px 18px;
+  margin: 0 auto 32px auto;
+  max-width: 1100px;
+  min-height: 300px;
+
+  &__title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: v.$primary-color;
+    margin-bottom: 18px;
+    text-align: center;
+    i {
+      margin-right: 8px;
+      color: v.$primary-light;
+    }
+  }
+
+  &__result-list {
+    margin-top: 12px;
+  }
+
+  &__notfound {
+    text-align: center;
+    color: v.$error-color;
+    font-size: 1.15rem;
+    margin-top: 32px;
+  }
+}
+
+@media (max-width: 900px) {
+  .course-search-section {
+    padding: 12px 2px 10px 2px;
+  }
+}

@@ -1,129 +1,187 @@
-@use '../../var' as v;
+@use '../../_var.scss' as v;
 
-.student {
-  .nav {
-    padding: 10px 40px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    background-color: #A1DE99;
-    color: v.$color-orange;
+.nav-bar {
+  background: linear-gradient(90deg, v.$primary-light 0%, v.$primary-color 100%);
+  color: v.$text-color;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  min-height: 70px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 
-    &__logo {
-      display: flex;
-      align-items: center;
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    height: v.$header-height;
+    gap: 18px;
+  }
 
-      img {
-        width: 50px;
-        height: auto;
-      }
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 
-      span {
-        font-size: 32px;
-        font-weight: 500;
-        margin-left: 10px;
-      }
+    img {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,80,158,0.07);
     }
-
-    &__menu {
-      display: flex;
-      list-style: none;
-      align-items: center;
-      justify-content: center;
-      margin: 0;
-      padding: 0;
-      height: 100%;
-
-      li {
-        margin: 0 15px;
-      }
-    }
-
-    &__link {
-      text-decoration: none;
-      color: black;
-      font-size: v.$font-size;
-
-      &:hover {
-        color: v.$color-orange;
-      }
-
-      &.active {
-        color: v.$color-orange;
-      }
-    }
-
-    &__auth {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-
-
-      .link-login,
-      .link-signup {
-        padding: 8px 15px;
-        text-decoration: none;
-        font-size: v.$font-size;
-        transition: color 0.3s ease;
-        color: black;
-
-
-      }
-
-      .link-login {
-        background: linear-gradient(to right, #ff7e5f, #feb47b);
-
-        color: black;
-      }
-
-      .link-signup {
-        border: 1px solid v.$color-orange;
-      }
-
-
-
-
-
-    }
-
-    .user-menu-wrapper {
-      position: relative;
-      display: inline-block;
-
-      .user-icon {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        margin-left: 10px;
-        cursor: pointer;
-        color: v.$color-orange;
-        border: 2px solid v.$color-orange;
-      }
-
-      .nav__dropdown {
-        display: none;
-        position: absolute;
-        top: 100%;
-        background: v.$color-green;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        min-width: 120px;
-        z-index: 1000;
-
-        .nav__link {
-          padding: 10px 16px;
-          cursor: pointer;
-
-          &:hover {
-            background: #f0f0f0;
-          }
-        }
-      }
-
-      &:hover .nav__dropdown {
-        display: block;
-      }
+    span {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: v.$primary-dark;
+      letter-spacing: 1px;
     }
   }
 
+  &__menu {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    li {
+      margin: 0;
+    }
+  }
+
+  &__link {
+    text-decoration: none;
+    color: v.$text-color;
+    font-size: 1.08rem;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: background 0.2s, color 0.2s;
+    &.active,
+    &:hover {
+      background: v.$primary-dark;
+      color: #fff;
+    }
+  }
+
+  &__auth {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__login-btn, &__signup-btn {
+    padding: 7px 18px;
+    border-radius: 5px;
+    font-size: 1.05rem;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    outline: none;
+    transition: background 0.2s, color 0.2s;
+    cursor: pointer;
+  }
+  &__login-btn {
+    background: linear-gradient(90deg, v.$primary-color 60%, v.$primary-light 100%);
+    color: #fff;
+    &:hover { background: v.$primary-dark; }
+  }
+  &__signup-btn {
+    background: #fff;
+    color: v.$primary-color;
+    border: 1.5px solid v.$primary-color;
+    &:hover {
+      background: v.$primary-light;
+      color: #fff;
+    }
+  }
+
+  .user-menu-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    .user-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      margin-left: 8px;
+      cursor: pointer;
+      color: v.$primary-dark;
+      border: 2px solid v.$primary-dark;
+      background: #fff;
+      padding: 3px;
+      transition: border 0.2s;
+      &:hover {
+        border: 2px solid v.$primary-light;
+      }
+    }
+
+    .nav-bar__dropdown {
+      display: none;
+      position: absolute;
+      top: 120%;
+      right: 0;
+      background: #fff;
+      box-shadow: 0 4px 16px rgba(0,80,158,0.13);
+      border-radius: 8px;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      min-width: 140px;
+      z-index: 1000;
+
+      .nav-bar__dropdown-item {
+        padding: 12px 18px;
+        color: v.$primary-dark;
+        font-weight: 500;
+        cursor: pointer;
+        border-bottom: 1px solid #f0f4fa;
+        transition: background 0.2s;
+        &:hover {
+          background: v.$primary-light;
+          color: #fff;
+        }
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+    }
+
+    &:hover .nav-bar__dropdown {
+      display: block;
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  .nav-bar__container {
+    flex-direction: column;
+    gap: 8px;
+    padding: 0 8px;
+    height: auto;
+  }
+  .nav-bar__menu {
+    gap: 10px;
+  }
+  .nav-bar__logo span {
+    font-size: 1.1rem;
+  }
+}
+
+.user-menu-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .nav-bar__dropdown {
+    display: none;
+    // ...các style khác...
+  }
+  .nav-bar__dropdown.show {
+    display: block;
+  }
 }

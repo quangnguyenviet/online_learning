@@ -1,63 +1,150 @@
-.payment-container {
-  padding: 30px;
-
-  h2 {
-    margin-bottom: 20px;
-    color: #343a40;
-  }
-
-  .payment-table {
-    width: 100%;
-    border-collapse: collapse;
-
-    th, td {
-      padding: 12px;
-      border: 1px solid #dee2e6;
-      text-align: center;
-    }
-
-    th {
-      background-color: #f1f3f5;
-      font-weight: bold;
-    }
-
-    .paid {
-      color: green;
-      font-weight: bold;
-    }
-
-    .unpaid {
-      color: red;
-      font-weight: bold;
-    }
-
-    button {
-      background-color: #0d6efd;
-      color: white;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 5px;
-      cursor: pointer;
-
-      &:hover {
-        background-color: #0b5ed7;
-      }
-    }
-  }
+.instructor-payment-page {
+  max-width: 1100px;
+  margin: 32px auto 0 auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+  padding: 32px 24px 24px 24px;
 }
-.payment-header {
+
+.page-title {
+  color: #00509e;
+  margin-bottom: 24px;
+  text-align: center;
+  font-size: 2em;
+  font-weight: 600;
+  i { margin-right: 8px; }
+}
+
+.filter-row {
   display: flex;
-  justify-content: space-between;
+  gap: 18px;
   align-items: center;
-  margin-bottom: 20px;
-
-  h2 {
-    margin: 0;
+  justify-content: center;
+  margin-bottom: 18px;
+  label {
+    font-weight: 500;
+    color: #00509e;
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
-
   select {
     padding: 6px 10px;
-    font-size: 16px;
-    border-radius: 4px;
+    border-radius: 5px;
+    border: 1px solid #b7c6d9;
+    background: #f8fafc;
+    font-size: 1em;
+  }
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.styled-table th, .styled-table td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #e0e6f0;
+  text-align: left;
+}
+
+.styled-table th {
+  background: #f0f4fa;
+  color: #00509e;
+  font-weight: 600;
+}
+
+.styled-table tr:hover {
+  background: #f6faff;
+}
+
+.teacher-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  i {
+    color: #00509e;
+    font-size: 1.1em;
+  }
+}
+
+.status {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 0.98em;
+  display: inline-block;
+  &.paid {
+    background: #e6f9e6;
+    color: #1e7e34;
+    border: 1px solid #b2e2b2;
+  }
+  &.unpaid {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+  }
+}
+
+.btn {
+  padding: 7px 18px;
+  border-radius: 5px;
+  border: none;
+  font-size: 1em;
+  cursor: pointer;
+  margin: 2px 2px;
+  transition: background 0.2s, color 0.2s;
+  &.btn-primary {
+    background: #00509e;
+    color: #fff;
+    &:hover { background: #003f7e; }
+  }
+  &.btn-info {
+    background: #17a2b8;
+    color: #fff;
+    &:hover { background: #117a8b; }
+  }
+}
+
+.payment-modal-backdrop {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.25);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.payment-modal {
+  background: #fff;
+  border-radius: 10px;
+  padding: 32px 28px 22px 28px;
+  min-width: 320px;
+  max-width: 95vw;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+  animation: modalShow 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+@keyframes modalShow {
+  from { transform: translateY(-40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.payment-modal-content p {
+  margin: 8px 0;
+}
+.payment-modal-actions {
+  margin-top: 18px;
+  text-align: right;
+  .btn {
+    min-width: 120px;
   }
 }

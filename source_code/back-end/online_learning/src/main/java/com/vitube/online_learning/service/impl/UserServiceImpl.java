@@ -26,6 +26,9 @@ import com.vitube.online_learning.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Lớp triển khai các phương thức liên quan đến người dùng.
+ */
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -36,6 +39,12 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
 
+    /**
+     * Chuyển đổi đối tượng UserRequest thành User.
+     *
+     * @param user Yêu cầu người dùng.
+     * @return Đối tượng người dùng.
+     */
     @Override
     public User userRequestToUser(UserRequest user) {
         User newUser = userMapper.userRequestToUser(user);
@@ -46,8 +55,7 @@ public class UserServiceImpl implements UserService {
             if (role1 != null) {
                 newUser.setRole(role1);
             }
-        }
-        else{
+        } else {
             Role userRole = roleRepository.getReferenceById("USER");
             newUser.setRole(userRole);
         }
@@ -55,6 +63,12 @@ public class UserServiceImpl implements UserService {
         return newUser;
     }
 
+    /**
+     * Chuyển đổi đối tượng User thành UserResponse.
+     *
+     * @param user Đối tượng người dùng.
+     * @return Đối tượng phản hồi người dùng.
+     */
     @Override
     public UserResponse userToUserREsponse(User user) {
         UserResponse userResponse = userMapper.userToUserResponse(user);
@@ -63,6 +77,12 @@ public class UserServiceImpl implements UserService {
         return userResponse;
     }
 
+    /**
+     * Tạo người dùng mới.
+     *
+     * @param request Yêu cầu tạo người dùng.
+     * @return Đối tượng phản hồi người dùng.
+     */
     @Override
     public UserResponse createUser(UserRequest request) {
         User user = userRequestToUser(request);
@@ -85,11 +105,21 @@ public class UserServiceImpl implements UserService {
         return userToUserREsponse(user);
     }
 
+    /**
+     * Xóa người dùng theo ID.
+     *
+     * @param id ID của người dùng.
+     */
     @Override
     public void deleteUser(String id) {
         userRepository.deleteById(id);
     }
 
+    /**
+     * Lấy danh sách tất cả người dùng.
+     *
+     * @return Danh sách phản hồi người dùng.
+     */
     @Override
     public List<UserResponse> getAllUsers() {
         List<User> users = userRepository.findAll();
@@ -100,6 +130,11 @@ public class UserServiceImpl implements UserService {
         return userResponses;
     }
 
+    /**
+     * Lấy thông tin của người dùng hiện tại.
+     *
+     * @return Đối tượng phản hồi người dùng.
+     */
     @Override
     public UserResponse getMyInfo() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();

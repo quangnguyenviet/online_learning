@@ -1,22 +1,60 @@
+@use "var.scss" as v;
+
 .view-detail-container {
-    max-width: 800px;
+    max-width: 900px;
     margin: 40px auto;
-    padding: 30px;
+    padding: 32px 20px;
     background-color: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 80, 158, 0.08);
     font-family: 'Segoe UI', sans-serif;
-    color: #333;
+    color: #222;
 
     .main-title {
         text-align: center;
-        font-size: 28px;
-        margin-bottom: 30px;
-        color: #2c3e50;
+        font-size: 2rem;
+        margin-bottom: 32px;
+        color: v.$primary-color;
+        font-weight: 800;
+        letter-spacing: 1px;
+    }
+
+    .publish-control {
+        margin-top: 0;
+        text-align: right;
+        margin-bottom: 24px;
+
+        .btn-publish {
+            padding: 10px 22px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 1.08rem;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+            box-shadow: 0 2px 8px rgba(0,80,158,0.07);
+
+            &.publish {
+                background: linear-gradient(90deg, #28a745 60%, #74ebd5 100%);
+                color: #fff;
+            }
+            &.revoke {
+                background: linear-gradient(90deg, #dc3545 60%, #ff8c00 100%);
+                color: #fff;
+            }
+            &:hover {
+                opacity: 0.92;
+                box-shadow: 0 4px 16px rgba(0,80,158,0.13);
+            }
+        }
     }
 
     .section {
-        margin-bottom: 30px;
+        margin-bottom: 32px;
+        background: v.$background-color;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,80,158,0.04);
+        padding: 18px 16px 10px 16px;
 
         .section-header {
             display: flex;
@@ -25,9 +63,9 @@
             margin-bottom: 10px;
 
             h2 {
-                font-size: 20px;
-                font-weight: 600;
-                color: #2c3e50;
+                font-size: 1.15rem;
+                font-weight: 700;
+                color: v.$primary-dark;
                 display: flex;
                 align-items: center;
                 gap: 10px;
@@ -37,74 +75,54 @@
                 display: flex;
                 align-items: center;
                 gap: 6px;
-                background-color: #f1f1f1;
+                background: #f1f1f1;
                 border: none;
                 border-radius: 6px;
-                padding: 6px 12px;
+                padding: 6px 14px;
                 cursor: pointer;
-                font-size: 14px;
-                color: #333;
-                transition: background-color 0.2s ease;
+                font-size: 1rem;
+                color: v.$primary-dark;
+                font-weight: 500;
+                transition: background 0.2s, color 0.2s;
 
                 &:hover {
-                    background-color: #e0e0e0;
+                    background: v.$primary-light;
+                    color: #fff;
                 }
             }
         }
 
         .section-list {
             padding-left: 20px;
+            margin-bottom: 0;
 
             li {
                 margin-bottom: 8px;
-                font-size: 16px;
+                font-size: 1rem;
                 line-height: 1.6;
+                color: v.$text-color;
             }
+        }
+        .lessons-list {
+            padding-left: 0;
         }
     }
 
     // Icon colors
     .icon {
-        font-size: 20px;
-    }
-
-    .icon-blue {
-        color: #007bff;
-    }
-
-    .icon-green {
-        color: #28a745;
-    }
-
-    .icon-orange {
-        color: #fd7e14;
-    }
-
-    .icon-purple {
-        color: #6f42c1;
+        font-size: 1.2em;
+        &.icon-blue { color: v.$primary-color; }
+        &.icon-green { color: #28a745; }
+        &.icon-orange { color: #fd7e14; }
+        &.icon-purple { color: #6f42c1; }
     }
 }
-.publish-control {
-  margin-top: 20px;
-  text-align: right;
-  margin-bottom: 20px;
 
-  .btn-publish {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-    cursor: pointer;
-
-    &.publish {
-      background-color: #28a745;
-      color: white;
+@media (max-width: 700px) {
+    .view-detail-container {
+        padding: 12px 2px;
+        .main-title { font-size: 1.2rem; }
+        .section { padding: 10px 4px 6px 4px; }
     }
-
-    &.revoke {
-      background-color: #dc3545;
-      color: white;
-    }
-  }
 }
 

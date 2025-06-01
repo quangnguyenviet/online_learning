@@ -5,7 +5,7 @@ export default function ViewVideo(props) {
 
     const handleView = () => {
 
-
+        console.log("vao day ne");
         fetch(`http://localhost:8080/online_learning/lessons/signed-url`, {
             method: "POST",
             headers: {
@@ -44,19 +44,20 @@ export default function ViewVideo(props) {
         video.src = ""; // Clear the video source when it ends
         video.pause(); // Pause the video when closing the modal
     }
+    console.log("lessonKey", lessonKey);
 
     return (
-        <>  
+        <>
             <div className="modal modal__inactive" onClick={handleClose}>
-                        <div className="modal__content" onClick={(e) => e.stopPropagation()}>
-                            <video width="100%" height="100%" controls>
-                                <source src="movie.mp4" type="video/mp4" />
-                                <source src="movie.ogg" type="video/ogg" />
-                                Your browser does not support the video tag.
-                            </video>
+                <div className="modal__content" onClick={(e) => e.stopPropagation()}>
+                    <video width="100%" height="100%" controls>
+                        <source src="movie.mp4" type="video/mp4" />
+                        <source src="movie.ogg" type="video/ogg" />
+                        Your browser does not support the video tag.
+                    </video>
 
-                        </div>
-                    </div>
+                </div>
+            </div>
             {/* <button
                 
                 style={{ color: "blue" }}

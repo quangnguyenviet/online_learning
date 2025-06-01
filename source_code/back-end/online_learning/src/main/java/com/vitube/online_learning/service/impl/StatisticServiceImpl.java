@@ -19,13 +19,22 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Lớp triển khai các phương thức liên quan đến thống kê.
+ */
 @Service
 @RequiredArgsConstructor
 public class StatisticServiceImpl implements StatisticService {
     private final UserRepository userRepository;
     private final InstructorStatisticRepository instructorStatisticRepository;
-    private final InstructorStatisticMapper instructorStatisticMapper;;
+    private final InstructorStatisticMapper instructorStatisticMapper;
 
+    /**
+     * Lấy thống kê về khóa học của giảng viên.
+     *
+     * @param instructorId ID của giảng viên.
+     * @return Đối tượng phản hồi thống kê.
+     */
     public StatisticResponse getCourseStatistic(String instructorId) {
         StatisticResponse response = new StatisticResponse();
         List<CourseStatisticResponse> courseStatisticResponses = new ArrayList<>();
@@ -33,17 +42,20 @@ public class StatisticServiceImpl implements StatisticService {
         float totalIncome = 0;
         int totalCourses = 0;
 
+        // Tìm giảng viên theo ID
         User instructor = userRepository.findById(instructorId).orElse(null);
         if (instructor == null) {
             return null;
         }
 
+        // Lấy danh sách khóa học của giảng viên
         Set<Course> courses = instructor.getCourses();
         totalCourses = courses.size();
         if (courses == null || courses.isEmpty()) {
             return null;
         }
 
+        // Tính toán thống kê cho từng khóa học
         for (Course course : courses) {
             CourseStatisticResponse result = new CourseStatisticResponse();
             result.setTitle(course.getTitle());
@@ -66,12 +78,21 @@ public class StatisticServiceImpl implements StatisticService {
         return response;
     }
 
+    /**
+     * Lấy thống kê về giảng viên theo tháng.
+     *
+     * @param instructorId ID của giảng viên.
+     * @return Danh sách phản hồi thống kê giảng viên.
+     */
     public List<InstructorStatisticResponse> getInstructorStatistic(String instructorId) {
+        // Tìm giảng viên theo ID
         User instructor = userRepository.findById(instructorId).orElse(null);
         List<InstructorStatic> instructorStatics = instructor.getInstructorStatics();
         int nowYear = java.time.LocalDate.now().getYear();
         int nowMonth = java.time.LocalDate.now().getMonthValue();
         List<InstructorStatisticResponse> instructorStatisticResponses = new ArrayList<>();
+
+        // Kiểm tra và thêm thống kê cho các tháng chưa có dữ liệu
         for (int i = 1; i <= nowMonth; i++) {
             boolean isExist = false;
             for (InstructorStatic instructorStatic : instructorStatics) {
@@ -90,11 +111,13 @@ public class StatisticServiceImpl implements StatisticService {
             }
         }
 
+        // Chuyển đổi dữ liệu thống kê thành phản hồi
         for (InstructorStatic instructorStatic : instructorStatics) {
             InstructorStatisticResponse response = instructorStatisticMapper.entityToResponse(instructorStatic);
             instructorStatisticResponses.add(response);
         }
 
+        // Sắp xếp danh sách thống kê theo thứ tự
         Collections.sort(instructorStatisticResponses);
         return instructorStatisticResponses;
     }

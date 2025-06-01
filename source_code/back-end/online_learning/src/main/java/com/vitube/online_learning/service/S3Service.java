@@ -18,18 +18,50 @@ import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
 import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
 
+/**
+ * Interface cung cấp các phương thức liên quan đến dịch vụ S3.
+ */
 public interface S3Service {
 
-
-    public String uploadPrivate(MultipartFile file, String key) throws IOException;
     /**
-     * Upload file to public bucket (truy cập trực tiếp qua URL)
+     * Tải lên file vào bucket private.
+     *
+     * @param file Tệp tin cần tải lên.
+     * @param key Khóa định danh của tệp tin.
+     * @return URL của tệp tin sau khi tải lên.
+     * @throws IOException Lỗi xảy ra khi xử lý tệp.
+     */
+    public String uploadPrivate(MultipartFile file, String key) throws IOException;
+
+    /**
+     * Tải lên file vào bucket public (có thể truy cập trực tiếp qua URL).
+     *
+     * @param file Tệp tin cần tải lên.
+     * @param key Khóa định danh của tệp tin.
+     * @return URL của tệp tin sau khi tải lên.
+     * @throws IOException Lỗi xảy ra khi xử lý tệp.
      */
     public String uploadPublicFile(MultipartFile file, String key) throws IOException;
 
+    /**
+     * Tạo URL có thời hạn để truy cập tệp tin.
+     *
+     * @param fileName Tên của tệp tin.
+     * @return URL có thời hạn để truy cập tệp tin.
+     */
     public String generatePresignedUrl(String fileName);
 
+    /**
+     * Xóa tệp tin trong bucket private.
+     *
+     * @param key Khóa định danh của tệp tin.
+     */
     public void deletePrivateFile(String key);
 
+    /**
+     * Xóa tệp tin trong bucket public.
+     *
+     * @param key Khóa định danh của tệp tin.
+     */
     public void deletePublicFile(String key);
 }

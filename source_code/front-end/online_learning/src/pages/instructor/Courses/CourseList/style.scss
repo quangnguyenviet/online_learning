@@ -1,0 +1,84 @@
+@use '../../../../_var.scss' as v;
+
+.instructor-course-list-section {
+  background: v.$background-color;
+  min-height: 70vh;
+  padding: 36px 0 48px 0;
+}
+
+.instructor-course-list__header {
+  max-width: 1200px;
+  margin: 0 auto 24px auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 0 8px;
+}
+
+.instructor-course-list__title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: v.$primary-color;
+  i {
+    margin-right: 10px;
+    color: v.$primary-light;
+  }
+}
+
+.instructor-course-list__add-btn {
+  background: linear-gradient(90deg, v.$primary-light 0%, v.$primary-color 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 22px;
+  font-size: 1.08rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0,80,158,0.07);
+  &:hover {
+    background: v.$primary-dark;
+    color: #fff;
+  }
+}
+
+.instructor-course-list__loading,
+.instructor-course-list__empty {
+  text-align: center;
+  color: v.$primary-dark;
+  font-size: 1.2rem;
+  padding: 40px 0;
+}
+
+.instructor-course-list__grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 32px;
+  justify-content: flex-start;
+  align-items: stretch;
+  padding: 8px 8px;
+}
+
+@media (max-width: 900px) {
+  .instructor-course-list__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .instructor-course-list__title {
+    font-size: 1.3rem;
+  }
+  .instructor-course-list__grid {
+    gap: 16px;
+  }
+}
+@media (max-width: 600px) {
+  .instructor-course-list__grid {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+}

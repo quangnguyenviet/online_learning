@@ -1,5 +1,5 @@
 import {useState, useEffect} from "react";
-import CourseList from "./CourseList";
+import CourseList from "components/Course/CourseList";
 import {getCourses} from "utils/CoursesUtil";
 
 export default function PlusCourse() {
@@ -29,7 +29,7 @@ export default function PlusCourse() {
                 <h2>Loading...</h2>
             ) : (
                 <div className="plus-course">
-                    <h2>Plus Courses</h2>
+                    <h2 className="text-center">Plus Courses</h2>
                     <div className="row">
                         <CourseList courses={courses}/>
                     </div>
