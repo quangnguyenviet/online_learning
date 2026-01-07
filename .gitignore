@@ -79,6 +79,8 @@ media/
 *.sql
 *.db
 
-application.properties
+plan/
+finalReport/
+weeklyReport/
 
  
