@@ -1,0 +1,39 @@
+// Dark theme color palette
+
+// Core brand
+$color-primary: #6c8cff; // neon periwinkle
+$color-primary-hover: #4f6fe0;
+
+// Backgrounds & surfaces
+$color-white: #0f1220; // main background
+$color-border: #2a2f45;
+
+// Text
+$color-text: #e6e8f2;
+$color-text-muted: #9aa0c3;
+
+// Gradients
+$color-gradient-start: #6c8cff;
+$color-gradient-end: #8a5cff;
+
+// Links (defaults to primary)
+$color-link: $color-primary;
+
+// Overlays
+$overlay: rgba(0, 0, 0, 0.55);
+$overlay-hover: rgba(0, 0, 0, 0.75);
+
+// Optional: expose CSS variables for runtime theming
+:root {
+	--color-primary: #{$color-primary};
+	--color-primary-hover: #{$color-primary-hover};
+	--color-white: #{$color-white};
+	--color-border: #{$color-border};
+	--color-text: #{$color-text};
+	--color-text-muted: #{$color-text-muted};
+	--color-gradient-start: #{$color-gradient-start};
+	--color-gradient-end: #{$color-gradient-end};
+	--color-link: #{$color-link};
+	--overlay: #{$overlay};
+	--overlay-hover: #{$overlay-hover};
+}

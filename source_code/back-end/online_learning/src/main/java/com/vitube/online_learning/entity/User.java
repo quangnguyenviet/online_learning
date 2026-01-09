@@ -33,17 +33,19 @@ public class User {
     private String lastName;
 
     @Column
-    private String username;
-
-    @Column
     private Date dob;
 
     private String bankName;
     private String accountNumber;
     private String accountName;
 
-    @ManyToOne
-    private Role role;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_name")
+    )
+    private List<Role> roles;
 
     @OneToMany(mappedBy = "instructor")
     private Set<Course> courses;

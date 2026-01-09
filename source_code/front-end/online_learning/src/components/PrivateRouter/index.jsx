@@ -1,8 +1,8 @@
 import { Navigate, Outlet } from "react-router-dom";
+import { isLoggedIn } from "service/Guard";
 
 export default function PrivateRouter(){
-    const token = localStorage.getItem('token');
-    const isLogin = token ? true : false;
+    const isLogin = isLoggedIn();
 
     return (
         <>

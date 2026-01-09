@@ -13,17 +13,5 @@ import lombok.RequiredArgsConstructor;
  */
 public interface SecurityContextService {
 
-    /**
-     * Lấy tên người dùng từ ngữ cảnh bảo mật hiện tại.
-     *
-     * @return Tên người dùng.
-     */
-    String getUsername();
 
-    /**
-     * Lấy thông tin người dùng từ ngữ cảnh bảo mật hiện tại.
-     *
-     * @return Đối tượng người dùng.
-     */
-    User getUser();
 }

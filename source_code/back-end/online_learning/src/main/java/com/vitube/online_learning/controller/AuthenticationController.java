@@ -80,7 +80,7 @@ public class AuthenticationController {
      * @return Phản hồi API chứa token mới.
      */
     @PostMapping("/refresh-token")
-    public ApiResponse<?> refreshtoken(@RequestBody RefreshRequest request) {
+    public ApiResponse<?> refreshtoken(@RequestBody RefreshRequest request) throws ParseException, JOSEException {
 
         return ApiResponse.builder()
                 .status(1000)

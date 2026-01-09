@@ -1,0 +1,40 @@
+// Default theme color palette
+
+// Core brand
+$color-primary: #0077cc;
+$color-primary-hover: #005fa3;
+
+// Backgrounds & surfaces
+$color-white: #ffffff;
+$color-border: #cccccc;
+
+// Text
+$color-text: #333333;
+$color-text-muted: #666666;
+
+// Gradients
+$color-gradient-start: #74ebd5;
+$color-gradient-end: #acb6e5;
+
+// Links (defaults to primary)
+$color-link: $color-primary;
+
+// Overlays
+$overlay: rgba(0, 0, 0, 0.3);
+$overlay-hover: rgba(0, 0, 0, 0.5);
+
+// Optional: expose CSS variables for runtime theming
+:root {
+	--color-primary: #{$color-primary};
+	--color-primary-hover: #{$color-primary-hover};
+	--color-white: #{$color-white};
+	--color-border: #{$color-border};
+	--color-text: #{$color-text};
+	--color-text-muted: #{$color-text-muted};
+	--color-gradient-start: #{$color-gradient-start};
+	--color-gradient-end: #{$color-gradient-end};
+	--color-link: #{$color-link};
+	--overlay: #{$overlay};
+	--overlay-hover: #{$overlay-hover};
+}
+

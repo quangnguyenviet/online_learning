@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import './style.scss';
+import styles from './Signup.module.scss';
 import { signup } from 'utils/AuthUtil';
 import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom';
@@ -48,39 +48,38 @@ export default function Signup() {
   };
 
   return (
-    <div className="signup-container">
-      <Link to="/" className="back-to-home">← Trang chủ</Link>
+    <div className={styles.signupContainer}>
+      <Link to="/" className={styles.backToHome}>← Trang chủ</Link>
 
-      <form className="signup-form" onSubmit={handleSubmit}>
+      <form className={styles.signupForm} onSubmit={handleSubmit}>
         <h2>Tạo tài khoản mới</h2>
         <p>Vui lòng nhập thông tin bên dưới để đăng ký</p>
 
-        <div className="form-group">
+        <div className={styles.formGroup}>
           <label htmlFor="username">Tên đăng nhập</label>
           <input type="text" id="username" name="username" placeholder="Nhập tên đăng nhập" required />
         </div>
 
-        <div className="form-group">
+        <div className={styles.formGroup}>
           <label htmlFor="email">Email</label>
           <input type="email" id="email" name="email" placeholder="Nhập email" required />
         </div>
 
-        <div className="form-group">
+        <div className={styles.formGroup}>
           <label htmlFor="password">Mật khẩu</label>
           <input type="password" id="password" name="password" placeholder="Nhập mật khẩu" required />
         </div>
 
-        <div className="form-group">
+        <div className={styles.formGroup}>
           <label htmlFor="confirmPassword">Nhập lại mật khẩu</label>
           <input type="password" id="confirmPassword" name="password2" placeholder="Nhập lại mật khẩu" required />
         </div>
 
-        {error && <p className="error-message">{error}</p>}
+        {error && <p className={styles.errorMessage}>{error}</p>}
 
-        <button type="submit" className="btn-submit">Đăng ký</button>
-        <div className="form-footer">
+        <button type="submit" className={styles.btnSubmit}>Đăng ký</button>
+        <div className={styles.formFooter}>
           <p>Đã có tài khoản? <Link to="/login">Đăng nhập</Link></p>
-          <p>Bạn là giảng viên? <Link to="/signup/instructor">Đăng ký tài khoản giáo viên</Link></p>
         </div>
 
       </form>

@@ -11,8 +11,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonInclude(JsonInclude.Include.NON_NULL) // only include non-null fields in JSON response
 public class ApiResponse<T> {
     private int status;
     private T data;
+    private String message;
 }

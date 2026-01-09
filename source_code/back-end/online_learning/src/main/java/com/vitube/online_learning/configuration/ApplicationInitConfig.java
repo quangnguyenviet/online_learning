@@ -1,12 +1,18 @@
 package com.vitube.online_learning.configuration;
 
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import com.vitube.online_learning.enums.ErrorCode;
+import com.vitube.online_learning.exception.AppException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.vitube.online_learning.entity.Role;
@@ -37,23 +43,28 @@ public class ApplicationInitConfig {
     @Bean
     ApplicationRunner applicationRunner(UserRepository userRepository) {
         return args -> {
-            // Tạo và lưu các vai trò mặc định (ADMIN, USER và INSTRUCTOR)
-            Role adminRole = Role.builder().name(RoleEnum.ADMIN.name()).build();
-            Role userRole = Role.builder().name(RoleEnum.USER.name()).build();
-            Role instructorRole = Role.builder().name(RoleEnum.INSTRUCTOR.name()).build();
-            roleRepository.save(userRole);
-            roleRepository.save(adminRole);
-            roleRepository.save(instructorRole);
+            // generate roles (ADMIN, STUDENT và INSTRUCTOR)
+            for (RoleEnum roleEnum : RoleEnum.values()) {
+                roleRepository.findById(roleEnum.name())
+                        .orElseGet(() ->
+                                roleRepository.save(
+                                        Role.builder()
+                                                .name(roleEnum.name())
+                                                .build()
+                                )
+                        );
+            }
+
 
             // Kiểm tra xem tài khoản admin đã tồn tại hay chưa
-            if (userRepository.findByUsername("admin") == null) {
+            if (userRepository.findByEmail("admin@gmail.com").isEmpty()) {
                 // Tạo và lưu tài khoản admin với vai trò ADMIN
-                Role role = new Role();
-                role.setName(RoleEnum.ADMIN.name());
+                List<Role> roles = roleRepository.findAll();
+
                 User adminAccount = User.builder()
-                        .username("admin")
+                        .email("admin@gmail.com")
                         .password(passwordEncoder.encode("admin")) // Mã hóa mật khẩu
-                        .role(role)
+                        .roles(roles)
                         .build();
 
                 userRepository.save(adminAccount);

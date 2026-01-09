@@ -1,5 +1,6 @@
 package com.vitube.online_learning.service.impl;
 
+import com.vitube.online_learning.service.UserService;
 import org.springframework.stereotype.Service;
 
 import com.vitube.online_learning.dto.request.RegisterRequest;
@@ -24,7 +25,7 @@ public class RegisterServiceImpl implements RegisterService {
     private final UserRepository userRepository;
     private final RegisterRepository registerRepository;
     private final CourseRepository courseRepository;
-    private final SecurityContextService securityContextService;
+    private final UserService userService;
     private final RegisterMapper registerMapper;
 
     /**
@@ -42,7 +43,7 @@ public class RegisterServiceImpl implements RegisterService {
         if (request.getStudentId() != null) {
             student = userRepository.findById(request.getStudentId()).get();
         } else {
-            student = securityContextService.getUser();
+            student = userService.getCurrentUser();
         }
 
         // Lấy thông tin khóa học từ yêu cầu
@@ -66,7 +67,7 @@ public class RegisterServiceImpl implements RegisterService {
         if (request.getStudentId() != null) {
             student = userRepository.findById(request.getStudentId()).get();
         } else {
-            student = securityContextService.getUser();
+            student = userService.getCurrentUser();
         }
 
         // Lấy thông tin khóa học từ yêu cầu
@@ -94,7 +95,7 @@ public class RegisterServiceImpl implements RegisterService {
     @Override
     public boolean isRegistered(String courseId) {
         // Lấy thông tin sinh viên từ ngữ cảnh bảo mật
-        User student = securityContextService.getUser();
+        User student = userService.getCurrentUser();
 
         // Kiểm tra danh sách đăng ký của sinh viên
         for (Register register : student.getRegisters()) {

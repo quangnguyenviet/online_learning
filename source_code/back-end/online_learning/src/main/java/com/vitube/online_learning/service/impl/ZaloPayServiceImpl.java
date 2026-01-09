@@ -3,6 +3,7 @@ package com.vitube.online_learning.service.impl;
 import com.vitube.online_learning.entity.Course;
 import com.vitube.online_learning.repository.CourseRepository;
 import com.vitube.online_learning.service.SecurityContextService;
+import com.vitube.online_learning.service.UserService;
 import com.vitube.online_learning.service.ZaloPayService;
 import com.vitube.online_learning.utils.HMACUtil;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,7 @@ public class ZaloPayServiceImpl implements ZaloPayService {
     // URL callback khi thanh toán hoàn tất
     private static final String CALLBACK_URL =
             "https://77fb-2405-4803-f586-6ad0-892f-7309-1740-d908.ngrok-free.app/online_learning/zalopay/callback";
-    private final SecurityContextService securityContextService;
+    private final UserService userService;
 
     /**
      * Tạo đơn hàng ZaloPay.
@@ -51,7 +52,7 @@ public class ZaloPayServiceImpl implements ZaloPayService {
         long appTime = System.currentTimeMillis();
 
         // Lấy username từ ngữ cảnh bảo mật
-        String appUser = securityContextService.getUser().getId();
+        String appUser = userService.getCurrentUser().getId();
 
         // Tạo embed_data chứa thông tin khóa học
         Map<String, String> embedMap = new HashMap<>();

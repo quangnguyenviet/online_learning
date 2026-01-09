@@ -1,16 +1,17 @@
-import { Navigate, Outlet } from "react-router-dom";
+// import { Navigate, Outlet } from "react-router-dom";
+// import { InstructorRoute } from "service/Guard";
 
-export default function InstructorRouter() {
-    const ROLE = localStorage.getItem('role');
+// export default function InstructorRouter() {
+    
 
 
-    return (
-        <>
-            {ROLE === 'INSTRUCTOR' ? (
-                <Outlet />
-            ) : (
-                <Navigate to="/login" />
-            )}
-        </>
-    );
-}
+//     return (
+//         <>
+//             {isInstructor() ? (
+//                 <Outlet />
+//             ) : (
+//                 <Navigate to="/login" />
+//             )}
+//         </>
+//     );
+// }

@@ -1,0 +1,4 @@
+integration guide for ZaloPay payment gateway: https://developers.zalopay.vn/start/
+key1: get on internet
+key2: get on internet
+app_id: get on internet (2553)

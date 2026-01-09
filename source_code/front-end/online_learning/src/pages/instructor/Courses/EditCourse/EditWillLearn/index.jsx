@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import "./style.scss";
 import Swal from 'sweetalert2'
 import { ModalContext } from "pages/instructor/Courses/CourseList/ViewDetail"; 
-import { setData } from "service/localStorageService";
+import { setData } from "service/StorageService";
 
 export function EditWillLearn(props) {
     const { courseId } = useParams();

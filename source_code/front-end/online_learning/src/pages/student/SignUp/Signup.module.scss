@@ -1,0 +1,112 @@
+.signupContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(to right, var(--color-gradient-start), var(--color-gradient-end));
+  font-family: 'Segoe UI', sans-serif;
+
+  .backToHome {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    color: var(--color-white);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--color-primary-hover);
+    }
+  }
+}
+
+.signupForm {
+  background-color: var(--color-white);
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  width: 400px;
+  max-width: 90%;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 10px;
+    color: var(--color-text);
+  }
+
+  p {
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--color-text-muted);
+    font-size: 14px;
+  }
+
+  .formGroup {
+    margin-bottom: 20px;
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      font-size: 15px;
+      transition: border-color 0.3s ease;
+
+      &:focus {
+        border-color: var(--color-primary);
+        outline: none;
+      }
+    }
+  }
+
+  .btnSubmit {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: var(--color-primary-hover);
+    }
+  }
+
+  .errorMessage {
+    color: #e74c3c;
+    background: rgba(231, 76, 60, 0.1);
+    border: 1px solid rgba(231, 76, 60, 0.3);
+    padding: 10px 12px;
+    border-radius: 6px;
+    margin: 10px 0 5px;
+    font-size: 14px;
+  }
+
+  .formFooter {
+    margin-top: 18px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--color-text-muted);
+
+    a {
+      color: var(--color-primary);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: var(--color-primary-hover);
+      text-decoration: underline;
+    }
+  }
+}

@@ -13,7 +13,7 @@ public enum RoleEnum {
     /**
      * Vai trò người dùng thông thường.
      */
-    USER,
+    STUDENT,
 
     /**
      * Vai trò giảng viên.

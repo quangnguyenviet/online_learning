@@ -3,15 +3,7 @@ import { FaUsers, FaBook, FaMoneyBill, FaChartBar, FaSignOutAlt } from "react-ic
 import "./style.scss";
 
 export default function AdminLayout() {
-    const isLogin = true; // Giả lập trạng thái đăng nhập, có thể thay bằng context hoặc redux
-    if (!isLogin) {
-        return (
-            <div className="admin-login">
-                <h2>Vui lòng đăng nhập để truy cập trang quản trị</h2>
-                <NavLink to="/admin/login">Đăng nhập</NavLink>
-            </div>
-        );
-    }
+  
 
   return (
     <div className="admin-dashboard">

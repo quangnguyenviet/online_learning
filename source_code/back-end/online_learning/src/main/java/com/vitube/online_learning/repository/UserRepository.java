@@ -7,13 +7,10 @@ import org.springframework.stereotype.Repository;
 
 import com.vitube.online_learning.entity.User;
 
+import java.util.Optional;
+
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
-    Boolean existsByUsername(String username);
     Boolean existsByEmail(String email);
-    User findByUsername(String username);
-    //    @Query("SELECT u FROM User u JOIN u.roles r WHERE u.username = :username AND r.name = :role")
-
-    @Query("SELECT u FROM User u WHERE u.username = :username AND u.role.name = :role")
-    User findByUsernameAndRole(@Param("username") String username, @Param("role") String role);
+    Optional<User> findByEmail(String email);
 }

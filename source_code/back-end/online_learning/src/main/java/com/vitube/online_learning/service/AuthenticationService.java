@@ -46,5 +46,5 @@ public interface AuthenticationService {
      * @param request Yêu cầu làm mới token.
      * @return Đối tượng phản hồi xác thực với token mới.
      */
-    AuthenticationResponse refreshToken(RefreshRequest request);
+    AuthenticationResponse refreshToken(RefreshRequest request) throws ParseException, JOSEException;
 }

@@ -2,6 +2,7 @@ package com.vitube.online_learning.controller;
 
 import java.util.List;
 
+import com.vitube.online_learning.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -32,9 +33,9 @@ public class UserController {
      * @return Phản hồi API chứa thông tin người dùng vừa được tạo.
      */
     @PostMapping
-    public ApiResponse<UserResponse> createUser(@RequestBody UserRequest request) {
-        UserResponse response = userService.createUser(request);
-        return ApiResponse.<UserResponse>builder().status(1000).data(response).build();
+    public ApiResponse<UserDTO> createUser(@RequestBody UserDTO request) {
+        UserDTO response = userService.createUser(request);
+        return ApiResponse.<UserDTO>builder().status(1000).data(response).build();
     }
 
     /**
@@ -57,10 +58,10 @@ public class UserController {
      * @return Phản hồi API chứa danh sách người dùng.
      */
     @GetMapping
-    public ApiResponse<List<UserResponse>> getAllUsers() {
+    public ApiResponse<List<UserDTO>> getAllUsers() {
         var authentaction = SecurityContextHolder.getContext().getAuthentication();
         log.info(authentaction.getAuthorities().toString());
-        return ApiResponse.<List<UserResponse>>builder()
+        return ApiResponse.<List<UserDTO>>builder()
                 .status(1000)
                 .data(userService.getAllUsers())
                 .build();
@@ -73,8 +74,8 @@ public class UserController {
      * @return Phản hồi API chứa thông tin cá nhân của người dùng.
      */
     @GetMapping("/my-info")
-    public ApiResponse<UserResponse> getMyInfo() {
-        UserResponse response = userService.getMyInfo();
-        return ApiResponse.<UserResponse>builder().status(1000).data(response).build();
+    public ApiResponse<UserDTO> getMyInfo() {
+        UserDTO response = userService.getMyInfo();
+        return ApiResponse.<UserDTO>builder().status(1000).data(response).build();
     }
 }

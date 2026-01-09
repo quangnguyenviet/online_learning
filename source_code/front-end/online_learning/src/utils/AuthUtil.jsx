@@ -1,11 +1,14 @@
 // src/utils/fetchApi.js
 
-const BASE_URL = 'http://localhost:8080/online_learning';
+// load BASE_URL from environment variables or define it here
+const BASE_URL = process.env.REACT_APP_BASE_URL
 const URL_SIGNUP = `${BASE_URL}/users`;
 
-export async function authenticate(url, method = 'GET', data = null) {
+// http://localhost:8080/online_learning/auth/login
+export async function authenticate(data) {
+    const url = `${BASE_URL}/auth/login`;
     const options = {
-      method,
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       }

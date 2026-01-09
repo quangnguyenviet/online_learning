@@ -93,7 +93,6 @@ public class Course {
      * Mô tả chi tiết về khóa học.
      * Lưu trữ dưới dạng văn bản dài (TEXT).
      */
-    @Lob
     @Column(columnDefinition = "TEXT")
     private String longDesc;
 

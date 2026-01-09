@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./style.scss";
 import { authenticate } from "utils/AuthUtil";
-import { setData } from 'service/localStorageService';
+import StorageService from "service/StorageService";
 import Swal from "sweetalert2";
 export default function AdminLogin() {
       const URL_AUTH = 'http://localhost:8080/online_learning/auth/login';
@@ -19,9 +19,9 @@ export default function AdminLogin() {
     authenticate(URL_AUTH, 'POST', data)
       .then((data) => {
         if (data.status === 1000) {
-          setData('token', data.data.token);
-          setData('role', "ADMIN");
-          setData('id', data.data.id);
+          StorageService.saveToken(data.data.token);
+          StorageService.setData('role', "ADMIN");
+          StorageService.setData('id', data.data.id);
           navigate('/admin');
         }
         else if (data.status === 1001) {

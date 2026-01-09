@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.vitube.online_learning.service.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,10 +23,6 @@ import com.vitube.online_learning.mapper.LearnWhatMapper;
 import com.vitube.online_learning.mapper.RequireMapper;
 import com.vitube.online_learning.repository.CourseRepository;
 import com.vitube.online_learning.repository.UserRepository;
-import com.vitube.online_learning.service.CourseService;
-import com.vitube.online_learning.service.LessonService;
-import com.vitube.online_learning.service.S3Service;
-import com.vitube.online_learning.service.SecurityContextService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -38,7 +35,7 @@ public class CourseServiceImpl implements CourseService {
     private final UserRepository userRepository;
     private final CourseRepository courseRepository;
     private final CousreMapper cousreMapper;
-    private final SecurityContextService securityContextService;
+    private final UserService userService;
     private final LessonService lessonService;
     private final LearnWhatMapper learnWhatMapper;
     private final RequireMapper requireMapper;
@@ -119,7 +116,7 @@ public class CourseServiceImpl implements CourseService {
 
         User instructor;
         if (request.getInstructorId() == null) {
-            instructor = securityContextService.getUser();
+            instructor = userService.getCurrentUser();
         } else {
             instructor = userRepository
                     .findById(request.getInstructorId())
@@ -273,7 +270,7 @@ public class CourseServiceImpl implements CourseService {
     public List<CourseResponse> getLearningCourses() {
         List<CourseResponse> responses = new ArrayList<>();
 
-        User user = securityContextService.getUser();
+        User user = userService.getCurrentUser();
         user.getRegisters().forEach(registration -> {
             CourseResponse response = cousreMapper.courseToCourseResponse(registration.getCourse());
             response.setInstructorId(registration.getCourse().getInstructor().getId());
@@ -308,7 +305,7 @@ public class CourseServiceImpl implements CourseService {
      */
     @Override
     public List<CourseResponse> getMyCourses() {
-        User instructor = securityContextService.getUser();
+        User instructor = userService.getCurrentUser();
         List<CourseResponse> responseList = new ArrayList<>();
         instructor.getCourses().forEach(course -> {
             CourseResponse response = courseToCourseResponse(course, 1);

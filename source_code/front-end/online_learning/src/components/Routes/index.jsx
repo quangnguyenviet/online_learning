@@ -1,10 +1,10 @@
 import LayoutDefault from "../../layout/StudentLayout";
 import About from "../../pages/student/About";
 import Contact from "../../pages/student/Contact";
-import Error404 from "../../pages/Error404";
+import Error404 from "../../pages/common/Error404";
 import Home from "../../pages/student/Home";
 import InforUser from "../../pages/student/InforUser";
-import Login from "../../pages/Login";
+import Login from "../../pages/common/Login";
 import PrivateRouter from "../PrivateRouter";
 import CourseDetail from "../../pages/student/CourseDetail";
 import MyLearning from "../../pages/student/MyLearning";
@@ -13,7 +13,7 @@ import UploadVideo from "../../pages/student/UploadVideo";
 import StudentLayout from "../../layout/StudentLayout";
 import InstructorLayout from "../../layout/InstructorLayout";
 import Dashboard from "../../pages/instructor/Dashboard";
-import InstructorRouter from "../InstructorRouter";
+import * as Guard from "service/Guard";
 import Courses from "../../pages/instructor/Courses";
 import CourseList from "../../pages/instructor/Courses/CourseList/index.jsx";
 import AddCourse from "pages/instructor/Courses/AddCourse";
@@ -28,11 +28,11 @@ import { User } from "pages/admin/User";
 import AdminLogin from "pages/admin/AdminLogin";
 import Signup from "pages/student/SignUp";
 import SignupInstructor from "pages/instructor/SignUp";
-import { Logout } from "components/Logout";
+import Logout from "components/Logout";
 const ROUTES = [
     {
         element: <StudentLayout />,
-        children : [
+        children: [
             {
                 path: "/",
                 element: <Home />
@@ -63,75 +63,71 @@ const ROUTES = [
                     {
                         path: "/my-learning",
                         element: <MyLearning />,
-                        
+
                     },
                     {
                         path: "/my-learning/:courseId",
                         element: <MyLearningDetail />
                     },
-                    
+
                 ]
             }
 
         ],
-        
+
     },
     {
         path: "/instructor",
-        element: <InstructorLayout />,
+        element: <Guard.InstructorRoute element={<InstructorLayout />} />,
         children: [
+
             {
-                element: <InstructorRouter />,
+                path: "dashboard",
+                element: <Dashboard />
+            },
+            {
+                path: "courses",
+                element: <Courses />,
                 children: [
                     {
-                        path: "dashboard",
-                        element: <Dashboard />
+                        path: "",
+                        element: <CourseList />
+
                     },
                     {
-                        path: "courses",
-                        element: <Courses />,
-                        children: [
-                            {
-                                path: "",
-                                element: <CourseList />
-                                
-                            },
-                            {
-                                path: ":courseId",
-                                // element: <EditCourse />
-                                element : <ViewDetail />
-                            },
-                            {
-                                path: "add-new",
-                                element: <AddCourse />
-                            }
-                        ]
+                        path: ":courseId",
+                        // element: <EditCourse />
+                        element: <ViewDetail />
                     },
                     {
-                        path: "profile",
-                        element: <Profile />
-                    },
+                        path: "add-new",
+                        element: <AddCourse />
+                    }
+                ]
+            },
+            {
+                path: "profile",
+                element: <Profile />
+            },
+            {
+                path: "notifications",
+                element: <Notification />,
+                children: [
                     {
-                        path: "notifications",
-                        element: <Notification />,
-                        children: [
-                            {
-                                path: ":id",
-                                element : <NotificationDetail />
-                            }
-                        ]
+                        path: ":id",
+                        element: <NotificationDetail />
                     }
                 ]
             }
-              
-            
         ]
+
+
     },
     {
         path: "/admin",
-        element: <AdminLayout />,
+        element: <Guard.AdminRoute element={<AdminLayout />} />,
         children: [
-            
+
             {
                 path: "users",
                 element: <User />
@@ -143,13 +139,9 @@ const ROUTES = [
         ]
     },
     {
-        path: "/admin/login",
-        element: <AdminLogin />
-    },
-    {
         path: "*",
         element: <Error404 />
-        
+
     },
     {
         path: "/login",
@@ -164,12 +156,8 @@ const ROUTES = [
         // element: <Signup />
         children: [
             {
-                path : "student",
+                path: "student",
                 element: <Signup />
-            },
-            {
-                path: "instructor",
-                element: <SignupInstructor />
             }
         ]
     }
