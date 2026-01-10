@@ -1,0 +1,82 @@
+
+.wrapper {
+    margin: 1rem auto 0;
+    z-index: 1000;
+    width: 90%;
+    max-width: 500px;
+    opacity: 0.95;
+    animation: fadeInDown 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    position: fixed;
+    left: 0;
+    right: 0;
+}
+
+.card {
+    background: #fff;
+    color: #d32f2f;
+    padding: 16px 24px;
+    border-radius: 8px;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-left: 4px solid #d32f2f;
+}
+
+.message {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.success {
+    color: #1b7a34;
+}
+
+.progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    background: rgba(211, 47, 47, 0.2);
+    animation: progressBar 5s linear forwards;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-24px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes progressBar {
+    from {
+        width: 100%;
+        background: #d32f2f;
+    }
+
+    to {
+        width: 0%;
+        background: #d32f2f;
+    }
+}
+
+@media (max-width: 768px) {
+    .wrapper {
+        width: 95%;
+    }
+
+    .card {
+        padding: 12px 16px;
+    }
+
+    .message {
+        font-size: 14px;
+    }
+}

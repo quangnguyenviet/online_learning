@@ -3,6 +3,7 @@ package com.vitube.online_learning.service;
 import java.util.List;
 
 import com.vitube.online_learning.dto.UserDTO;
+import com.vitube.online_learning.dto.request.UserCreationRequest;
 import com.vitube.online_learning.dto.request.UserRequest;
 import com.vitube.online_learning.dto.response.UserResponse;
 import com.vitube.online_learning.entity.User;
@@ -18,7 +19,7 @@ public interface UserService {
      * @param request Yêu cầu tạo người dùng.
      * @return Phản hồi người dùng sau khi tạo.
      */
-    UserDTO createUser(UserDTO request);
+    UserDTO createUser(UserCreationRequest request);
 
     /**
      * Xóa người dùng theo ID.

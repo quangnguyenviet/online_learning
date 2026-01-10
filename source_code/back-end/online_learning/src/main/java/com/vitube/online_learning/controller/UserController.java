@@ -3,6 +3,7 @@ package com.vitube.online_learning.controller;
 import java.util.List;
 
 import com.vitube.online_learning.dto.UserDTO;
+import com.vitube.online_learning.dto.request.UserCreationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,7 @@ public class UserController {
      * @return Phản hồi API chứa thông tin người dùng vừa được tạo.
      */
     @PostMapping
-    public ApiResponse<UserDTO> createUser(@RequestBody UserDTO request) {
+    public ApiResponse<?> createUser(@RequestBody UserCreationRequest request) {
         UserDTO response = userService.createUser(request);
         return ApiResponse.<UserDTO>builder().status(1000).data(response).build();
     }

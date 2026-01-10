@@ -1,64 +1,52 @@
 import { useState } from 'react';
 import styles from './Signup.module.scss';
-import { signup } from 'utils/AuthUtil';
-import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom';
-
+import UserApi from 'service/apis/UserApi';
+import { useNavigate } from 'react-router-dom';
+import { useError } from 'components/common/ErrorDisplay/ErrorDisplay';
 export default function Signup() {
-  const [error, setError] = useState('');
+  const navigate = useNavigate();
+  const {ErrorDisplay, showError} = useError();
+
+  const createUser = async (data) => {
+    try {
+      const response = await UserApi.createUser(data);
+      navigate('/login');
+    } catch (error) {
+      console.error('Error creating user:', error);
+      showError(error.response?.data?.message || 'Đã xảy ra lỗi khi tạo tài khoản');
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
+    console.log(data);
 
     if (data.password !== data.password2) {
-      setError('Mật khẩu không khớp');
+      showError('Mật khẩu và xác nhận mật khẩu không khớp');
       return;
     }
 
-    setError('');
-    delete data.confirmPassword; // Xóa field này trước khi gửi
+    delete data.password2; // delete confirm password field
 
-    signup(data)
-      .then((response) => {
-        if (response.status === 1000) {
-          Swal.fire({
-            title: 'Đăng ký thành công',
-            text: 'Bạn đã đăng ký tài khoản thành công. Vui lòng đăng nhập để tiếp tục.',
-            icon: 'success',
-            confirmButtonText: 'OK'
-          });
-          window.location.href = '/login';
-        }
-        else if (response.status === 1004) {
-          setError('Tên đăng nhập đã tông tại. Vui lòng chọn tên khác.');
-        }
-        else if (response.status === 1005) {
-          setError('Email đã được sử dụng. Vui lòng sử dụng email khác.');
-        }
-        else {
-          setError(response.message || 'Đăng ký không thành công. Vui lòng thử lại.');
-        }
-      })
-      .catch((err) => {
-        console.error('Error during signup:', err);
-        setError('Đã xảy ra lỗi. Vui lòng thử lại sau.');
-      });
+    createUser(data);
+
+    
+
   };
 
   return (
-    <div className={styles.signupContainer}>
+    <>
+    <ErrorDisplay />
+      <div className={styles.signupContainer}>
+      
       <Link to="/" className={styles.backToHome}>← Trang chủ</Link>
 
       <form className={styles.signupForm} onSubmit={handleSubmit}>
         <h2>Tạo tài khoản mới</h2>
         <p>Vui lòng nhập thông tin bên dưới để đăng ký</p>
-
-        <div className={styles.formGroup}>
-          <label htmlFor="username">Tên đăng nhập</label>
-          <input type="text" id="username" name="username" placeholder="Nhập tên đăng nhập" required />
-        </div>
 
         <div className={styles.formGroup}>
           <label htmlFor="email">Email</label>
@@ -75,7 +63,6 @@ export default function Signup() {
           <input type="password" id="confirmPassword" name="password2" placeholder="Nhập lại mật khẩu" required />
         </div>
 
-        {error && <p className={styles.errorMessage}>{error}</p>}
 
         <button type="submit" className={styles.btnSubmit}>Đăng ký</button>
         <div className={styles.formFooter}>
@@ -84,5 +71,7 @@ export default function Signup() {
 
       </form>
     </div>
+    </>
+    
   );
 }

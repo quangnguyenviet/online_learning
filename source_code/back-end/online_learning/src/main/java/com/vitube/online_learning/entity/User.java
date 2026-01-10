@@ -45,6 +45,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_name")
     )
+
     private List<Role> roles;
 
     @OneToMany(mappedBy = "instructor")

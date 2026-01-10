@@ -81,7 +81,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String token = jwtService.generateToken(user);
         // extract rolea as a list of string
         List<String> roles = user.getRoles().stream()
-                .map(role -> role.getName())
+                .map(role -> role.getName().name())
                 .toList();
         AuthenticationResponse response = AuthenticationResponse.builder()
                 .token(token)

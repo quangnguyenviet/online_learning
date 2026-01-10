@@ -32,7 +32,7 @@ public class GlobalHandlerException {
     @ExceptionHandler(value = AppException.class)
     public ResponseEntity<ApiResponse<?>> apiExceptionHandler(AppException e) {
         ApiResponse<String> response = ApiResponse.<String>builder()
-                .data(e.getMessage())
+                .message(e.getMessage())
                 .status(e.getErrorCode().getCode())
                 .build();
         return ResponseEntity.status(e.getErrorCode().getStatusCode()).body(response);

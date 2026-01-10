@@ -2,6 +2,7 @@ package com.vitube.online_learning.controller;
 
 import java.text.ParseException;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,7 +35,7 @@ public class AuthenticationController {
      * @return Phản hồi API chứa token xác thực.
      */
     @PostMapping("/login")
-    public ApiResponse<?> authenticate(@RequestBody AuthenticationRequest request) {
+    public ApiResponse<?> authenticate(@RequestBody @Valid AuthenticationRequest request) {
 
         return ApiResponse.builder()
                 .status(1000)

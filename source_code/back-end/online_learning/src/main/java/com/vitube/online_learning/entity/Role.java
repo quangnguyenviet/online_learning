@@ -2,6 +2,7 @@ package com.vitube.online_learning.entity;
 
 import java.util.Set;
 
+import com.vitube.online_learning.enums.RoleEnum;
 import jakarta.persistence.*;
 
 import lombok.*;
@@ -15,7 +16,8 @@ import lombok.*;
 @Builder
 public class Role {
     @Id
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private RoleEnum name;
 
     private String description;
 

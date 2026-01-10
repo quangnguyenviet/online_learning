@@ -45,11 +45,11 @@ public class ApplicationInitConfig {
         return args -> {
             // generate roles (ADMIN, STUDENT và INSTRUCTOR)
             for (RoleEnum roleEnum : RoleEnum.values()) {
-                roleRepository.findById(roleEnum.name())
+                roleRepository.findById(roleEnum)
                         .orElseGet(() ->
                                 roleRepository.save(
                                         Role.builder()
-                                                .name(roleEnum.name())
+                                                .name(roleEnum)
                                                 .build()
                                 )
                         );

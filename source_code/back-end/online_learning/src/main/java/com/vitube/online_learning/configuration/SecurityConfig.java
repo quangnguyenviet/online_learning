@@ -31,7 +31,7 @@ public class SecurityConfig {
 
     // Các endpoint công khai cho phương thức POST
     private final String[] PUBLIC_ENPOINTS = {
-            "/users", "/auth/login", "/auth/introspect", "/auth/logout", "/auth/refresh-token", "/zalopay/callback"
+            "/users", "/auth/**", "/zalopay/callback"
     };
 
     // Các endpoint công khai cho phương thức GET
@@ -61,7 +61,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.cors(cors -> cors.configurationSource(corsConfigurationSource())).authorizeHttpRequests(request -> {
-            request.requestMatchers(HttpMethod.POST, PUBLIC_ENPOINTS)
+            request.requestMatchers(PUBLIC_ENPOINTS)
                     .permitAll()
                     .requestMatchers(HttpMethod.GET, PUBLIC_GET)
                     .permitAll()

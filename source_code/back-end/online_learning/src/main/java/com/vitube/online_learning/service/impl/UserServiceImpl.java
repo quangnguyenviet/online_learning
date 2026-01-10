@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Set;
 
 import com.vitube.online_learning.dto.UserDTO;
+import com.vitube.online_learning.dto.request.UserCreationRequest;
 import com.vitube.online_learning.enums.ErrorCode;
+import com.vitube.online_learning.enums.RoleEnum;
 import com.vitube.online_learning.exception.AppException;
 import com.vitube.online_learning.utils.ValidateUtil;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -46,21 +48,36 @@ public class UserServiceImpl implements UserService {
      * @return Đối tượng phản hồi người dùng.
      */
     @Override
-    public UserDTO createUser(UserDTO request) {
-        User user = userMapper.dtoToUser(request);
-        if (!ValidateUtil.isValidEmail(user.getEmail())) {
-            throw new AppException(ErrorCode.INVALID_EMAIL);
+    public UserDTO createUser(UserCreationRequest request) {
+        User user = User.builder()
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .build();
+        user.setRoles(new ArrayList<>());
+        if (request.getRoles() != null){
+            request.getRoles().stream()
+                    .map(roleName -> {
+                        Role role = roleRepository.findById(RoleEnum.valueOf(roleName))
+                                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
+                        return role;
+                    })
+                    .forEach(role -> {
+                        user.getRoles().add(role);
+                    });
         }
-
-        if (!ValidateUtil.isValidPassword(user.getPassword())) {
-            throw new AppException(ErrorCode.INVALID_PASSWORD);
+        else{
+            Role userRole = roleRepository.findById(RoleEnum.STUDENT)
+                    .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
+            List<Role> roles = new ArrayList<>();
+            roles.add(userRole);
+            user.setRoles(roles);
         }
 
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new AppException(ErrorCode.EMAIL_EXIST);
         }
-        userRepository.save(user);
-        UserDTO userDTO = userMapper.userToUserDTO(user);
+        User savedUser =  userRepository.save(user);
+        UserDTO userDTO = userMapper.userToUserDTO(savedUser);
         return userDTO;
     }
 

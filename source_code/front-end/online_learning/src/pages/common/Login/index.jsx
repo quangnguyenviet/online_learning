@@ -3,10 +3,11 @@ import StorageService from 'service/StorageService';
 import { Link, useNavigate } from 'react-router-dom';
 import React from 'react';
 import AuthApi from 'service/apis/AuthApi';
-import Swal from 'sweetalert2';
+import { useError } from 'components/common/ErrorDisplay/ErrorDisplay';
 
 export default function Login() {
     const navigate = useNavigate();
+    const { ErrorDisplay, showError } = useError();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -29,15 +30,19 @@ export default function Login() {
                         navigate('/');
                     }
                 }
+                else{
+                    console.log('Login failed:', response);
+                }
             })
             .catch((error) => {
-                console.error('Error:', error);
+                showError(error.response?.data?.message || 'Đã có lỗi xảy ra trong quá trình đăng nhập.');
             });
     };
 
     return (
-
-        <div className={styles['login-container']}>
+        <>
+        <ErrorDisplay />
+         <div className={styles['login-container']}>
             <Link to="/" className={styles['back-to-home']}>← Trang chủ</Link>
 
             <form onSubmit={handleSubmit} className={styles['login-form']}>
@@ -68,5 +73,7 @@ export default function Login() {
                 </div>
             </form>
         </div>
+        </>
+       
     );
 }
