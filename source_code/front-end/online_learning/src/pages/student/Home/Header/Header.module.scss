@@ -1,0 +1,94 @@
+/* Using global CSS variables from defaultTheme.scss (imported globally) */
+
+.header {
+  background: linear-gradient(
+    0deg,
+    var(--color-gradient-start) 0%,
+    var(--color-primary) 100%
+  );
+  color: var(--color-text);
+  min-height: 340px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 70px;
+
+  &__container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    gap: 36px;
+    padding: 32px 16px;
+    flex-wrap: wrap;
+  }
+
+  &__img-wrap {
+    flex: 1 1 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+      max-width: 340px;
+      width: 100%;
+      height: auto;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(0, 80, 158, 0.13);
+      background: var(--color-white);
+    }
+  }
+
+  &__content {
+    flex: 2 1 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 12px;
+
+    h1 {
+      font-size: 2.3rem;
+      font-weight: 700;
+      color: var(--color-primary-hover);
+      margin-bottom: 18px;
+      margin-top: 0;
+      line-height: 1.2;
+    }
+
+    p {
+      font-size: 1.18rem;
+      margin-bottom: 22px;
+      color: var(--color-text);
+      line-height: 1.6;
+    }
+  }
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .header__container {
+    flex-direction: column;
+    gap: 18px;
+    padding: 18px 4px;
+  }
+
+  .header__img-wrap img {
+    max-width: 220px;
+  }
+
+  .header__content {
+    align-items: center;
+    text-align: center;
+
+    h1 {
+      font-size: 1.5rem;
+    }
+
+    p {
+      font-size: 1rem;
+    }
+  }
+}

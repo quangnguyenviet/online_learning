@@ -5,7 +5,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL
 const apiClient = axios.create({
   baseURL: BASE_URL,
   headers: {
-    'Content-Type': 'application/json',
+    // 'Content-Type': 'application/json',
     Accept: 'application/json',
   },
   // You can set a timeout if needed

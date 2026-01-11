@@ -9,5 +9,5 @@ import lombok.*;
 @Builder
 public class UpdateCoursePrice {
     private String courseId;
-    private Float price;
+    private Double price;
 }

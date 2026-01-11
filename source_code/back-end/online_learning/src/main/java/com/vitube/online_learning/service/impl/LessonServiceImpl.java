@@ -145,7 +145,7 @@ public class LessonServiceImpl implements LessonService {
                 lesson.setVideoUrl(videoUrl);
 
                 String oldKey = lesson.getLessonKey();
-                s3Service.deletePrivateFile(oldKey);
+                s3Service.deleteFile(oldKey);
                 lesson.setLessonKey(key);
             }
         }

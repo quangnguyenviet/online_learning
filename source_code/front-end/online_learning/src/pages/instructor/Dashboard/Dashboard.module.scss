@@ -1,0 +1,307 @@
+// Local palette (no defaultTheme variables)
+$bg: #F7F9FC;
+$text: #1F2937;
+$muted: #6B7280;
+$card: #FFFFFF;
+$border: #E5E7EB;
+$primary: #2563EB;
+$accent: #3B82F6;
+$success: #10B981;
+
+.dashboard {
+  background: $bg;
+  min-height: 100vh;
+  padding: 24px 28px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+
+  .title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: $text;
+    margin: 0 0 6px 0;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+    color: $muted;
+    margin: 0;
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  .buttonPrimary,
+  .buttonSecondary {
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid $border;
+    background: $card;
+    color: $text;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .buttonPrimary {
+    background: linear-gradient(90deg, $primary 0%, $accent 100%);
+    color: #ffffff;
+    border-color: transparent;
+
+    &:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+  }
+
+  .buttonSecondary {
+    &:hover {
+      background: #F3F4F6;
+      transform: translateY(-1px);
+    }
+  }
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+
+  .card {
+    background: $card;
+    border: 1px solid $border;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: baseline;
+    column-gap: 12px;
+
+    .cardValue {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: $text;
+    }
+
+    .cardLabel {
+      font-size: 0.9rem;
+      color: $muted;
+    }
+
+    .cardTrend {
+      font-size: 0.85rem;
+      color: $success;
+      justify-self: end;
+    }
+  }
+}
+
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 16px;
+}
+
+.section {
+  background: $card;
+  border: 1px solid $border;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid $border;
+
+  h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    color: $text;
+  }
+
+  .sectionLink {
+    font-size: 0.9rem;
+    color: $accent;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.courseList {
+  padding: 8px 12px 16px 12px;
+}
+
+.courseItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  border: 1px solid $border;
+  border-radius: 10px;
+  margin-bottom: 10px;
+
+  .courseInfo {
+    .courseTitle {
+      font-weight: 600;
+      color: $text;
+    }
+    .courseMeta {
+      font-size: 0.85rem;
+      color: $muted;
+      margin-top: 4px;
+    }
+  }
+
+  .progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 220px;
+
+    .progressTrack {
+      height: 8px;
+      width: 160px;
+      border-radius: 999px;
+      background: #EEF2F7;
+      position: relative;
+      overflow: hidden;
+    }
+    .progressBar {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      background: linear-gradient(90deg, $primary 0%, $accent 100%);
+      border-radius: 999px;
+    }
+    .progressPct {
+      width: 48px;
+      text-align: right;
+      font-size: 0.85rem;
+      color: $muted;
+    }
+  }
+}
+
+.lessonList {
+  padding: 8px 12px 16px 12px;
+}
+
+.lessonItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid $border;
+  border-radius: 10px;
+  margin-bottom: 10px;
+
+  .lessonDate {
+    font-size: 0.85rem;
+    color: $muted;
+    min-width: 120px;
+  }
+  .lessonInfo {
+    .lessonCourse {
+      font-weight: 600;
+      color: $text;
+    }
+    .lessonTopic {
+      font-size: 0.9rem;
+      color: $muted;
+    }
+  }
+}
+
+.secondaryGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.performance {
+  padding: 10px 12px 16px 12px;
+
+  .perfItem {
+    display: grid;
+    grid-template-columns: 120px 1fr 50px;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .perfLabel {
+    color: $text;
+    font-weight: 600;
+  }
+  .perfTrack {
+    height: 8px;
+    border-radius: 999px;
+    background: #EEF2F7;
+    position: relative;
+    overflow: hidden;
+  }
+  .perfBar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: linear-gradient(90deg, $success 0%, $accent 100%);
+    border-radius: 999px;
+  }
+  .perfValue {
+    font-size: 0.85rem;
+    color: $muted;
+    text-align: right;
+  }
+}
+
+.announcements {
+  list-style: disc;
+  padding: 12px 28px 18px 44px;
+  margin: 0;
+
+  li {
+    color: $text;
+    margin-bottom: 8px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .mainGrid {
+    grid-template-columns: 1fr;
+  }
+  .secondaryGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .actions {
+    width: 100%;
+  }
+}

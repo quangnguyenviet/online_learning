@@ -2,10 +2,10 @@ package com.vitube.online_learning.service.impl;
 
 import com.vitube.online_learning.dto.request.SaveLearnWhatRequest;
 import com.vitube.online_learning.entity.Course;
-import com.vitube.online_learning.entity.LearnWhat;
+import com.vitube.online_learning.entity.Objective;
 import com.vitube.online_learning.repository.CourseRepository;
-import com.vitube.online_learning.repository.LearnWhatRepository;
-import com.vitube.online_learning.service.LearnWhatService;
+import com.vitube.online_learning.repository.ObjectiveRepository;
+import com.vitube.online_learning.service.ObjectiveService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +16,9 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
-public class LearnWhatServiceImpl implements LearnWhatService {
+public class LearnWhatServiceImpl implements ObjectiveService {
     private final CourseRepository courseRepository;
-    private final LearnWhatRepository learnWhatRepository;
+    private final ObjectiveRepository objectiveRepository;
 
     /**
      * Lưu thông tin "Learn What" cho một khóa học.
@@ -33,12 +33,12 @@ public class LearnWhatServiceImpl implements LearnWhatService {
         Course course = courseRepository.findById(courseId).orElseThrow(() -> new RuntimeException("Course not found"));
 
         // Lấy danh sách "Learn What" của khóa học
-        List<LearnWhat> learnWhats = learnWhatRepository.findByCourseId(courseId);
+        List<Objective> learnWhats = objectiveRepository.findByCourseId(courseId);
 
         // Xóa các "Learn What" theo danh sách ID được cung cấp
         learnWhats.forEach(require -> {
             request.getDelIdList().forEach(delId -> {
-                learnWhatRepository.deleteById(delId);
+                objectiveRepository.deleteById(delId);
             });
         });
 
@@ -46,18 +46,18 @@ public class LearnWhatServiceImpl implements LearnWhatService {
         request.getOtherList().forEach(other -> {
             if (other.get("id") == null) {
                 // Tạo mới "Learn What" nếu ID không tồn tại
-                LearnWhat learnWhat = new LearnWhat();
-                learnWhat.setCourse(course);
-                learnWhat.setDescription(other.get("description").toString());
-                course.getLearnWhats().add(learnWhat);
-                learnWhatRepository.save(learnWhat);
+                Objective objective = new Objective();
+                objective.setCourse(course);
+                objective.setDescription(other.get("description").toString());
+                course.getObjectives().add(objective);
+                objectiveRepository.save(objective);
             } else {
                 // Cập nhật "Learn What" nếu ID tồn tại
-                LearnWhat learnWhat = learnWhatRepository
+                Objective objective = objectiveRepository
                         .findById(other.get("id").toString())
                         .orElseThrow(() -> new RuntimeException("Require not found"));
-                learnWhat.setDescription(other.get("description").toString());
-                learnWhatRepository.save(learnWhat);
+                objective.setDescription(other.get("description").toString());
+                objectiveRepository.save(objective);
             }
         });
 

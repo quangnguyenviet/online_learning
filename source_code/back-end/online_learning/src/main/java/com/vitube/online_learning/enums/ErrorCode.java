@@ -55,6 +55,7 @@ public enum ErrorCode {
      * Lỗi: Vai trò không tìm thấy.
      */
     ROLE_NOT_FOUND(1009, "Role is not found", HttpStatus.BAD_REQUEST),
+    NOT_FOUND(1010, "Resource not found", HttpStatus.NOT_FOUND)
     ;
 
     /**

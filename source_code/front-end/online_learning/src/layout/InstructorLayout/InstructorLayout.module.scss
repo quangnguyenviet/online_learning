@@ -1,0 +1,12 @@
+/* MainLayout.module.scss */
+.wrapper {
+  display: flex;
+}
+
+.mainContent {
+  flex: 1;
+  margin-left: 270px; // Matches your sidebar width
+  background-color: #f9fafb; // Light Content Background
+  min-height: 100vh;
+  position: relative;
+}

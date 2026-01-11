@@ -1,0 +1,67 @@
+/* ==========================================================================
+   GLOBAL VARIABLES - HYBRID THEME (Dark Sidebar / Light Content)
+   ========================================================================== */
+
+// --- 1. SIDEBAR (Dark Theme) ---
+$sidebar-bg:           #111827; // Deep Charcoal/Navy
+$sidebar-text:         #9ca3af; // Muted Gray
+$sidebar-text-active:  #ffffff; // Pure White
+$sidebar-hover-bg:     rgba(255, 255, 255, 0.05);
+$sidebar-width:        280px;
+$sidebar-z-index:      1000;
+
+// --- 2. MAIN CONTENT (Light Theme) ---
+$bg-body:              #f3f4f6; // Light Gray background (cool tone)
+$bg-card:              #ffffff; // Pure White for surface panels
+$bg-input:             #ffffff;
+$bg-input-faint:       #f9fafb; // Very subtle background for disabled/read-only
+
+// --- 3. BRAND & ACCENT (Indigo Pro) ---
+$accent:               #6366f1; // The main "Action" color
+$accent-hover:         #4f46e5;
+$accent-soft:          #eef2ff; // Light tint for highlights/tags
+$accent-border:        #c7d2fe;
+
+// --- 4. TYPOGRAPHY (Content Area) ---
+$text-main:            #111827; // High contrast for headings
+$text-secondary:       #4b5563; // Body text and descriptions
+$text-muted:           #9ca3af; // Placeholders and small metadata
+$text-white:           #ffffff;
+
+// --- 5. SEMANTIC STATUS ---
+$success:              #10b981; // Emerald
+$danger:               #ef4444; // Rose
+$warning:              #f59e0b; // Amber
+$info:                 #3b82f6; // Blue
+
+// --- 6. BORDERS & DIVIDERS ---
+$border-light:         #e5e7eb; // Standard divider
+$border-focus:         #6366f1; // Matches accent
+
+// --- 7. SHADOWS & RADIUS ---
+$shadow-sm:            0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-md:            0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$shadow-lg:            0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+$radius-sm:            4px;
+$radius-md:            8px;
+$radius-lg:            12px;
+$radius-xl:            16px;
+
+// --- 8. TRANSITIONS ---
+$transition-fast:      all 0.15s ease-in-out;
+$transition-base:      all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+// --- 9. Buttons ---
+$btn-padding-y:        10px;
+$btn-padding-x:        16px;
+$btn-font-size:        1rem;
+$btn-border-radius:    $radius-md;
+$btn-shadow:           $shadow-sm;
+$btn-hover-shadow:     $shadow-md;
+$btn-active-shadow:    $shadow-sm;
+$btn-disabled-bg:      #d1d5db; // Gray-300
+$btn-disabled-text:    #9ca3af; // Gray-400
+$btn-disabled-cursor:  not-allowed;
+$btn-transition:       $transition-base;
+$btn-primary-bg:       $accent;

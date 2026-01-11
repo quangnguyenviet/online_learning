@@ -6,20 +6,22 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.vitube.online_learning.dto.CourseDTO;
+import com.vitube.online_learning.dto.ObjectiveDTO;
+import com.vitube.online_learning.dto.request.CourseCreattionRequest;
+import com.vitube.online_learning.entity.*;
+import com.vitube.online_learning.enums.ErrorCode;
+import com.vitube.online_learning.exception.AppException;
+import com.vitube.online_learning.mapper.CourseMapper;
+import com.vitube.online_learning.mapper.ObjectiveMapper;
+import com.vitube.online_learning.repository.CategoryRepository;
 import com.vitube.online_learning.service.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.vitube.online_learning.dto.request.CourseRequest;
-import com.vitube.online_learning.dto.response.CourseResponse;
-import com.vitube.online_learning.dto.response.LearnWhatResponse;
 import com.vitube.online_learning.dto.response.LessonResponse;
 import com.vitube.online_learning.dto.response.RequireResponse;
-import com.vitube.online_learning.entity.Course;
-import com.vitube.online_learning.entity.Lesson;
-import com.vitube.online_learning.entity.User;
-import com.vitube.online_learning.mapper.CousreMapper;
-import com.vitube.online_learning.mapper.LearnWhatMapper;
 import com.vitube.online_learning.mapper.RequireMapper;
 import com.vitube.online_learning.repository.CourseRepository;
 import com.vitube.online_learning.repository.UserRepository;
@@ -34,12 +36,13 @@ import lombok.RequiredArgsConstructor;
 public class CourseServiceImpl implements CourseService {
     private final UserRepository userRepository;
     private final CourseRepository courseRepository;
-    private final CousreMapper cousreMapper;
+    private final CourseMapper courseMapper;
     private final UserService userService;
     private final LessonService lessonService;
-    private final LearnWhatMapper learnWhatMapper;
+    private final ObjectiveMapper objectiveMapper;
     private final RequireMapper requireMapper;
     private final S3Service s3Service;
+    private final CategoryRepository categoryRepository;
 
     /**
      * Chuyển đổi đối tượng Course thành CourseResponse.
@@ -49,8 +52,8 @@ public class CourseServiceImpl implements CourseService {
      * @return Đối tượng phản hồi khóa học.
      */
     @Override
-    public CourseResponse courseToCourseResponse(Course course, int type) {
-        CourseResponse response = cousreMapper.courseToCourseResponse(course);
+    public CourseDTO toDto(Course course, int type) {
+        CourseDTO response = courseMapper.toDto(course);
         int hour = 0;
         int minute = 0;
         int second = 0;
@@ -69,9 +72,9 @@ public class CourseServiceImpl implements CourseService {
 
         response.setNumber_of_lessons(course.getLessons().size());
 
-        List<LearnWhatResponse> learnWhatResponses = new ArrayList<>();
-        course.getLearnWhats().forEach(learnWhat -> {
-            learnWhatResponses.add(learnWhatMapper.learnWhatTooLearnWhatResponse(learnWhat));
+        List<ObjectiveDTO> objectiveDTOS = new ArrayList<>();
+        course.getObjectives().forEach(objective -> {
+            objectiveDTOS.add(objectiveMapper.toDto(objective));
         });
 
         List<RequireResponse> requireResponses = new ArrayList<>();
@@ -79,7 +82,6 @@ public class CourseServiceImpl implements CourseService {
             requireResponses.add(requireMapper.requireToRequireResponse(require));
         });
 
-        response.setInstructorId(course.getInstructor().getId());
 
         if (type == 0) {
             return response;
@@ -87,7 +89,7 @@ public class CourseServiceImpl implements CourseService {
             Collections.sort(lessonResponses);
 
             response.setLessons(lessonResponses);
-            response.setLearnWhats(learnWhatResponses);
+            response.setObjectives(objectiveDTOS);
             response.setRequires(requireResponses);
         }
 
@@ -104,7 +106,7 @@ public class CourseServiceImpl implements CourseService {
      * @return Đối tượng phản hồi khóa học sau khi tạo.
      */
     @Override
-    public CourseResponse createCourse(CourseRequest request, MultipartFile image) {
+    public CourseDTO createCourse(CourseCreattionRequest request, MultipartFile image) {
         String key = generateKey();
         String imageUrl = "";
         try {
@@ -114,25 +116,37 @@ public class CourseServiceImpl implements CourseService {
             throw new RuntimeException(e);
         }
 
-        User instructor;
-        if (request.getInstructorId() == null) {
-            instructor = userService.getCurrentUser();
-        } else {
-            instructor = userRepository
-                    .findById(request.getInstructorId())
-                    .orElseThrow(() -> new RuntimeException("Instructor not found"));
-        }
-
-        Course course = cousreMapper.requestToCourse(request);
+        User instructor = userService.getCurrentUser();
+        Category category = categoryRepository.findById(request.getCategoryId())
+                .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
+        Course course = courseMapper.createRequestToEntity(request);
         course.setInstructor(instructor);
         course.setImageUrl(imageUrl);
+        course.setCategory(category);
+
+        // create objectives
+        if (request.getObjectives() == null || request.getObjectives().isEmpty()) {
+
+        }
+        else{
+            List<Objective> objectives = request.getObjectives().stream()
+                    .map(o -> {
+                        Objective objective = Objective.builder()
+                                .description(o)
+                                .course(course)
+                                .build();
+                        return objective;
+                    })
+                    .toList();
+            course.setObjectives(objectives);
+        }
+
 
         Course saved = courseRepository.save(course);
 
-        CourseResponse courseResponse = cousreMapper.courseToCourseResponse(course);
-        courseResponse.setInstructorId(instructor.getId());
+        CourseDTO courseDTO = courseMapper.toDto(saved);
 
-        return courseResponse;
+        return courseDTO;
     }
 
     /**
@@ -142,10 +156,10 @@ public class CourseServiceImpl implements CourseService {
      * @return Đối tượng phản hồi khóa học.
      */
     @Override
-    public CourseResponse getCourseById(String id) {
+    public CourseDTO getCourseById(String id) {
         Course course = courseRepository.findById(id).get();
 
-        CourseResponse response = courseToCourseResponse(course, 1);
+        CourseDTO response = toDto(course, 1);
         return response;
     }
 
@@ -157,7 +171,7 @@ public class CourseServiceImpl implements CourseService {
      * @return Đối tượng phản hồi khóa học sau khi cập nhật.
      */
     @Override
-    public CourseResponse updateCourse(String id, CourseRequest request) {
+    public CourseDTO updateCourse(String id, CourseRequest request) {
         Course course = courseRepository.findById(id).orElseThrow(() -> new RuntimeException("Course not found"));
 
         if (request.getTag().equals("GENERAL")) {
@@ -168,8 +182,7 @@ public class CourseServiceImpl implements CourseService {
 
         Course saved = courseRepository.save(course);
 
-        CourseResponse response = cousreMapper.courseToCourseResponse(saved);
-        response.setInstructorId(course.getInstructor().getId());
+        CourseDTO response = courseMapper.toDto(saved);
 
         return response;
     }
@@ -190,19 +203,19 @@ public class CourseServiceImpl implements CourseService {
      * @return Danh sách phản hồi khóa học.
      */
     @Override
-    public List<CourseResponse> getCourses(String type, String query) {
-        List<CourseResponse> responseList = new ArrayList<>();
+    public List<CourseDTO> getCourses(String type, String query) {
+        List<CourseDTO> responseList = new ArrayList<>();
         if (type == null || type.equals("")) {
             if (query != null) {
                 courseRepository.findByTitleContaining(query).forEach(course -> {
                     if (course.getTitle().toLowerCase().contains(query.toLowerCase())) {
-                        CourseResponse response = courseToCourseResponse(course, 0);
+                        CourseDTO response = toDto(course, 0);
                         responseList.add(response);
                     }
                 });
             } else {
                 courseRepository.findAll().forEach(course -> {
-                    CourseResponse response = courseToCourseResponse(course, 0);
+                    CourseDTO response = toDto(course, 0);
                     responseList.add(response);
                 });
             }
@@ -210,14 +223,14 @@ public class CourseServiceImpl implements CourseService {
         } else if (type.equals("free")) {
             courseRepository.findAll().forEach(course -> {
                 if (course.getPrice() == 0 || course.getNewPrice() == 0) {
-                    CourseResponse response = courseToCourseResponse(course, 0);
+                    CourseDTO response = toDto(course, 0);
                     responseList.add(response);
                 }
             });
         } else if (type.equals("plus")) {
             courseRepository.findAll().forEach(course -> {
                 if (course.getPrice() != 0 && course.getNewPrice() != 0) {
-                    CourseResponse response = courseToCourseResponse(course, 0);
+                    CourseDTO response = toDto(course, 0);
                     responseList.add(response);
                 }
             });
@@ -231,12 +244,11 @@ public class CourseServiceImpl implements CourseService {
      * @return Danh sách phản hồi khóa học miễn phí.
      */
     @Override
-    public List<CourseResponse> getFreeCourse() {
-        List<CourseResponse> responseList = new ArrayList<>();
+    public List<CourseDTO> getFreeCourse() {
+        List<CourseDTO> responseList = new ArrayList<>();
         courseRepository.findAll().forEach(course -> {
             if (course.getPrice() == 0 || course.getNewPrice() == 0) {
-                CourseResponse response = cousreMapper.courseToCourseResponse(course);
-                response.setInstructorId(course.getInstructor().getId());
+                CourseDTO response = courseMapper.toDto(course);
                 responseList.add(response);
             }
         });
@@ -249,12 +261,11 @@ public class CourseServiceImpl implements CourseService {
      * @return Danh sách phản hồi khóa học trả phí.
      */
     @Override
-    public List<CourseResponse> getPlusCourse() {
-        List<CourseResponse> responseList = new ArrayList<>();
+    public List<CourseDTO> getPlusCourse() {
+        List<CourseDTO> responseList = new ArrayList<>();
         courseRepository.findAll().forEach(course -> {
             if (course.getPrice() != 0 && course.getNewPrice() != 0) {
-                CourseResponse response = cousreMapper.courseToCourseResponse(course);
-                response.setInstructorId(course.getInstructor().getId());
+                CourseDTO response = courseMapper.toDto(course);
                 responseList.add(response);
             }
         });
@@ -267,13 +278,12 @@ public class CourseServiceImpl implements CourseService {
      * @return Danh sách phản hồi khóa học đang học.
      */
     @Override
-    public List<CourseResponse> getLearningCourses() {
-        List<CourseResponse> responses = new ArrayList<>();
+    public List<CourseDTO> getLearningCourses() {
+        List<CourseDTO> responses = new ArrayList<>();
 
         User user = userService.getCurrentUser();
         user.getRegisters().forEach(registration -> {
-            CourseResponse response = cousreMapper.courseToCourseResponse(registration.getCourse());
-            response.setInstructorId(registration.getCourse().getInstructor().getId());
+            CourseDTO response = courseMapper.toDto(registration.getCourse());
             responses.add(response);
         });
         return responses;
@@ -286,13 +296,12 @@ public class CourseServiceImpl implements CourseService {
      * @return Danh sách phản hồi khóa học của giảng viên.
      */
     @Override
-    public List<CourseResponse> getCoursesOfInstructor(String instructorId) {
+    public List<CourseDTO> getCoursesOfInstructor(String instructorId) {
         User instructor =
                 userRepository.findById(instructorId).orElseThrow(() -> new RuntimeException("Instructor not found"));
-        List<CourseResponse> responseList = new ArrayList<>();
+        List<CourseDTO> responseList = new ArrayList<>();
         instructor.getCourses().forEach(course -> {
-            CourseResponse response = cousreMapper.courseToCourseResponse(course);
-            response.setInstructorId(course.getInstructor().getId());
+            CourseDTO response = courseMapper.toDto(course);
             responseList.add(response);
         });
         return responseList;
@@ -304,11 +313,11 @@ public class CourseServiceImpl implements CourseService {
      * @return Danh sách phản hồi khóa học của giảng viên hiện tại.
      */
     @Override
-    public List<CourseResponse> getMyCourses() {
+    public List<CourseDTO> getMyCourses() {
         User instructor = userService.getCurrentUser();
-        List<CourseResponse> responseList = new ArrayList<>();
+        List<CourseDTO> responseList = new ArrayList<>();
         instructor.getCourses().forEach(course -> {
-            CourseResponse response = courseToCourseResponse(course, 1);
+            CourseDTO response = toDto(course, 1);
             responseList.add(response);
         });
         return responseList;
@@ -321,7 +330,7 @@ public class CourseServiceImpl implements CourseService {
      * @param price Giá mới của khóa học.
      */
     @Override
-    public void setPrice(String courseId, Float price) {
+    public void setPrice(String courseId, Double price) {
         Course course = courseRepository.findById(courseId).orElseThrow(() -> new RuntimeException("Course not found"));
         course.setPrice(price);
         courseRepository.save(course);

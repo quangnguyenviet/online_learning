@@ -11,6 +11,7 @@ import com.vitube.online_learning.enums.ErrorCode;
 import com.vitube.online_learning.enums.RoleEnum;
 import com.vitube.online_learning.exception.AppException;
 import com.vitube.online_learning.utils.ValidateUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 /**
  * Lớp triển khai các phương thức liên quan đến người dùng.
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -120,6 +122,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getCurrentUser() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
+        // log authority of user
+        List<String> authorities = authentication.getAuthorities()
+                .stream()
+                .map(grantedAuthority -> grantedAuthority.getAuthority())
+                .toList();
+        log.info(String.join(",", authorities));
+
+
         User user = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
         return user;

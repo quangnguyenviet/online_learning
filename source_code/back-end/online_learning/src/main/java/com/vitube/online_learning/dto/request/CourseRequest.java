@@ -25,12 +25,12 @@ public class CourseRequest extends BaseRequest {
     /**
      * Giá của khóa học.
      */
-    private float price;
+    private Double price;
 
     /**
      * Mức giảm giá của khóa học (theo phần trăm).
      */
-    private double discount;
+    private Integer discount;
 
     /**
      * Mô tả ngắn gọn về khóa học.

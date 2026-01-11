@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.vitube.online_learning.dto.request.SaveLearnWhatRequest;
 import com.vitube.online_learning.dto.response.ApiResponse;
-import com.vitube.online_learning.service.LearnWhatService;
+import com.vitube.online_learning.service.ObjectiveService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/instructor-learn-what")
 @RequiredArgsConstructor
 public class ILearnWhatController {
-    private final LearnWhatService learnWhatService;
+    private final ObjectiveService learnWhatService;
 
     @PatchMapping("/{courseId}")
     public ApiResponse<?> saveLearnWhat(@RequestBody SaveLearnWhatRequest request, @PathVariable String courseId) {

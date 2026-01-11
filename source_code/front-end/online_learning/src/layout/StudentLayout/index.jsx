@@ -1,15 +1,15 @@
 import { Outlet } from "react-router-dom"
 import Footer from "../../components/Footer"
-import Nav from "components/Nav";
-import "./style.scss"
+import styles from './style.module.scss'
+import Nav from "../Nav/Nav"
 
 export default function StudentLayout() {
     return (
         <>
-            <div className="student">
+            <div className={styles['student']}>
 
                 <Nav />
-                <main className="main">
+                <main className={styles['main']}>
                     <Outlet />
                 </main>
                 <Footer />

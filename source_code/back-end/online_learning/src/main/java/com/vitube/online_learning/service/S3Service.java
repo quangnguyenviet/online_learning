@@ -56,12 +56,6 @@ public interface S3Service {
      *
      * @param key Khóa định danh của tệp tin.
      */
-    public void deletePrivateFile(String key);
+    public void deleteFile(String key);
 
-    /**
-     * Xóa tệp tin trong bucket public.
-     *
-     * @param key Khóa định danh của tệp tin.
-     */
-    public void deletePublicFile(String key);
 }

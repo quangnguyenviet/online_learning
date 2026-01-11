@@ -26,7 +26,7 @@ import lombok.experimental.NonFinal;
  */
 @Configuration
 @EnableWebSecurity // Kích hoạt bảo mật web
-@EnableMethodSecurity // Kích hoạt bảo mật ở cấp độ phương thức
+@EnableMethodSecurity // activate method-level security
 public class SecurityConfig {
 
     // Các endpoint công khai cho phương thức POST
@@ -36,7 +36,8 @@ public class SecurityConfig {
 
     // Các endpoint công khai cho phương thức GET
     private final String[] PUBLIC_GET = {
-            "/courses/*", "/courses", "/courses/{id}", "/courses/free", "/instructor-require/{courseId}",
+            "/courses/*", "/courses", "/courses/{id}", "/courses/free", "/instructor-require/{courseId}"
+            , "/categories",
     };
 
     // Khóa ký JWT được lấy từ file cấu hình
@@ -71,7 +72,7 @@ public class SecurityConfig {
 
         http.oauth2ResourceServer(oauth2 -> {
             oauth2.jwt(jwt -> {
-                        jwt.decoder(myJwtDecoder); // Cấu hình bộ giải mã cho token JWT
+                        jwt.decoder(myJwtDecoder); // config custom JwtDecoder
                     })
                     .authenticationEntryPoint(new JwtAuthenticationEntryPoint());
         });

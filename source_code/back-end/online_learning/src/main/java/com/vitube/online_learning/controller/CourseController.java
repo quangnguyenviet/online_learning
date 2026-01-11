@@ -2,13 +2,18 @@ package com.vitube.online_learning.controller;
 
 import java.util.List;
 
+import com.vitube.online_learning.dto.CourseDTO;
+import com.vitube.online_learning.dto.request.CourseCreattionRequest;
+import com.vitube.online_learning.dto.request.CourseRequest;
+import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.vitube.online_learning.dto.response.ApiResponse;
-import com.vitube.online_learning.dto.response.CourseResponse;
 import com.vitube.online_learning.service.CourseService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Lớp điều khiển xử lý các yêu cầu liên quan đến khóa học.
@@ -29,10 +34,10 @@ public class CourseController {
      * @return Phản hồi API chứa danh sách khóa học.
      */
     @GetMapping
-    public ApiResponse<List<CourseResponse>> getCourses(
+    public ApiResponse<List<CourseDTO>> getCourses(
             @RequestParam(required = false) String type, @RequestParam(required = false) String query) {
-        List<CourseResponse> response = courseService.getCourses(type, query);
-        return ApiResponse.<List<CourseResponse>>builder()
+        List<CourseDTO> response = courseService.getCourses(type, query);
+        return ApiResponse.<List<CourseDTO>>builder()
                 .status(1000)
                 .data(response)
                 .build();
@@ -45,9 +50,9 @@ public class CourseController {
      * @return Phản hồi API chứa thông tin chi tiết của khóa học.
      */
     @GetMapping("/{id}")
-    public ApiResponse<CourseResponse> getCourseById(@PathVariable String id) {
-        CourseResponse response = courseService.getCourseById(id);
-        return ApiResponse.<CourseResponse>builder().status(1000).data(response).build();
+    public ApiResponse<CourseDTO> getCourseById(@PathVariable String id) {
+        CourseDTO response = courseService.getCourseById(id);
+        return ApiResponse.<CourseDTO>builder().status(1000).data(response).build();
     }
 
     /**
@@ -56,9 +61,9 @@ public class CourseController {
      * @return Phản hồi API chứa danh sách các khóa học miễn phí.
      */
     @GetMapping("/free")
-    public ApiResponse<List<CourseResponse>> getFreeCourses() {
-        List<CourseResponse> response = courseService.getFreeCourse();
-        return ApiResponse.<List<CourseResponse>>builder()
+    public ApiResponse<List<CourseDTO>> getFreeCourses() {
+        List<CourseDTO> response = courseService.getFreeCourse();
+        return ApiResponse.<List<CourseDTO>>builder()
                 .status(1000)
                 .data(response)
                 .build();
@@ -70,9 +75,9 @@ public class CourseController {
      * @return Phản hồi API chứa danh sách các khóa học nâng cao.
      */
     @GetMapping("/plus")
-    public ApiResponse<List<CourseResponse>> getPlusCourses() {
-        List<CourseResponse> response = courseService.getPlusCourse();
-        return ApiResponse.<List<CourseResponse>>builder()
+    public ApiResponse<List<CourseDTO>> getPlusCourses() {
+        List<CourseDTO> response = courseService.getPlusCourse();
+        return ApiResponse.<List<CourseDTO>>builder()
                 .status(1000)
                 .data(response)
                 .build();
@@ -84,9 +89,9 @@ public class CourseController {
      * @return Phản hồi API chứa danh sách các khóa học đang học.
      */
     @GetMapping("/learning")
-    public ApiResponse<List<CourseResponse>> getLearningCourses() {
-        List<CourseResponse> response = courseService.getLearningCourses();
-        return ApiResponse.<List<CourseResponse>>builder()
+    public ApiResponse<List<CourseDTO>> getLearningCourses() {
+        List<CourseDTO> response = courseService.getLearningCourses();
+        return ApiResponse.<List<CourseDTO>>builder()
                 .status(1000)
                 .data(response)
                 .build();
@@ -99,10 +104,20 @@ public class CourseController {
      * @return Phản hồi API chứa danh sách các khóa học của giảng viên.
      */
     @GetMapping("/instructor/{instructorId}")
-    public ApiResponse<List<CourseResponse>> getCoursesOfInstructor(@PathVariable String instructorId) {
-        List<CourseResponse> response = courseService.getCoursesOfInstructor(instructorId);
-        return ApiResponse.<List<CourseResponse>>builder()
+    public ApiResponse<List<CourseDTO>> getCoursesOfInstructor(@PathVariable String instructorId) {
+        List<CourseDTO> response = courseService.getCoursesOfInstructor(instructorId);
+        return ApiResponse.<List<CourseDTO>>builder()
                 .status(1000)
+                .data(response)
+                .build();
+    }
+
+    @PreAuthorize("hasAuthority('SCOPE_INSTRUCTOR')")
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ApiResponse<?> createCourse(
+            @ModelAttribute CourseCreattionRequest request, @RequestPart("imageFile") MultipartFile imageFile) {
+        CourseDTO response = courseService.createCourse(request, imageFile);
+        return ApiResponse.builder().status(1000)
                 .data(response)
                 .build();
     }

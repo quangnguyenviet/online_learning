@@ -2,6 +2,7 @@ package com.vitube.online_learning.service.impl;
 
 import com.vitube.online_learning.service.S3Service;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +25,7 @@ import java.time.Duration;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class S3ServiceImpl implements S3Service {
     @Value("${aws.videoBucketName}")
     private String videoBucketName;
@@ -52,6 +54,7 @@ public class S3ServiceImpl implements S3Service {
      */
     @Override
     public String uploadPrivate(MultipartFile file, String key) throws IOException {
+        log.info("Inside uploadPrivate - Uploading to bucket: {}, region: {}, key: {}", videoBucketName, region, key);
         PutObjectRequest putRequest = PutObjectRequest.builder()
                 .bucket(videoBucketName)
                 .key(key)
@@ -60,7 +63,8 @@ public class S3ServiceImpl implements S3Service {
 
         s3Client.putObject(putRequest, RequestBody.fromBytes(file.getBytes()));
 
-        return String.format("https://%s.s3.amazonaws.com/%s", videoBucketName, key);
+//        return String.format("https://%s.s3.amazonaws.com/%s", videoBucketName, key);
+        return s3Client.utilities().getUrl(builder -> builder.bucket(videoBucketName).key(key)).toString();
     }
 
     /**
@@ -73,9 +77,7 @@ public class S3ServiceImpl implements S3Service {
      */
     @Override
     public String uploadPublicFile(MultipartFile file, String key) throws IOException {
-        System.out.printf("Uploading to bucket: %s, region: %s, key: %s\n", imageBucketName, region, key);
-
-        System.out.println("Content type: " + file.getContentType());
+        log.info("Inside uploadPublicFile");
 
         PutObjectRequest putRequest = PutObjectRequest.builder()
                 .bucket(imageBucketName)
@@ -85,7 +87,9 @@ public class S3ServiceImpl implements S3Service {
 
         s3Client.putObject(putRequest, RequestBody.fromBytes(file.getBytes()));
 
-        return String.format("https://%s.s3.%s.amazonaws.com/%s", imageBucketName, region, key);
+//        return String.format("https://%s.s3.%s.amazonaws.com/%s", imageBucketName, region, key);
+        return s3Client.utilities().getUrl(builder -> builder.bucket(imageBucketName).key(key)).toString();
+
     }
 
     /**
@@ -119,17 +123,7 @@ public class S3ServiceImpl implements S3Service {
      * @param key Khóa của tệp cần xóa.
      */
     @Override
-    public void deletePrivateFile(String key) {
+    public void deleteFile(String key) {
         s3Client.deleteObject(builder -> builder.bucket(videoBucketName).key(key));
-    }
-
-    /**
-     * Xóa tệp trong bucket công khai.
-     *
-     * @param key Khóa của tệp cần xóa.
-     */
-    @Override
-    public void deletePublicFile(String key) {
-        s3Client.deleteObject(builder -> builder.bucket(imageBucketName).key(key));
     }
 }

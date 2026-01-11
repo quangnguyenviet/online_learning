@@ -1,0 +1,224 @@
+/* AddNewCourse.module.scss */
+@use '../../../../_instructorTheme.scss' as theme;
+
+.container {
+  padding: 40px;
+  background-color: theme.$bg-body;
+  min-height: 100vh;
+  color: theme.$text-main;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+
+  h1 { 
+    font-size: 1.75rem; 
+    font-weight: 700;
+    color: theme.$text-main; 
+    margin: 0; 
+  }
+  p { 
+    color: theme.$text-secondary; 
+    margin-top: 4px; 
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btnPrimary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: theme.$radius-md;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: theme.$transition-base;
+}
+
+.btnPrimary {
+  background: theme.$accent;
+  color: theme.$text-white;
+  border: none;
+  
+  &:hover { 
+    background: theme.$accent-hover;
+    transform: translateY(-1px);
+    box-shadow: theme.$shadow-md;
+  }
+}
+
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mainCard, .sideCard {
+  background: theme.$bg-card;
+  padding: 28px;
+  border-radius: theme.$radius-lg;
+  border: 1px solid theme.$border-light;
+  box-shadow: theme.$shadow-sm;
+}
+
+.section {
+  margin-bottom: 22px;
+  
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: theme.$text-main;
+  }
+
+  input, textarea, select {
+    width: 100%;
+    padding: 11px 14px;
+    background: theme.$bg-input;
+    border: 1px solid theme.$border-light;
+    border-radius: theme.$radius-md;
+    color: theme.$text-main;
+    font-size: 0.95rem;
+    transition: theme.$transition-base;
+
+    &::placeholder { 
+      color: theme.$text-muted; 
+    }
+    
+    &:focus {
+      outline: none;
+      border-color: theme.$accent;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+  }
+
+  textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.uploadArea {
+  position: relative;
+  border: 2px dashed theme.$border-light;
+  background: theme.$bg-input-faint;
+  border-radius: theme.$radius-lg;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: pointer;
+  transition: theme.$transition-base;
+
+  &:hover {
+    border-color: theme.$accent;
+    background: theme.$accent-soft;
+  }
+
+  input[type="file"] {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
+}
+
+.uploadPlaceholder {
+  text-align: center;
+  color: theme.$text-secondary;
+  
+  svg { 
+    font-size: 3rem; 
+    margin-bottom: 10px;
+    color: theme.$text-muted;
+  }
+  
+  p {
+    margin: 4px 0;
+    font-size: 0.9rem;
+  }
+}
+
+.preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bulletInput {
+  display: flex;
+  gap: 8px;
+  
+  input {
+    flex: 1;
+  }
+  
+  button {
+    background: theme.$accent;
+    border: none;
+    color: theme.$text-white;
+    padding: 0 20px;
+    border-radius: theme.$radius-md;
+    font-weight: 600;
+    cursor: pointer;
+    transition: theme.$transition-base;
+    
+    &:hover { 
+      background: theme.$accent-hover;
+    }
+  }
+}
+
+.bulletList {
+  margin-top: 14px;
+  padding-left: 24px;
+  color: theme.$text-secondary;
+  font-size: 0.9rem;
+  
+  li { 
+    margin-bottom: 6px;
+    line-height: 1.5;
+  }
+}
+.removeBtn {
+  background: transparent;
+  border: none;
+  color: #ff4d4f;
+  cursor: pointer;
+  font-size: 1.2rem;
+  line-height: 1;
+  padding: 0;
+  margin-left: 8px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: #a8071a;
+    transform: scale(1.1);
+  }
+}

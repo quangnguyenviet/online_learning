@@ -1,7 +1,9 @@
 package com.vitube.online_learning.entity;
 
+import java.util.List;
 import java.util.Set;
 
+import com.vitube.online_learning.enums.LevelEnum;
 import jakarta.persistence.*;
 
 import lombok.*;
@@ -18,33 +20,17 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Course {
-    /**
-     * ID duy nhất của khóa học.
-     */
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    /**
-     * Tiêu đề của khóa học.
-     */
     private String title;
 
-    /**
-     * URL hình ảnh đại diện của khóa học.
-     */
     private String imageUrl;
 
-    /**
-     * Trạng thái xuất bản của khóa học.
-     * True nếu đã xuất bản, false nếu chưa.
-     */
     private Boolean published;
 
-    /**
-     * Giảng viên tạo khóa học.
-     * Liên kết với thực thể User.
-     */
     @ManyToOne
     @JoinColumn(name = "instructor_id")
     private User instructor;
@@ -52,12 +38,12 @@ public class Course {
     /**
      * Giá của khóa học.
      */
-    private float price;
+    private Double price;
 
     /**
      * Mức giảm giá của khóa học (theo phần trăm).
      */
-    private int discount;
+    private Integer discount;
 
     /**
      * Phương thức tính giá mới sau khi áp dụng giảm giá.
@@ -86,8 +72,8 @@ public class Course {
      * Danh sách các nội dung học được trong khóa học.
      * Liên kết với thực thể LearnWhat.
      */
-    @OneToMany(mappedBy = "course")
-    private Set<LearnWhat> learnWhats;
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Objective> objectives;
 
     /**
      * Mô tả chi tiết về khóa học.
@@ -107,4 +93,11 @@ public class Course {
      */
     @OneToMany(mappedBy = "course")
     private Set<Require> requires;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    @Enumerated(EnumType.STRING)
+    private LevelEnum level;
 }

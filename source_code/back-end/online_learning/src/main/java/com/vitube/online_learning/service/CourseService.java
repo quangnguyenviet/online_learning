@@ -2,10 +2,11 @@ package com.vitube.online_learning.service;
 
 import java.util.List;
 
+import com.vitube.online_learning.dto.CourseDTO;
+import com.vitube.online_learning.dto.request.CourseCreattionRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.vitube.online_learning.dto.request.CourseRequest;
-import com.vitube.online_learning.dto.response.CourseResponse;
 import com.vitube.online_learning.entity.Course;
 
 /**
@@ -19,7 +20,7 @@ public interface CourseService {
      * @param type Loại chuyển đổi.
      * @return Đối tượng phản hồi khóa học.
      */
-    CourseResponse courseToCourseResponse(Course course, int type);
+    CourseDTO toDto(Course course, int type);
 
     /**
      * Tạo mới một khóa học.
@@ -28,7 +29,7 @@ public interface CourseService {
      * @param image Tệp hình ảnh của khóa học.
      * @return Đối tượng phản hồi khóa học.
      */
-    CourseResponse createCourse(CourseRequest request, MultipartFile image);
+    CourseDTO createCourse(CourseCreattionRequest request, MultipartFile image);
 
     /**
      * Lấy thông tin khóa học theo ID.
@@ -36,7 +37,7 @@ public interface CourseService {
      * @param id ID của khóa học.
      * @return Đối tượng phản hồi khóa học.
      */
-    CourseResponse getCourseById(String id);
+    CourseDTO getCourseById(String id);
 
     /**
      * Cập nhật thông tin khóa học.
@@ -45,7 +46,7 @@ public interface CourseService {
      * @param request Yêu cầu cập nhật khóa học.
      * @return Đối tượng phản hồi khóa học.
      */
-    CourseResponse updateCourse(String id, CourseRequest request);
+    CourseDTO updateCourse(String id, CourseRequest request);
 
     /**
      * Xóa khóa học theo ID.
@@ -61,28 +62,28 @@ public interface CourseService {
      * @param query Từ khóa tìm kiếm.
      * @return Danh sách phản hồi khóa học.
      */
-    List<CourseResponse> getCourses(String type, String query);
+    List<CourseDTO> getCourses(String type, String query);
 
     /**
      * Lấy danh sách các khóa học miễn phí.
      *
      * @return Danh sách phản hồi khóa học miễn phí.
      */
-    List<CourseResponse> getFreeCourse();
+    List<CourseDTO> getFreeCourse();
 
     /**
      * Lấy danh sách các khóa học Plus.
      *
      * @return Danh sách phản hồi khóa học Plus.
      */
-    List<CourseResponse> getPlusCourse();
+    List<CourseDTO> getPlusCourse();
 
     /**
      * Lấy danh sách các khóa học đang học.
      *
      * @return Danh sách phản hồi khóa học đang học.
      */
-    List<CourseResponse> getLearningCourses();
+    List<CourseDTO> getLearningCourses();
 
     /**
      * Lấy danh sách các khóa học của giảng viên.
@@ -90,14 +91,14 @@ public interface CourseService {
      * @param instructorId ID của giảng viên.
      * @return Danh sách phản hồi khóa học của giảng viên.
      */
-    List<CourseResponse> getCoursesOfInstructor(String instructorId);
+    List<CourseDTO> getCoursesOfInstructor(String instructorId);
 
     /**
      * Lấy danh sách các khóa học của người dùng hiện tại.
      *
      * @return Danh sách phản hồi khóa học của người dùng.
      */
-    List<CourseResponse> getMyCourses();
+    List<CourseDTO> getMyCourses();
 
     /**
      * Thiết lập giá cho khóa học.
@@ -105,5 +106,5 @@ public interface CourseService {
      * @param courseId ID của khóa học.
      * @param price Giá của khóa học.
      */
-    void setPrice(String courseId, Float price);
+    void setPrice(String courseId, Double price);
 }

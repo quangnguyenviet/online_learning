@@ -69,6 +69,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
      */
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
+        // log authority of user
+        
+
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(
                 () -> new AppException(ErrorCode.USER_NOT_EXIST)
         );

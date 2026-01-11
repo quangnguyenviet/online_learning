@@ -4,11 +4,11 @@ const isStudent = () => {
     const roles = localStorage.getItem('role');
     return roles && roles.includes('STUDENT');
 }
-const isInstructor = () => {
+export const isInstructor = () => {
     const roles = localStorage.getItem('role');
     return roles && roles.includes('INSTRUCTOR');
 }
-const isAdmin = () => {
+export const isAdmin = () => {
     const roles = localStorage.getItem('role');
     return roles && roles.includes('ADMIN');
 }

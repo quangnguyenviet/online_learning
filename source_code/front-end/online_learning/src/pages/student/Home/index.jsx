@@ -1,4 +1,4 @@
-import Header from "components/Header";
+import Header from "pages/student/Home/Header";
 
 import Course from "components/Course";
 import { useState } from "react";
