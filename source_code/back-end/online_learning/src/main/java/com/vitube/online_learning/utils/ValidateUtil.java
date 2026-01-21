@@ -32,5 +32,12 @@ public class ValidateUtil {
     public static boolean isValidPassword(String password) {
         return password != null && password.length() >= 6;
     }
+
+    public static boolean customValidateString(String input) {
+        if (input == null || input.trim().isEmpty()) {
+            return false;
+        }
+        return true;
+    }
     
 }

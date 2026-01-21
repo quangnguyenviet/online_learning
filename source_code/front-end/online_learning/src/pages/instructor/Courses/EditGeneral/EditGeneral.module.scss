@@ -1,0 +1,196 @@
+@import '../../../../_instructorTheme.scss';
+
+/* ==========================================================================
+   EDIT GENERAL - SCSS MODULE
+   ========================================================================== */
+
+.editGeneralContainer {
+  background-color: $bg-card;
+  padding: 2rem;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+  max-width: 650px;
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+  }
+}
+
+.relativePosition {
+  position: relative;
+}
+
+.fieldLabel {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: $text-main;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+
+  .icon {
+    font-size: 1.15em;
+    flex-shrink: 0;
+
+    &.purple {
+      color: #8b5cf6; // Purple-500
+    }
+
+    &.green {
+      color: $success;
+    }
+
+    &.blue {
+      color: $info;
+    }
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+}
+
+.imageUploadWrapper {
+  margin-bottom: 1.5rem;
+}
+
+.imagePreview {
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 1rem;
+  border-radius: $radius-md;
+  overflow: hidden;
+  border: 2px solid $border-light;
+  box-shadow: $shadow-sm;
+
+  img {
+    width: 100%;
+    height: auto;
+    max-height: 250px;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+.fileInput {
+  display: none;
+}
+
+.fileLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background-color: $accent-soft;
+  color: $accent;
+  border: 1px solid $accent-border;
+  border-radius: $radius-md;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: $transition-base;
+
+  &:hover {
+    background-color: $accent;
+    color: $text-white;
+    border-color: $accent-hover;
+    box-shadow: $shadow-sm;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  svg {
+    font-size: 1.1em;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    padding: 0.65rem 1rem;
+  }
+}
+
+.formControl {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid $border-light;
+  border-radius: $radius-md;
+  font-size: 1rem;
+  color: $text-main;
+  background-color: $bg-input;
+  transition: $transition-base;
+  font-family: inherit;
+
+  &::placeholder {
+    color: $text-muted;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $border-focus;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  }
+
+  &:hover:not(:focus) {
+    border-color: $accent-border;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.65rem 0.85rem;
+    font-size: 0.95rem;
+  }
+}
+
+textarea.formControl {
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.6;
+}
+
+.saveBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  justify-content: center;
+  width: 100%;
+  padding: $btn-padding-y $btn-padding-x;
+  font-size: $btn-font-size;
+  font-weight: 600;
+  background-color: $btn-primary-bg;
+  color: $text-white;
+  border: none;
+  border-radius: $btn-border-radius;
+  cursor: pointer;
+  transition: $btn-transition;
+  box-shadow: $btn-shadow;
+  margin-top: 0.5rem;
+
+  &:hover {
+    background-color: $accent-hover;
+    box-shadow: $btn-hover-shadow;
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    background-color: darken($accent-hover, 5%);
+    box-shadow: $btn-active-shadow;
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    background-color: $btn-disabled-bg;
+    color: $btn-disabled-text;
+    cursor: $btn-disabled-cursor;
+    box-shadow: none;
+    transform: none;
+  }
+
+  @media (max-width: 768px) {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.95rem;
+  }
+}

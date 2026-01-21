@@ -1,0 +1,215 @@
+/* LessonList.module.scss */
+
+$bg: #f9fafb;
+$card-bg: #ffffff;
+$text: #1f2937;
+$muted: #6b7280;
+$border: #e5e7eb;
+$primary: #2563eb;
+$danger: #ef4444;
+$success: #10b981;
+$shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+
+.lessons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  background: $bg;
+  border-radius: 12px;
+}
+
+.lessonCard {
+  background: $card-bg;
+  border: 1px solid $border;
+  border-radius: 12px;
+  box-shadow: $shadow;
+  padding: 16px;
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+
+  &:hover {
+    // transform: translateY(-1px);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+    border-color: lighten($border, 6%);
+  }
+}
+
+.lessonHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.lessonTitle {
+  font-weight: 700;
+  font-size: 16px;
+  color: $text;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lessonActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  > button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    color: $muted;
+    background: transparent;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 140ms ease;
+  }
+
+  > *:hover {
+    color: $primary;
+    border-color: rgba($primary, 0.2);
+    background: rgba($primary, 0.06);
+  }
+
+  // Danger action (Delete)
+  :global(svg) {
+    pointer-events: none;
+  }
+}
+
+.orderChip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  line-height: 1;
+  color: $primary;
+  background: rgba($primary, 0.08);
+  border: 1px solid rgba($primary, 0.2);
+}
+
+.lessonInfo {
+  margin-top: 10px;
+}
+
+.lessonDescription {
+  color: $muted;
+  line-height: 1.6;
+}
+
+.lessonVideoStatus {
+  margin-top: 6px;
+  font-size: 14px;
+  color: $text;
+
+  span {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 6px;
+    background: #f3f4f6;
+  }
+}
+
+.addLessonButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid $border;
+  background: $card-bg;
+  color: $primary;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 140ms ease;
+
+  &:hover {
+    border-color: rgba($primary, 0.3);
+    background: rgba($primary, 0.06);
+  }
+}
+
+.addLessonForm {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid $border;
+  background: $card-bg;
+  box-shadow: $shadow;
+
+  h3 {
+    margin: 0 0 4px;
+    color: $text;
+  }
+
+  label {
+    font-size: 14px;
+    color: $muted;
+  }
+
+  input[type="text"],
+  textarea,
+  input[type="file"] {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid $border;
+    outline: none;
+    color: $text;
+    background: #f8fafc;
+    transition: border-color 140ms ease, background 140ms ease;
+
+    &:focus {
+      border-color: rgba($primary, 0.5);
+      background: #ffffff;
+    }
+  }
+}
+
+.formButtons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 6px;
+
+  button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid $border;
+    background: $card-bg;
+    color: $text;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 140ms ease;
+  }
+
+  button:first-child {
+    color: $primary;
+
+    &:hover {
+      border-color: rgba($primary, 0.3);
+      background: rgba($primary, 0.06);
+    }
+  }
+
+  button:last-child {
+    color: $danger;
+
+    &:hover {
+      border-color: rgba($danger, 0.25);
+      background: rgba($danger, 0.06);
+    }
+  }
+}

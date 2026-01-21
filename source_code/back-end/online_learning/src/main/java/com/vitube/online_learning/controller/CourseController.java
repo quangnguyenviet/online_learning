@@ -3,8 +3,9 @@ package com.vitube.online_learning.controller;
 import java.util.List;
 
 import com.vitube.online_learning.dto.CourseDTO;
+import com.vitube.online_learning.dto.ObjectiveDTO;
 import com.vitube.online_learning.dto.request.CourseCreattionRequest;
-import com.vitube.online_learning.dto.request.CourseRequest;
+import com.vitube.online_learning.dto.request.UpdateCourseRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -97,21 +98,18 @@ public class CourseController {
                 .build();
     }
 
-    /**
-     * API lấy danh sách các khóa học của giảng viên.
-     *
-     * @param instructorId ID của giảng viên.
-     * @return Phản hồi API chứa danh sách các khóa học của giảng viên.
-     */
-    @GetMapping("/instructor/{instructorId}")
-    public ApiResponse<List<CourseDTO>> getCoursesOfInstructor(@PathVariable String instructorId) {
-        List<CourseDTO> response = courseService.getCoursesOfInstructor(instructorId);
+    @PreAuthorize("hasAuthority('SCOPE_INSTRUCTOR')")
+    @GetMapping("/my-courses")
+    public ApiResponse<List<CourseDTO>> getMyCourses() {
+        List<CourseDTO> response = courseService.getMyCourses();
         return ApiResponse.<List<CourseDTO>>builder()
                 .status(1000)
                 .data(response)
                 .build();
     }
 
+
+    // checked
     @PreAuthorize("hasAuthority('SCOPE_INSTRUCTOR')")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<?> createCourse(
@@ -121,4 +119,20 @@ public class CourseController {
                 .data(response)
                 .build();
     }
+
+    // checking
+    @PreAuthorize("hasAuthority('SCOPE_INSTRUCTOR')")
+    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ApiResponse<CourseDTO> updateCourse(
+                                       @ModelAttribute UpdateCourseRequest request,
+                                       @RequestPart(value = "imageFile", required = false) MultipartFile imageFile,
+                                       @RequestPart(value = "test", required = false) String test,
+                                       @RequestPart(value = "updatedObjectives", required = false) List<ObjectiveDTO> updatedObjectives
+                                       ) {
+        CourseDTO response = courseService.updateCourse(request, imageFile, updatedObjectives);
+        return ApiResponse.<CourseDTO>builder().status(1000)
+                .data(response)
+                .build();
+    }
+
 }

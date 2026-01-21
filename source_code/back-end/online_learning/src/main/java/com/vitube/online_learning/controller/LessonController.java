@@ -1,8 +1,14 @@
 package com.vitube.online_learning.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import com.vitube.online_learning.dto.LessonDTO;
+import com.vitube.online_learning.dto.request.CreateLessonRequest;
+import com.vitube.online_learning.dto.request.LessonRequest;
+import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import com.vitube.online_learning.dto.response.ApiResponse;
@@ -11,6 +17,7 @@ import com.vitube.online_learning.service.LessonService;
 import com.vitube.online_learning.service.S3Service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Lớp điều khiển xử lý các yêu cầu liên quan đến bài học.
@@ -32,12 +39,17 @@ public class LessonController {
      */
     @PostMapping("/signed-url")
     public ApiResponse<?> getSignedUrl(@RequestBody Map<String, String> body) {
-        String filename = body.get("filename");
-        if (filename == null) {
+        String videoUrl = body.get("videoUrl");
+        if (videoUrl == null) {
             throw new IllegalArgumentException("Filename is required");
         }
-        String response = s3Service.generatePresignedUrl(filename);
-        return ApiResponse.builder().status(1000).data(response).build();
+        String response = s3Service.generatePresignedUrl(videoUrl);
+        return ApiResponse.builder().status(1000)
+                .data(LessonDTO.builder()
+                    .presignedUrl(response)
+                        .build()
+                )
+                .build();
     }
 
     /**
@@ -54,5 +66,23 @@ public class LessonController {
                 .status(1000)
                 .data(responses)
                 .build();
+    }
+
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAuthority('SCOPE_INSTRUCTOR')")
+    public ApiResponse<?> createLesson(
+            @ModelAttribute CreateLessonRequest request,
+            @RequestPart(value = "videoFile", required = true) MultipartFile videoFile
+            )
+            throws IOException {
+        return lessonService.createLesson(request, videoFile);
+
+    }
+
+    @DeleteMapping("/{lessonId}")
+    @PreAuthorize("hasAuthority('SCOPE_INSTRUCTOR')")
+    public ApiResponse<?> deleteLesson(@PathVariable String lessonId) {
+        lessonService.deleteLesson(lessonId);
+        return ApiResponse.builder().status(1000).build();
     }
 }

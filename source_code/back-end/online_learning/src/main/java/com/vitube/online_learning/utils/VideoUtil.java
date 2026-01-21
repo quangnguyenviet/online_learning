@@ -3,6 +3,7 @@ package com.vitube.online_learning.utils;
 import java.io.File;
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import net.bramp.ffmpeg.FFprobe;
@@ -14,6 +15,8 @@ import net.bramp.ffmpeg.probe.FFmpegProbeResult;
  */
 @Component
 public class VideoUtil {
+    @Value("${ffmpeg.path}")
+    private String ffprobePath;
 
     /**
      * Lấy thời lượng của video (tính bằng giây).
@@ -32,7 +35,7 @@ public class VideoUtil {
             }
 
             // Sử dụng FFprobe để phân tích tệp video
-            FFprobe ffprobe = new FFprobe("D:\\ffmpeg-master-latest-win64-gpl-shared\\bin\\ffprobe.exe");
+            FFprobe ffprobe = new FFprobe(ffprobePath);
             FFmpegProbeResult probeResult = ffprobe.probe(videoFile.getAbsolutePath());
 
             // Lấy thông tin định dạng của video

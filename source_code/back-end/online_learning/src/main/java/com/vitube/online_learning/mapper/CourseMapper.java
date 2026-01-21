@@ -9,10 +9,11 @@ import org.mapstruct.Mapping;
 import com.vitube.online_learning.dto.request.CourseRequest;
 import com.vitube.online_learning.entity.Course;
 
-@Mapper(componentModel = "spring", uses = {CategoryMapper.class})
+@Mapper(componentModel = "spring", uses = {CategoryMapper.class, LessonMapper.class})
 public interface CourseMapper {
-    @Mapping(target = "lessons", ignore = true)
     CourseDTO toDto(Course course);
+
+    Course dtoToEntity(CourseDTO dto);
 
 
     @Mapping(target = "objectives", ignore = true)

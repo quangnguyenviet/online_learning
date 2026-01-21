@@ -1,6 +1,7 @@
 package com.vitube.online_learning.service.impl;
 
 import com.vitube.online_learning.service.S3Service;
+import com.vitube.online_learning.utils.FileUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -95,15 +96,16 @@ public class S3ServiceImpl implements S3Service {
     /**
      * Tạo URL có thời hạn để truy cập tệp trong bucket riêng tư.
      *
-     * @param fileName Tên tệp cần tạo URL.
      * @return URL có thời hạn.
      */
     @Override
-    public String generatePresignedUrl(String fileName) {
+    public String generatePresignedUrl(String videoUrl) {
         S3Presigner presigner = S3Presigner.builder()
                 .region(Region.of(region))
                 .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create(accessKey, secretKey)))
                 .build();
+
+        String fileName = FileUtil.getKeyFromUrl(videoUrl);
 
         GetObjectRequest getObjectRequest =
                 GetObjectRequest.builder().bucket(videoBucketName).key(fileName).build();
@@ -123,7 +125,15 @@ public class S3ServiceImpl implements S3Service {
      * @param key Khóa của tệp cần xóa.
      */
     @Override
-    public void deleteFile(String key) {
-        s3Client.deleteObject(builder -> builder.bucket(videoBucketName).key(key));
+    public void deleteFile(String key, String type) {
+        if (type.equals("IMAGE")) {
+            s3Client.deleteObject(builder -> builder.bucket(imageBucketName).key(key));
+        } else if (type.equals("VIDEO")) {
+            s3Client.deleteObject(builder -> builder.bucket(videoBucketName).key(key));
+        }
+        else{
+            log.error("Invalid type provided for deleteFile: {}", type);
+        }
+
     }
 }

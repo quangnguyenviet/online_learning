@@ -1,8 +1,9 @@
-import styles from './ErrorDisplay.module.css';
+import styles from './SuccessDisplay.module.scss';
 import { useState, useEffect, useCallback } from 'react';
-const SuccessDisplay = ({message, onDismiss}) => {
+export const SuccessDisplay = ({message, onDismiss}) => {
     // Auto-dismiss the error after 5 seconds
     useEffect(() => {
+        if (!message) return;
         const timer = setTimeout(() => {
             onDismiss();
         }, 5000);
@@ -21,23 +22,24 @@ const SuccessDisplay = ({message, onDismiss}) => {
     );
 }
 
-export const useError = () => {
+export const useSuccess = () => {
     // State to hold the current error message
     const [successMessage, setSuccessMessage] = useState(null);
     const showSuccess = useCallback((message) => {
         setSuccessMessage(message);
     }, []);
-    const dismissSuccess = () => {
+    const dismissSuccess = useCallback(() => {
         setSuccessMessage(null);
-    };
+    }, []);
     return {
         // Component that renders the error display
         SuccessDisplay: () => (
             <SuccessDisplay
-                message={errorMessage}
-                onDismiss={dismissError}
+                message={successMessage}
+                onDismiss={dismissSuccess}
             />
         ),
+        successMessage,
         // Methods to control the error display
         showSuccess,
         dismissSuccess

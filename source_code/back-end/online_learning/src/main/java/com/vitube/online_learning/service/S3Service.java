@@ -56,6 +56,6 @@ public interface S3Service {
      *
      * @param key Khóa định danh của tệp tin.
      */
-    public void deleteFile(String key);
+    public void deleteFile(String key, String type);
 
 }

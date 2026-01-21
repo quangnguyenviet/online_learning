@@ -9,13 +9,18 @@ import java.util.List;
 import com.vitube.online_learning.dto.CourseDTO;
 import com.vitube.online_learning.dto.ObjectiveDTO;
 import com.vitube.online_learning.dto.request.CourseCreattionRequest;
+import com.vitube.online_learning.dto.request.UpdateCourseRequest;
 import com.vitube.online_learning.entity.*;
 import com.vitube.online_learning.enums.ErrorCode;
+import com.vitube.online_learning.enums.S3DeleteEnum;
 import com.vitube.online_learning.exception.AppException;
 import com.vitube.online_learning.mapper.CourseMapper;
 import com.vitube.online_learning.mapper.ObjectiveMapper;
 import com.vitube.online_learning.repository.CategoryRepository;
 import com.vitube.online_learning.service.*;
+import com.vitube.online_learning.utils.FileUtil;
+import com.vitube.online_learning.utils.ValidateUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,9 +33,12 @@ import com.vitube.online_learning.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.transaction.annotation.Transactional;
+
 /**
  * Lớp triển khai các phương thức liên quan đến khóa học.
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CourseServiceImpl implements CourseService {
@@ -53,49 +61,7 @@ public class CourseServiceImpl implements CourseService {
      */
     @Override
     public CourseDTO toDto(Course course, int type) {
-        CourseDTO response = courseMapper.toDto(course);
-        int hour = 0;
-        int minute = 0;
-        int second = 0;
-        long totalSecond = 0;
-        List<LessonResponse> lessonResponses = new ArrayList<>();
-        for (Lesson lesson : course.getLessons()) {
-            totalSecond += lesson.getDuration();
-            lessonResponses.add(lessonService.lessonToLessonResponse(lesson));
-        }
-        hour = (int) (totalSecond / 3600);
-        minute = (int) ((totalSecond % 3600) / 60);
-        second = (int) (totalSecond % 60);
-        response.setHour(hour);
-        response.setMinute(minute);
-        response.setSecond(second);
-
-        response.setNumber_of_lessons(course.getLessons().size());
-
-        List<ObjectiveDTO> objectiveDTOS = new ArrayList<>();
-        course.getObjectives().forEach(objective -> {
-            objectiveDTOS.add(objectiveMapper.toDto(objective));
-        });
-
-        List<RequireResponse> requireResponses = new ArrayList<>();
-        course.getRequires().forEach(require -> {
-            requireResponses.add(requireMapper.requireToRequireResponse(require));
-        });
-
-
-        if (type == 0) {
-            return response;
-        } else {
-            Collections.sort(lessonResponses);
-
-            response.setLessons(lessonResponses);
-            response.setObjectives(objectiveDTOS);
-            response.setRequires(requireResponses);
-        }
-
-        response.setShort_desc(course.getShortDesc());
-
-        return response;
+        return null;
     }
 
     /**
@@ -107,7 +73,7 @@ public class CourseServiceImpl implements CourseService {
      */
     @Override
     public CourseDTO createCourse(CourseCreattionRequest request, MultipartFile image) {
-        String key = generateKey();
+        String key = FileUtil.generateFileName(image.getOriginalFilename());
         String imageUrl = "";
         try {
             imageUrl = s3Service.uploadPublicFile(image, key);
@@ -159,32 +125,123 @@ public class CourseServiceImpl implements CourseService {
     public CourseDTO getCourseById(String id) {
         Course course = courseRepository.findById(id).get();
 
-        CourseDTO response = toDto(course, 1);
+        CourseDTO response = courseMapper.toDto(course);
+
+        Collections.sort(response.getLessons(), (o1, o2) -> {
+            return o1.getCreatedAt().compareTo(o2.getCreatedAt());
+        });
+
         return response;
     }
 
     /**
      * Cập nhật thông tin khóa học.
      *
-     * @param id ID của khóa học.
      * @param request Yêu cầu cập nhật khóa học.
      * @return Đối tượng phản hồi khóa học sau khi cập nhật.
      */
     @Override
-    public CourseDTO updateCourse(String id, CourseRequest request) {
-        Course course = courseRepository.findById(id).orElseThrow(() -> new RuntimeException("Course not found"));
+    @Transactional
+    public CourseDTO updateCourse(UpdateCourseRequest request,
+                                  MultipartFile imageFile,
+                                  List<ObjectiveDTO> updatedObjectives) {
+        Course course = courseRepository.findById(request.getId())
+                .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
 
-        if (request.getTag().equals("GENERAL")) {
+        // basic fields
+        if (ValidateUtil.customValidateString(request.getTitle())) {
             course.setTitle(request.getTitle());
+        }
+        if (ValidateUtil.customValidateString(request.getShortDesc())) {
             course.setShortDesc(request.getShortDesc());
+        }
+        if (request.getPrice() != null) {
             course.setPrice(request.getPrice());
         }
+        if (request.getDiscount() != null) {
+            course.setDiscount(request.getDiscount());
+        }
+
+        // set category only if provided
+        if (request.getCategoryId() != null) {
+            Category category = categoryRepository.findById(request.getCategoryId())
+                    .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
+            course.setCategory(category);
+        }
+
+        // image handling (if provided)
+        if (imageFile != null && !imageFile.isEmpty()) {
+            handleImageUpdate(course, imageFile);
+        }
+
+        // objectives handling (delete / add / update)
+        handleObjectivesUpdate(course, request, updatedObjectives);
 
         Course saved = courseRepository.save(course);
+        CourseDTO reponse = courseMapper.toDto(saved);
 
-        CourseDTO response = courseMapper.toDto(saved);
+        return reponse;
 
-        return response;
+    }
+
+    // helper: handle image replacement with graceful S3 delete logging
+    private void handleImageUpdate(Course course, MultipartFile imageFile) {
+        String oldImageUrl = course.getImageUrl();
+        if (oldImageUrl != null && oldImageUrl.contains("/")) {
+            String oldKey = oldImageUrl.substring(oldImageUrl.lastIndexOf("/") + 1);
+            try {
+                s3Service.deleteFile(oldKey, S3DeleteEnum.IMAGE.name());
+            } catch (Exception e) {
+                log.warn("Old image deletion failed or not found: {}", oldKey, e);
+                // continue - do not abort update because old image deletion failed
+            }
+        }
+
+        String key = FileUtil.generateFileName(imageFile.getOriginalFilename());
+        try {
+            String imageUrl = s3Service.uploadPublicFile(imageFile, key);
+            course.setImageUrl(imageUrl);
+        } catch (Exception e) {
+            log.error("Failed to upload new image", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    // helper: handle objective deletions, additions, and updates in a clear and safe way
+    private void handleObjectivesUpdate(Course course, UpdateCourseRequest request,  List<ObjectiveDTO> updatedObjectives) {
+        // must follow delete -> update -> add order to avoid conflicts
+
+        // delete objectives by id
+        if (request.getDeleteObjectiveIds() != null && !request.getDeleteObjectiveIds().isEmpty()) {
+            for (String objId : request.getDeleteObjectiveIds()) {
+                course.getObjectives().removeIf(obj -> obj.getId().equals(objId));
+            }
+        }
+
+        // update existing objectives safely (index-bounded)
+        if (updatedObjectives != null && !updatedObjectives.isEmpty()) {
+            List<Objective> currentObjectives = course.getObjectives();
+            for (ObjectiveDTO objDto : updatedObjectives) {
+                for (int i = 0; i < currentObjectives.size(); i++) {
+                    Objective obj = currentObjectives.get(i);
+                    if (obj.getId().equals(objDto.getId())) {
+                        obj.setDescription(objDto.getDescription());
+                        break;
+                    }
+                }
+            }
+        }
+
+        // add new objectives
+        if (request.getNewObjectives() != null && !request.getNewObjectives().isEmpty()) {
+            List<Objective> newObjectives = request.getNewObjectives().stream()
+                    .map(desc -> Objective.builder().description(desc).course(course).build())
+                    .toList();
+            course.getObjectives().addAll(newObjectives);
+        }
+
+
+
     }
 
     /**
@@ -209,13 +266,13 @@ public class CourseServiceImpl implements CourseService {
             if (query != null) {
                 courseRepository.findByTitleContaining(query).forEach(course -> {
                     if (course.getTitle().toLowerCase().contains(query.toLowerCase())) {
-                        CourseDTO response = toDto(course, 0);
+                        CourseDTO response = courseMapper.toDto(course);
                         responseList.add(response);
                     }
                 });
             } else {
                 courseRepository.findAll().forEach(course -> {
-                    CourseDTO response = toDto(course, 0);
+                    CourseDTO response = courseMapper.toDto(course);
                     responseList.add(response);
                 });
             }
@@ -223,14 +280,14 @@ public class CourseServiceImpl implements CourseService {
         } else if (type.equals("free")) {
             courseRepository.findAll().forEach(course -> {
                 if (course.getPrice() == 0 || course.getNewPrice() == 0) {
-                    CourseDTO response = toDto(course, 0);
+                    CourseDTO response = courseMapper.toDto(course);
                     responseList.add(response);
                 }
             });
         } else if (type.equals("plus")) {
             courseRepository.findAll().forEach(course -> {
                 if (course.getPrice() != 0 && course.getNewPrice() != 0) {
-                    CourseDTO response = toDto(course, 0);
+                    CourseDTO response = courseMapper.toDto(course);
                     responseList.add(response);
                 }
             });
@@ -289,23 +346,8 @@ public class CourseServiceImpl implements CourseService {
         return responses;
     }
 
-    /**
-     * Lấy danh sách các khóa học của giảng viên theo ID.
-     *
-     * @param instructorId ID của giảng viên.
-     * @return Danh sách phản hồi khóa học của giảng viên.
-     */
-    @Override
-    public List<CourseDTO> getCoursesOfInstructor(String instructorId) {
-        User instructor =
-                userRepository.findById(instructorId).orElseThrow(() -> new RuntimeException("Instructor not found"));
-        List<CourseDTO> responseList = new ArrayList<>();
-        instructor.getCourses().forEach(course -> {
-            CourseDTO response = courseMapper.toDto(course);
-            responseList.add(response);
-        });
-        return responseList;
-    }
+
+
 
     /**
      * Lấy danh sách các khóa học của giảng viên hiện tại.
@@ -317,7 +359,7 @@ public class CourseServiceImpl implements CourseService {
         User instructor = userService.getCurrentUser();
         List<CourseDTO> responseList = new ArrayList<>();
         instructor.getCourses().forEach(course -> {
-            CourseDTO response = toDto(course, 1);
+            CourseDTO response = courseMapper.toDto(course);
             responseList.add(response);
         });
         return responseList;
@@ -347,3 +389,4 @@ public class CourseServiceImpl implements CourseService {
         return now.format(formatter);
     }
 }
+

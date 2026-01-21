@@ -18,12 +18,6 @@ import lombok.RequiredArgsConstructor;
 public class ILessonController {
     private final LessonService lessonService;
 
-    @DeleteMapping("/{lessonId}")
-    public ApiResponse<?> deleteLesson(@PathVariable String lessonId) {
-        lessonService.deleteLesson(lessonId);
-        return ApiResponse.builder().status(1000).build();
-    }
-
     @PutMapping("/{lessonId}")
     public ApiResponse<?> updateLesson(
             @PathVariable String lessonId,
@@ -45,22 +39,5 @@ public class ILessonController {
         return ApiResponse.builder().status(1000).build();
     }
 
-    @PostMapping
-    public ApiResponse<LessonResponse> createLesson(
-            @RequestParam("file") MultipartFile file,
-            @RequestParam("title") String title,
-            @RequestParam("courseId") String courseId,
-            @RequestParam("description") String description,
-            @RequestParam("order") int order)
-            throws IOException {
 
-        LessonResponse response = lessonService.createLessonS3(LessonRequest.builder()
-                .file(file)
-                .title(title)
-                .courseId(courseId)
-                .description(description)
-                .order(order)
-                .build());
-        return ApiResponse.<LessonResponse>builder().status(1000).data(response).build();
-    }
 }

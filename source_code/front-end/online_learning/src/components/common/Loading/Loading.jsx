@@ -37,7 +37,7 @@ const LocalLoading = ({isLoading, message = "Loading..."}) => {
     );
 }
 
-export const useGlobalLoading = () => {
+export const useLoading = () => {
     const [isLoading, setIsLoading] = useState(false);
     const showLoading = () => setIsLoading(true);
     const hideLoading = () => setIsLoading(false);

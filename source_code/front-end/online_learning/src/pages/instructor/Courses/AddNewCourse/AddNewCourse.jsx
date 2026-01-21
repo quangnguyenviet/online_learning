@@ -4,7 +4,7 @@ import styles from './AddNewCourse.module.scss';
 import { useError } from 'components/common/ErrorDisplay/ErrorDisplay';
 import CategoryApi from 'service/apis/CategoryApi';
 import CourseApi from 'service/apis/CourseApi';
-import { useGlobalLoading } from 'components/common/Loading/Loading';
+import { useLoading } from 'components/common/Loading/Loading';
 
 export default function AddNewCourse() {
     const [thumbnail, setThumbnail] = useState(null);
@@ -31,7 +31,7 @@ export default function AddNewCourse() {
 
 
     const { ErrorDisplay, showError } = useError();
-    const { LocalLoading, showLoading, hideLoading } = useGlobalLoading();
+    const { LocalLoading, showLoading, hideLoading } = useLoading();
 
     const fetchCategories = async () => {
         // Fetch categories from API

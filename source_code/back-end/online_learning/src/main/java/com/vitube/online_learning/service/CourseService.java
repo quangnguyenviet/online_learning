@@ -3,7 +3,9 @@ package com.vitube.online_learning.service;
 import java.util.List;
 
 import com.vitube.online_learning.dto.CourseDTO;
+import com.vitube.online_learning.dto.ObjectiveDTO;
 import com.vitube.online_learning.dto.request.CourseCreattionRequest;
+import com.vitube.online_learning.dto.request.UpdateCourseRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.vitube.online_learning.dto.request.CourseRequest;
@@ -46,7 +48,7 @@ public interface CourseService {
      * @param request Yêu cầu cập nhật khóa học.
      * @return Đối tượng phản hồi khóa học.
      */
-    CourseDTO updateCourse(String id, CourseRequest request);
+    CourseDTO updateCourse(UpdateCourseRequest request, MultipartFile imageFile, List<ObjectiveDTO> updatedObjectives);
 
     /**
      * Xóa khóa học theo ID.
@@ -85,16 +87,10 @@ public interface CourseService {
      */
     List<CourseDTO> getLearningCourses();
 
-    /**
-     * Lấy danh sách các khóa học của giảng viên.
-     *
-     * @param instructorId ID của giảng viên.
-     * @return Danh sách phản hồi khóa học của giảng viên.
-     */
-    List<CourseDTO> getCoursesOfInstructor(String instructorId);
+
 
     /**
-     * Lấy danh sách các khóa học của người dùng hiện tại.
+     * Lấy danh sách các khóa học của người dùng hiện tại (instructor only).
      *
      * @return Danh sách phản hồi khóa học của người dùng.
      */

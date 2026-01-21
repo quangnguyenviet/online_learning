@@ -1,8 +1,10 @@
-import { deleteLesson } from "utils/InstructorUtil/LessonUtil";
 import Swal from "sweetalert2";
+import LessonApi from "service/apis/LessonApi";
+import { useLoading } from "components/common/Loading/Loading";
 
 export default function DeleteLesson(props) {
     const { lessonId, handleDelete, children } = props;
+    const { GlobalLoading, showLoading, hideLoading } = useLoading();
 
     const handleDeleteBackend = () => {
 
@@ -16,24 +18,18 @@ export default function DeleteLesson(props) {
             cancelButtonColor: '#d33',
             confirmButtonText: 'Xóa!',
             cancelButtonText: 'Hủy'
-        }).then((result) => {
+        }).then(async (result) => {
             if (result.isConfirmed) {
-                // xóa bai học
-                deleteLesson(lessonId)
-                    .then(() => {
-                        console.log("Lesson deleted successfully");
-                    })
-                    .catch((error) => {
-                        console.error("Error deleting lesson:", error);
-                    });
-                handleDelete(lessonId);
-
-
-                Swal.fire(
-                    'Đã xóa!',
-                    'Bài học đã được xóa.',
-                    'success'
-                )
+                showLoading();
+                try {
+                    // gọi api xóa bài học
+                    const response = await LessonApi.deleteLesson(lessonId);
+                    console.log("Xóa bài học thành công:", response);
+                    // remove lesson from list and display success message
+                    handleDelete(lessonId);
+                } catch (error) {
+                    console.error("Xóa bài học thất bại:", error);
+                }
             }
         })
 

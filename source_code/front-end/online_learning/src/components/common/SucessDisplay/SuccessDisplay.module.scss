@@ -1,14 +1,12 @@
 
 .wrapper {
-    margin: 1rem auto 0;
     z-index: 1000;
     width: 90%;
     max-width: 500px;
-    opacity: 0.95;
     animation: fadeInDown 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     position: fixed;
-    left: 0;
-    right: 0;
+    top: 1rem;
+    right: 1rem;
 }
 
 .card {

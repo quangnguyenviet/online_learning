@@ -21,10 +21,9 @@ public class CourseDTO {
     private String title;
     private Double price;
     private Integer discount;
-    private List<LessonResponse> lessons;
     private List<ObjectiveDTO> objectives;
     private List<RequireResponse> requires;
-    private String short_desc;
+    private String shortDesc;
     private Integer number_of_lessons;
     private Integer hour;
     private Integer minute;
@@ -34,4 +33,6 @@ public class CourseDTO {
     private MultipartFile imageFile;
     private LevelEnum level;
     private CategoryDTO category;
+    private int categoryId;
+    private List<LessonDTO> lessons;
 }

@@ -16,8 +16,7 @@ import Dashboard from "../../pages/instructor/Dashboard/Dashboard";
 import * as Guard from "service/Guard";
 import Courses from "../../pages/instructor/Courses";
 import CourseList from "../../pages/instructor/Courses/CourseList/CourseList.jsx";
-import { EditCourse } from "pages/instructor/Courses/EditCourse";
-import ViewDetail from "pages/instructor/Courses/CourseList/ViewDetail";
+import ViewDetail from "pages/instructor/Courses/ViewDetail/ViewDetail";
 import Profile from "pages/instructor/Profile";
 import Notification from "pages/instructor/Notification";
 import NotificationDetail from "pages/instructor/Notification/NotificationDetail";
@@ -96,7 +95,6 @@ const ROUTES = [
                     },
                     {
                         path: ":courseId",
-                        // element: <EditCourse />
                         element: <ViewDetail />
                     },
                     {

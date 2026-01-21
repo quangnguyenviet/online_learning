@@ -1,23 +1,29 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getMyCourses } from 'utils/InstructorUtil/CourseUtil';
 import CourseCard from 'components/Course/CourseCard';
 import styles from './CourseList.module.scss';
+import CourseApi from 'service/apis/CourseApi';
 
 export default function CourseList() {
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
+    const fetchCourses = async () => {
+        try {
+            const response = await CourseApi.getMyCourses();
+            const data = response.data;
+            setCourses(data);
+            setLoading(false);
+            return response;
+        } catch (error) {
+            console.error('Error fetching courses:', error);
+            throw error;
+        }
+    }
+
     useEffect(() => {
-        getMyCourses().then((data) => {
-            if (data.status === 1000) {
-                setCourses(data.data);
-            }
-            setLoading(false);
-        }).catch((error) => {
-            setLoading(false);
-        });
+        fetchCourses();
     }, []);
 
     const handleAddCourse = () => {
