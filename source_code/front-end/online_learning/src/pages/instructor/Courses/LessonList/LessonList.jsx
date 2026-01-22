@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import DeleteLesson from "pages/instructor/Courses/LessonList/DeleteLesson/DeleteLesson";
 import ViewVideo from "pages/instructor/Courses/LessonList/ViewVideo/ViewVideo";
-import EditLesson from "pages/instructor/Courses/LessonList/EditLesson";
+import EditLesson from "pages/instructor/Courses/LessonList/EditLesson/EditLesson";
 import { FaEdit, FaTrashAlt, FaPlus, FaTimes, FaVideo } from "react-icons/fa";
 import Swal from "sweetalert2";
 import styles from "./LessonList.module.scss";
@@ -33,38 +33,38 @@ export function LessonList(props) {
         }
     };
 
-    const handleEditFormChange = (field, value) => {
-        setEditForm(prev => ({ ...prev, [field]: value }));
-    };
+    // const handleEditFormChange = (field, value) => {
+    //     setEditForm(prev => ({ ...prev, [field]: value }));
+    // };
 
-    const handleSaveEdit = (id) => {
-        Swal.fire({
+    const handleSaveEdit = async (id, lessonData) => {
+        const result = await Swal.fire({
             title: 'Bạn có chắc chắn muốn lưu thay đổi?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Lưu!',
             cancelButtonText: 'Hủy'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                setLessons(prev =>
-                    prev.map(lesson =>
-                        lesson.id === id
-                            ? {
-                                ...lesson,
-                                title: editForm.title,
-                                description: editForm.description,
-                                video: editForm.video ? URL.createObjectURL(editForm.video) : lesson.video
-                            }
-                            : lesson
-                    )
-                );
-
-                updateLesson(id, editForm).catch(err => console.error("Update failed:", err));
-                setEditingLessonId(null);
-
-                Swal.fire('Đã lưu!', '', 'success');
-            }
         });
+
+        if (!result.isConfirmed) return;
+
+        try {
+            showLoading('Đang cập nhật bài học...');
+            const response = await LessonApi.editLesson(id, lessonData);
+            const updatedLesson = response.data;
+            setLessons(prev => prev.map(lesson => lesson.id === id ? updatedLesson : lesson));
+            setEditingLessonId(null);
+            showSuccess("Cập nhật bài học thành công!");
+        } catch (error) {
+            console.error("Error updating lesson:", error);
+            await Swal.fire({
+                title: 'Cập nhật thất bại',
+                text: 'Vui lòng thử lại sau.',
+                icon: 'error'
+            });
+        } finally {
+            hideLoading();
+        }
     };
 
     const handleDelete = (id) => {
@@ -143,8 +143,6 @@ export function LessonList(props) {
                         {editingLessonId === lesson.id && (
                             <EditLesson
                                 lesson={lesson}
-                                handleEditFormChange={handleEditFormChange}
-                                editForm={editForm}
                                 handleSaveEdit={handleSaveEdit}
                             />
                         )}

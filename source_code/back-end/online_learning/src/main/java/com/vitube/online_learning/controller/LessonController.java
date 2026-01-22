@@ -85,4 +85,20 @@ public class LessonController {
         lessonService.deleteLesson(lessonId);
         return ApiResponse.builder().status(1000).build();
     }
+
+    @PutMapping(value = "/{lessonId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PreAuthorize("hasAuthority('SCOPE_INSTRUCTOR')")
+    public ApiResponse<?> updateLesson(
+            @PathVariable String lessonId,
+           @ModelAttribute LessonDTO request,
+            @RequestPart(value = "videoFile", required = false) MultipartFile videoFile
+            ) throws IOException {
+        request.setId(lessonId);
+        LessonDTO response = lessonService.updateLesson(request, videoFile);
+
+        return ApiResponse.<LessonDTO>builder()
+                .status(1000)
+                .data(response)
+                .build();
+    }
 }

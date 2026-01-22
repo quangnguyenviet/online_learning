@@ -24,5 +24,14 @@ class LessonApi {
         const json = response.data;
         return json;
     }
+    static async editLesson(lessonId, formData){
+        const response = await apiClient.put(`/lessons/${lessonId}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            }
+        });
+        const json = response.data;
+        return json;
+    }
 }
 export default LessonApi;

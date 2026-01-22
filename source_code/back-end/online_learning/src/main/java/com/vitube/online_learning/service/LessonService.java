@@ -40,15 +40,8 @@ public interface LessonService {
      */
     Void deleteLesson(String lessonId);
 
-    /**
-     * Cập nhật thông tin bài học theo ID.
-     *
-     * @param lessonId ID của bài học.
-     * @param request Yêu cầu cập nhật bài học.
-     * @return Void.
-     * @throws IOException Lỗi xảy ra khi xử lý tệp.
-     */
-    Void updateLesson(String lessonId, LessonRequest request) throws IOException;
+
+    LessonDTO updateLesson(LessonDTO request, MultipartFile videoFile) throws IOException;
 
     /**
      * Chuyển đổi đối tượng Lesson thành LessonResponse.

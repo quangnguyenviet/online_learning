@@ -141,17 +141,49 @@ public class LessonServiceImpl implements LessonService {
         return null;
     }
 
-    /**
-     * Cập nhật thông tin bài học.
-     *
-     * @param lessonId ID của bài học.
-     * @param request Yêu cầu cập nhật bài học.
-     * @return Đối tượng phản hồi (null).
-     * @throws IOException Lỗi xảy ra khi xử lý tệp video.
-     */
+
     @Override
-    public Void updateLesson(String lessonId, LessonRequest request) throws IOException {
-        return null;
+    public LessonDTO updateLesson(LessonDTO request, MultipartFile videoFile) throws IOException {
+        Lesson lesson = lessonRepository.findById(request.getId())
+                .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
+        lesson.setTitle(request.getTitle());
+        lesson.setDescription(request.getDescription());
+        if (videoFile != null && !videoFile.isEmpty()) {
+            // Delete old video from S3
+            String oldKey = FileUtil.getKeyFromUrl(lesson.getVideoUrl());
+            s3Service.deleteFile(oldKey, S3DeleteEnum.VIDEO.name());
+
+            // Upload new video to S3
+            String newKey = FileUtil.generateFileName(videoFile.getOriginalFilename());
+            String newVideoUrl = s3Service.uploadPrivate(videoFile, newKey);
+            lesson.setVideoUrl(newVideoUrl);
+
+            // Create temp file to get video duration
+            File tempFile = null;
+            try {
+                tempFile = File.createTempFile("video", ".mp4");
+                videoFile.transferTo(tempFile);
+
+                // Ensure the file was transferred successfully
+                if (!tempFile.exists()) {
+                    throw new RuntimeException("Temp file transfer failed.");
+                }
+
+                // Get video duration
+                long newDurationInSeconds = videoUtil.getVideoDuration(tempFile);
+                lesson.setDuration(newDurationInSeconds);
+            } catch (IOException e) {
+                throw new RuntimeException("Error processing video file", e);
+            } finally {
+                // Delete temp file
+                if (tempFile != null && tempFile.exists()) {
+                    tempFile.delete();
+                }
+            }
+        }
+        Lesson updatedLesson = lessonRepository.save(lesson);
+        return lessonMapper.entityToDto(updatedLesson);
+
     }
 
     /**
