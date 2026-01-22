@@ -25,9 +25,10 @@ public class CourseDTO {
     private List<RequireResponse> requires;
     private String shortDesc;
     private Integer number_of_lessons;
-    private Integer hour;
-    private Integer minute;
-    private Integer second;
+//    private Integer hour;
+//    private Integer minute;
+//    private Integer second;
+    private String duration;
     private String imageUrl;
     private Boolean published;
     private MultipartFile imageFile;

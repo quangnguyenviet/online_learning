@@ -109,7 +109,7 @@ public class CourseController {
     }
 
 
-    // checked
+
     @PreAuthorize("hasAuthority('SCOPE_INSTRUCTOR')")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<?> createCourse(
@@ -120,7 +120,7 @@ public class CourseController {
                 .build();
     }
 
-    // checking
+
     @PreAuthorize("hasAuthority('SCOPE_INSTRUCTOR')")
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<CourseDTO> updateCourse(

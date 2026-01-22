@@ -31,7 +31,7 @@ export default function CourseCard(props) {
                     )}
                     <div className="course-card__meta">
                         <span>
-                            <FaRegClock /> {course.hour}h {course.minute}m {course.second}s
+                            <FaRegClock /> {course.duration}
                         </span>
                         <span>
                             <FaBook /> {course.number_of_lessons} bài học

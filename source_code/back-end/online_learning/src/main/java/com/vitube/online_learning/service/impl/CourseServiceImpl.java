@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.vitube.online_learning.dto.CourseDTO;
+import com.vitube.online_learning.dto.LessonDTO;
 import com.vitube.online_learning.dto.ObjectiveDTO;
 import com.vitube.online_learning.dto.request.CourseCreattionRequest;
 import com.vitube.online_learning.dto.request.UpdateCourseRequest;
@@ -360,6 +361,19 @@ public class CourseServiceImpl implements CourseService {
         List<CourseDTO> responseList = new ArrayList<>();
         instructor.getCourses().forEach(course -> {
             CourseDTO response = courseMapper.toDto(course);
+
+            // calculate duration
+            int totalSeconds = 0;
+            for (LessonDTO lessonDTO: response.getLessons()){
+                totalSeconds += lessonDTO.getDuration();
+            }
+            // convert format
+            int hours = totalSeconds / 3600;
+            int minutes = (totalSeconds % 3600) / 60;
+            int seconds = totalSeconds % 60;
+            String duration = hours + "h " + minutes + "m " + seconds + "s";
+            response.setDuration(duration);
+
             responseList.add(response);
         });
         return responseList;
