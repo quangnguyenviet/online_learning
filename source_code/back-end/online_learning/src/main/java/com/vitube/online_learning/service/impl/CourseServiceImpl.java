@@ -108,6 +108,8 @@ public class CourseServiceImpl implements CourseService {
             course.setObjectives(objectives);
         }
 
+        course.setCreatedAt(LocalDateTime.now());
+
 
         Course saved = courseRepository.save(course);
 
@@ -374,8 +376,12 @@ public class CourseServiceImpl implements CourseService {
             String duration = hours + "h " + minutes + "m " + seconds + "s";
             response.setDuration(duration);
 
+            // set number of lessons
+            response.setNumberOfLessons(response.getLessons().size());
+
             responseList.add(response);
         });
+
         return responseList;
     }
 

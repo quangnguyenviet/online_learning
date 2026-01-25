@@ -34,7 +34,7 @@ export default function CourseCard(props) {
                             <FaRegClock /> {course.duration}
                         </span>
                         <span>
-                            <FaBook /> {course.number_of_lessons} bài học
+                            <FaBook /> {course.numberOfLessons} bài học
                         </span>
                     </div>
                 </div>

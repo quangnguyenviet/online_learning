@@ -1,5 +1,6 @@
 package com.vitube.online_learning.entity;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -100,4 +101,6 @@ public class Course {
 
     @Enumerated(EnumType.STRING)
     private LevelEnum level;
+
+    private LocalDateTime createdAt;
 }

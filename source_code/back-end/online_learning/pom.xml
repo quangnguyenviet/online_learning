@@ -132,14 +132,6 @@
 <!--			<version>4.5.14</version>-->
 <!--		</dependency>-->
 
-<!--		get data from .evn-->
-<!--		<dependency>-->
-<!--			<groupId>io.github.cdimascio</groupId>-->
-<!--			<artifactId>dotenv-java</artifactId>-->
-<!--			<version>3.0.0</version>-->
-<!--		</dependency>-->
-
-
 <!--	 lay do dai video-->
 		<dependency>
 			<groupId>net.bramp.ffmpeg</groupId>
@@ -154,6 +146,14 @@
         </dependency>
 
 
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-mysql</artifactId>
+        </dependency>
 
 
 
@@ -162,7 +162,8 @@
 
 
 
-	</dependencies>
+
+    </dependencies>
 
 
 

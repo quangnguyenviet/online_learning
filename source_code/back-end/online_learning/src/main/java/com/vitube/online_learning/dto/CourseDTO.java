@@ -24,7 +24,7 @@ public class CourseDTO {
     private List<ObjectiveDTO> objectives;
     private List<RequireResponse> requires;
     private String shortDesc;
-    private Integer number_of_lessons;
+    private Integer numberOfLessons;
 //    private Integer hour;
 //    private Integer minute;
 //    private Integer second;
