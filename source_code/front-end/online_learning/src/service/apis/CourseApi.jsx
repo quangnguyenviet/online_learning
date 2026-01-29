@@ -1,6 +1,20 @@
 import apiClient from "./apiClient";
 
 class CourseApi {
+
+    static async getCourses({type, query, page, size}){
+        const response = await apiClient.get('/courses', {
+            params: {
+                type,
+                query,
+                page,
+                size
+            }
+        });
+        const json = response.data;
+        return json;
+    }
+
     static async createCourse(formData){
         const response = await apiClient.post('/courses', formData);
         const json = response.data;
@@ -16,6 +30,12 @@ class CourseApi {
     // instructor only
     static async getMyCourses(){
         const response = await apiClient.get(`/courses/my-courses`);
+        const json = response.data;
+        return json;
+    }
+
+    static async getCourseById(courseId){
+        const response = await apiClient.get(`/courses/${courseId}`);
         const json = response.data;
         return json;
     }

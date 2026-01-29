@@ -11,9 +11,12 @@ import java.util.List;
 import com.vitube.online_learning.dto.LessonDTO;
 import com.vitube.online_learning.dto.request.CreateLessonRequest;
 import com.vitube.online_learning.dto.response.ApiResponse;
+import com.vitube.online_learning.entity.User;
 import com.vitube.online_learning.enums.ErrorCode;
 import com.vitube.online_learning.enums.S3DeleteEnum;
 import com.vitube.online_learning.exception.AppException;
+import com.vitube.online_learning.repository.RegisterRepository;
+import com.vitube.online_learning.service.UserService;
 import com.vitube.online_learning.utils.FileUtil;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +45,8 @@ public class LessonServiceImpl implements LessonService {
     private final S3Service s3Service;
     private final LessonMapper lessonMapper;
     private final VideoUtil videoUtil;
+    private final RegisterRepository registerRepository;
+    private final UserService userService;
 
     /**
      * Tạo khóa duy nhất cho bài học.
@@ -196,5 +201,31 @@ public class LessonServiceImpl implements LessonService {
         LessonResponse lessonResponse = lessonMapper.lessonToLessonResponse(lesson);
         lessonResponse.setDurationInSeconds(lesson.getDuration());
         return lessonResponse;
+    }
+
+    @Override
+    public LessonDTO getSignedUrl(LessonDTO request) {
+        Lesson lesson = lessonRepository.findById(request.getId())
+                .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
+        User currentUser = userService.getCurrentUser();
+        Course course = lesson.getCourse();
+        boolean isAuthorized = registerRepository.existsByStudentIdAndCourseId(currentUser.getId(), course.getId());
+
+        if(lesson.getIsPreview()) isAuthorized = true;
+
+        if (courseRepository.existsByIdAndInstructorId(course.getId(), currentUser.getId())) {
+            isAuthorized = true;
+        }
+
+        if (!isAuthorized) {
+            throw new AppException(ErrorCode.FORBIDDEN);
+        }
+
+        String presignedUrl = s3Service.generatePresignedUrl(FileUtil.getKeyFromUrl(lesson.getVideoUrl()));
+        LessonDTO lessonDTO = LessonDTO.builder()
+                .presignedUrl(presignedUrl)
+                .build();
+        return lessonDTO;
+
     }
 }

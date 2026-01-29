@@ -1,11 +1,28 @@
-import PlusCourse from "./PlusCourse";
 import './Course.scss';
 import { useSelector } from "react-redux";
 import CourseSearch from "components/Course/CourseSearch";
-import FreeCourse from "components/Course/FreeCourse";
+import CourseApi from 'service/apis/CourseApi';
+import React, { useEffect } from 'react';
+import CourseList from './CourseList';
 
 export default function Course() {
+    const [courses, setCourses] = React.useState([]);
     const query = useSelector((state) => state.search);
+
+    const fetchCourses = async () => {
+        try {
+            const response = await CourseApi.getCourses({type: "", query: query, page: 0, size: 10});
+            console.log(response);
+            setCourses(response.data.content);
+        }
+        catch (error) {
+            console.error("Error fetching courses:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchCourses();
+    }, []);
 
     return (
         <section className="course-section">
@@ -15,12 +32,14 @@ export default function Course() {
                 </h2>
                 {query === "" ? (
                     <div className="course-section__list">
-                        <div className="course-section__column">
+                        {/* <div className="course-section__column">
                             <FreeCourse />
                         </div>
                         <div className="course-section__column">
                             <PlusCourse />
-                        </div>
+                        </div> */}
+                        <CourseList courses={courses} />
+                        
                     </div>
                 ) : (
                     <CourseSearch />

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./style.scss";
 
 export default function CourseList(props) {
+    console.log(props)
     const { courses } = props;
     const navigation = useNavigate();
 

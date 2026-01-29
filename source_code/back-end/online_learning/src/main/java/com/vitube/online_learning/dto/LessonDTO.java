@@ -20,4 +20,5 @@ public class LessonDTO {
     private String presignedUrl;
     private String courseId;
     private LocalDateTime createdAt;
+    private Boolean isPreview;
 }

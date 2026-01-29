@@ -17,9 +17,9 @@ class LessonApi {
         return json;
     }
 
-    static async getSignedUrl(videoUrl){
+    static async getSignedUrl(lessonId){
         const response = await apiClient.post('/lessons/signed-url', {
-            videoUrl: videoUrl,
+            id: lessonId,
         });
         const json = response.data;
         return json;

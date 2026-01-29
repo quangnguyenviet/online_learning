@@ -16,12 +16,17 @@ import com.vitube.online_learning.enums.ErrorCode;
 import com.vitube.online_learning.enums.S3DeleteEnum;
 import com.vitube.online_learning.exception.AppException;
 import com.vitube.online_learning.mapper.CourseMapper;
+import com.vitube.online_learning.mapper.LessonMapper;
 import com.vitube.online_learning.mapper.ObjectiveMapper;
 import com.vitube.online_learning.repository.CategoryRepository;
 import com.vitube.online_learning.service.*;
 import com.vitube.online_learning.utils.FileUtil;
 import com.vitube.online_learning.utils.ValidateUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -52,6 +57,7 @@ public class CourseServiceImpl implements CourseService {
     private final RequireMapper requireMapper;
     private final S3Service s3Service;
     private final CategoryRepository categoryRepository;
+    private final LessonMapper lessonMapper;
 
     /**
      * Chuyển đổi đối tượng Course thành CourseResponse.
@@ -126,13 +132,27 @@ public class CourseServiceImpl implements CourseService {
      */
     @Override
     public CourseDTO getCourseById(String id) {
-        Course course = courseRepository.findById(id).get();
+        Course course = courseRepository.findById(id).orElseThrow(
+                () -> new AppException(ErrorCode.NOT_FOUND)
+        );
 
         CourseDTO response = courseMapper.toDto(course);
 
-        Collections.sort(response.getLessons(), (o1, o2) -> {
-            return o1.getCreatedAt().compareTo(o2.getCreatedAt());
+        if (course.getLessons() == null || course.getLessons().isEmpty()) {
+            response.setLessons(Collections.emptyList());
+            return response;
+        }
+
+        List<LessonDTO> lessonResponses = new ArrayList<>();
+        course.getLessons().forEach(lesson -> {
+            LessonDTO lessonResponse = lessonMapper.entityToDto(lesson);
+            lessonResponses.add(lessonResponse);
         });
+        // sort by createdAt
+        lessonResponses.sort((l1, l2) -> l1.getCreatedAt().compareTo(l2.getCreatedAt()));
+        response.setLessons(lessonResponses);
+
+        response.setDuration(calculateCourseDuration(lessonResponses));
 
         return response;
     }
@@ -255,47 +275,37 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public void deleteCourse(String id) {}
 
-    /**
-     * Lấy danh sách các khóa học theo loại và từ khóa tìm kiếm.
-     *
-     * @param type Loại khóa học (free, plus, hoặc null).
-     * @param query Từ khóa tìm kiếm.
-     * @return Danh sách phản hồi khóa học.
-     */
-    @Override
-    public List<CourseDTO> getCourses(String type, String query) {
-        List<CourseDTO> responseList = new ArrayList<>();
-        if (type == null || type.equals("")) {
-            if (query != null) {
-                courseRepository.findByTitleContaining(query).forEach(course -> {
-                    if (course.getTitle().toLowerCase().contains(query.toLowerCase())) {
-                        CourseDTO response = courseMapper.toDto(course);
-                        responseList.add(response);
-                    }
-                });
-            } else {
-                courseRepository.findAll().forEach(course -> {
-                    CourseDTO response = courseMapper.toDto(course);
-                    responseList.add(response);
-                });
-            }
 
-        } else if (type.equals("free")) {
-            courseRepository.findAll().forEach(course -> {
-                if (course.getPrice() == 0 || course.getNewPrice() == 0) {
-                    CourseDTO response = courseMapper.toDto(course);
-                    responseList.add(response);
-                }
-            });
-        } else if (type.equals("plus")) {
-            courseRepository.findAll().forEach(course -> {
-                if (course.getPrice() != 0 && course.getNewPrice() != 0) {
-                    CourseDTO response = courseMapper.toDto(course);
-                    responseList.add(response);
-                }
-            });
+    @Override
+    public Page<CourseDTO> getCourses(String type, String query, Integer page, Integer size) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Page<Course> coursePage;
+
+        List<CourseDTO> responseList = new ArrayList<>();
+        // have type
+        if (ValidateUtil.customValidateString(type)) {
+            // have type and have quey
+            if (ValidateUtil.customValidateString(query)) {
+                coursePage = courseRepository.findByTitleContainingAndCategoryNameContaining(query, type, pageable);
+
+            }
+            else { // have type, no query
+                coursePage = courseRepository.findByCategoryNameContaining(type, pageable);
+
+            }
         }
-        return responseList;
+        else{ // no type
+            if(ValidateUtil.customValidateString(query)){ // no type, have query
+                coursePage = courseRepository.findByTitleContaining(query, pageable);
+            }
+            // no type, no query
+            else{
+                coursePage = courseRepository.findAll(pageable);
+            }
+        }
+        Page<CourseDTO> responsePage = coursePage.map(course -> courseMapper.toDto(course));
+        return responsePage;
     }
 
     /**
@@ -361,29 +371,24 @@ public class CourseServiceImpl implements CourseService {
     public List<CourseDTO> getMyCourses() {
         User instructor = userService.getCurrentUser();
         List<CourseDTO> responseList = new ArrayList<>();
+
         instructor.getCourses().forEach(course -> {
             CourseDTO response = courseMapper.toDto(course);
 
-            // calculate duration
-            int totalSeconds = 0;
-            for (LessonDTO lessonDTO: response.getLessons()){
-                totalSeconds += lessonDTO.getDuration();
-            }
-            // convert format
-            int hours = totalSeconds / 3600;
-            int minutes = (totalSeconds % 3600) / 60;
-            int seconds = totalSeconds % 60;
-            String duration = hours + "h " + minutes + "m " + seconds + "s";
-            response.setDuration(duration);
+            response.setDuration(
+                    calculateCourseDuration(response.getLessons())
+            );
 
-            // set number of lessons
-            response.setNumberOfLessons(response.getLessons().size());
+            response.setNumberOfLessons(
+                    response.getLessons() != null ? response.getLessons().size() : 0
+            );
 
             responseList.add(response);
         });
 
         return responseList;
     }
+
 
     /**
      * Cập nhật giá của khóa học.
@@ -408,5 +413,22 @@ public class CourseServiceImpl implements CourseService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss");
         return now.format(formatter);
     }
+
+    private String calculateCourseDuration(List<LessonDTO> lessons) {
+        if (lessons == null || lessons.isEmpty()) {
+            return "0h 0m 0s";
+        }
+
+        int totalSeconds = (int)lessons.stream()
+                .mapToLong(LessonDTO::getDuration)
+                .sum();
+
+        int hours = totalSeconds / 3600;
+        int minutes = (totalSeconds % 3600) / 60;
+        int seconds = totalSeconds % 60;
+
+        return hours + "h " + minutes + "m " + seconds + "s";
+    }
+
 }
 

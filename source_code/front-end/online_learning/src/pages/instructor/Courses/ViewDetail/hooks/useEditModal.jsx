@@ -1,5 +1,5 @@
 import { useState } from "react";
-import CustomModal from "components/CustomModal";
+import CustomModal from "components/CustomModal/CustomModal";
 import EditGeneral from "../../EditGeneral/EditGeneral";
 import { EditConditions } from "../../EditConditons";
 import { LessonList } from "../../LessonList/LessonList";

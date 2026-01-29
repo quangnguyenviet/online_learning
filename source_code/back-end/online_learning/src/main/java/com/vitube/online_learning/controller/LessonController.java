@@ -7,6 +7,7 @@ import java.util.Map;
 import com.vitube.online_learning.dto.LessonDTO;
 import com.vitube.online_learning.dto.request.CreateLessonRequest;
 import com.vitube.online_learning.dto.request.LessonRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -26,29 +27,18 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/lessons")
 @RequiredArgsConstructor
+@Slf4j
 public class LessonController {
     private final LessonService lessonService;
     private final S3Service s3Service;
 
-    /**
-     * API tạo URL có chữ ký để tải lên file video.
-     * Nhận tên file từ yêu cầu và trả về URL có chữ ký.
-     *
-     * @param body Đối tượng chứa tên file.
-     * @return Phản hồi API chứa URL có chữ ký.
-     */
+
     @PostMapping("/signed-url")
-    public ApiResponse<?> getSignedUrl(@RequestBody Map<String, String> body) {
-        String videoUrl = body.get("videoUrl");
-        if (videoUrl == null) {
-            throw new IllegalArgumentException("Filename is required");
-        }
-        String response = s3Service.generatePresignedUrl(videoUrl);
+    public ApiResponse<?> getSignedUrl(@RequestBody LessonDTO request) {
+        LessonDTO response = lessonService.getSignedUrl(request);
+
         return ApiResponse.builder().status(1000)
-                .data(LessonDTO.builder()
-                    .presignedUrl(response)
-                        .build()
-                )
+                .data(response)
                 .build();
     }
 
@@ -75,7 +65,9 @@ public class LessonController {
             @RequestPart(value = "videoFile", required = true) MultipartFile videoFile
             )
             throws IOException {
-        return lessonService.createLesson(request, videoFile);
+        log.info("Inside createLesson (LessonController)");
+        ApiResponse<?> response = lessonService.createLesson(request, videoFile);
+        return response;
 
     }
 

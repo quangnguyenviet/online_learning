@@ -6,6 +6,7 @@ import com.vitube.online_learning.dto.CourseDTO;
 import com.vitube.online_learning.dto.ObjectiveDTO;
 import com.vitube.online_learning.dto.request.CourseCreattionRequest;
 import com.vitube.online_learning.dto.request.UpdateCourseRequest;
+import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.vitube.online_learning.dto.request.CourseRequest;
@@ -41,13 +42,7 @@ public interface CourseService {
      */
     CourseDTO getCourseById(String id);
 
-    /**
-     * Cập nhật thông tin khóa học.
-     *
-     * @param id ID của khóa học.
-     * @param request Yêu cầu cập nhật khóa học.
-     * @return Đối tượng phản hồi khóa học.
-     */
+
     CourseDTO updateCourse(UpdateCourseRequest request, MultipartFile imageFile, List<ObjectiveDTO> updatedObjectives);
 
     /**
@@ -57,14 +52,8 @@ public interface CourseService {
      */
     void deleteCourse(String id);
 
-    /**
-     * Lấy danh sách các khóa học theo loại và từ khóa tìm kiếm.
-     *
-     * @param type Loại khóa học.
-     * @param query Từ khóa tìm kiếm.
-     * @return Danh sách phản hồi khóa học.
-     */
-    List<CourseDTO> getCourses(String type, String query);
+
+    Page<CourseDTO> getCourses(String type, String query, Integer page, Integer size);
 
     /**
      * Lấy danh sách các khóa học miễn phí.

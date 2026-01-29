@@ -35,9 +35,9 @@ public class User {
     @Column
     private Date dob;
 
-    private String bankName;
-    private String accountNumber;
-    private String accountName;
+//    private String bankName;
+//    private String accountNumber;
+//    private String accountName;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

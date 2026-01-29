@@ -12,6 +12,7 @@ export default function CourseList() {
     const fetchCourses = async () => {
         try {
             const response = await CourseApi.getMyCourses();
+            console.log('Fetched courses:', response);
             const data = response.data;
             setCourses(data);
             setLoading(false);

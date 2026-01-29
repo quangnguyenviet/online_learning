@@ -37,5 +37,7 @@ public class Lesson {
     @JoinColumn(name = "courseId")
     private Course course;
 
+    private Boolean isPreview;
+
     private LocalDateTime createdAt;
 }

@@ -6,6 +6,7 @@ import com.vitube.online_learning.dto.CourseDTO;
 import com.vitube.online_learning.dto.ObjectiveDTO;
 import com.vitube.online_learning.dto.request.CourseCreattionRequest;
 import com.vitube.online_learning.dto.request.UpdateCourseRequest;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -26,19 +27,26 @@ import org.springframework.web.multipart.MultipartFile;
 public class CourseController {
     private final CourseService courseService;
 
-    /**
-     * API lấy danh sách khóa học.
-     * Cho phép lọc theo loại khóa học hoặc tìm kiếm theo từ khóa.
-     *
-     * @param type Loại khóa học (tùy chọn).
-     * @param query Từ khóa tìm kiếm (tùy chọn).
-     * @return Phản hồi API chứa danh sách khóa học.
-     */
     @GetMapping
-    public ApiResponse<List<CourseDTO>> getCourses(
-            @RequestParam(required = false) String type, @RequestParam(required = false) String query) {
-        List<CourseDTO> response = courseService.getCourses(type, query);
-        return ApiResponse.<List<CourseDTO>>builder()
+//    public ApiResponse<List<CourseDTO>> getCourses(
+//            @RequestParam(required = false) String type, @RequestParam(required = false) String query) {
+//        List<CourseDTO> response = courseService.getCourses(type, query);
+//        return ApiResponse.<List<CourseDTO>>builder()
+//                .status(1000)
+//                .data(response)
+//                .build();
+//    }
+
+//    Response<Page<OrderDTO>> getAllOrders(OrderStatus orderStatus, int page, int size);
+
+    public ApiResponse<Page<CourseDTO>> getCourses(
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) String query,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size) {
+        Page<CourseDTO> response = courseService.getCourses(type, query, page, size);
+
+        return ApiResponse.<Page<CourseDTO>>builder()
                 .status(1000)
                 .data(response)
                 .build();

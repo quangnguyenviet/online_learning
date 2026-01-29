@@ -50,4 +50,6 @@ public interface LessonService {
      * @return Đối tượng phản hồi bài học.
      */
     LessonResponse lessonToLessonResponse(Lesson lesson);
+
+    LessonDTO getSignedUrl(LessonDTO request);
 }

@@ -6,7 +6,7 @@ import Home from "../../pages/student/Home";
 import InforUser from "../../pages/student/InforUser";
 import Login from "../../pages/common/Login";
 import PrivateRouter from "../PrivateRouter";
-import CourseDetail from "../../pages/student/CourseDetail";
+import CourseDetail from "../../pages/student/CourseDetail/CourseDetail";
 import MyLearning from "../../pages/student/MyLearning";
 import MyLearningDetail from "../../pages/student/MyLearning/MyLearningDetail";
 import UploadVideo from "../../pages/student/UploadVideo";

@@ -114,7 +114,7 @@ export function LessonList(props) {
                                 {lesson.title}
                             </strong>
                             <div className={styles.lessonActions}>
-                                <ViewVideo videoUrl={lesson.videoUrl}><FaVideo /></ViewVideo>
+                                <ViewVideo lessonId={lesson.id}><FaVideo /></ViewVideo>
                                 <button type="button" onClick={() => toggleEdit(lesson)} title="Chỉnh sửa">
                                     {editingLessonId === lesson.id ? <FaTimes /> : <FaEdit />}
                                 </button>
