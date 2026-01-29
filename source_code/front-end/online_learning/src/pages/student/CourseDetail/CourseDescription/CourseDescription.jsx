@@ -6,7 +6,6 @@ import {
     FaDotCircle
 } from "react-icons/fa";
 import styles from "./CourseDescription.module.scss";
-import ViewLessonButton from "components/ViewLessonButton/ViewLessonButton";
 import ViewVideo from "components/ViewVideo/ViewVideo";
 
 export default function CourseDescription({ course }) {

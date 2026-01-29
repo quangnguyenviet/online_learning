@@ -1,4 +1,3 @@
-import { updateLesson, uploadLesson } from "utils/InstructorUtil/LessonUtil";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import DeleteLesson from "pages/instructor/Courses/LessonList/DeleteLesson/DeleteLesson";
@@ -114,7 +113,11 @@ export function LessonList(props) {
                                 {lesson.title}
                             </strong>
                             <div className={styles.lessonActions}>
-                                <ViewVideo lessonId={lesson.id}><FaVideo /></ViewVideo>
+                                <ViewVideo lessonId={lesson.id}>
+                                    <button className={styles.viewVideoBtn} title="Xem video">
+                                        <FaVideo />
+                                    </button>
+                                </ViewVideo>
                                 <button type="button" onClick={() => toggleEdit(lesson)} title="Chỉnh sửa">
                                     {editingLessonId === lesson.id ? <FaTimes /> : <FaEdit />}
                                 </button>

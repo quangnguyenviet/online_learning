@@ -5,6 +5,7 @@ import React from "react";
 import ViewVideoModal from "components/ViewVideoModal/ViewVideoModal";
 
 export default function ViewVideo({ lessonId, children }) {
+    
     const [isOpen, setIsOpen] = useState(false);
     const [signedUrl, setSignedUrl] = useState("");
     const [loading, setLoading] = useState(false);
