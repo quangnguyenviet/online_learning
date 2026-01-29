@@ -7,6 +7,7 @@ import {
 } from "react-icons/fa";
 import styles from "./CourseDescription.module.scss";
 import ViewLessonButton from "components/ViewLessonButton/ViewLessonButton";
+import ViewVideo from "components/ViewVideo/ViewVideo";
 
 export default function CourseDescription({ course }) {
 
@@ -49,9 +50,9 @@ export default function CourseDescription({ course }) {
                                 <FaPlayCircle className={`${styles.icon} ${styles.iconGray}`} />
                                 <span>{lesson.title}</span>
                                 {lesson.isPreview && (
-                                    <ViewLessonButton>
+                                    <ViewVideo lessonId={lesson.id}>
                                         <button className={styles.previewBtn}>Xem thử</button>
-                                    </ViewLessonButton>
+                                    </ViewVideo>
                                 )}
                             </div>
                             {lesson.description && (

@@ -1,6 +1,7 @@
 import styles from "./ViewVideo.module.scss";
 import LessonApi from "service/apis/LessonApi";
 import { useRef, useState } from "react";
+import React from "react";
 import ViewVideoModal from "components/ViewVideoModal/ViewVideoModal";
 
 export default function ViewVideo({ lessonId, children }) {
@@ -38,9 +39,14 @@ export default function ViewVideo({ lessonId, children }) {
 
     return (
         <>
-            <div onClick={openModal} className={styles.trigger}>
+            {/* <div onClick={openModal} className={styles.trigger}>
                 {children}
-            </div>
+            </div> */}
+            {
+                 React.cloneElement(children, {
+                        onClick: openModal,
+                    })
+            }
 
             <ViewVideoModal
                 isOpen={isOpen}

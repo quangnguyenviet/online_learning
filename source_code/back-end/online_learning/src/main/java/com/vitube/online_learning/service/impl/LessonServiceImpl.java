@@ -151,8 +151,9 @@ public class LessonServiceImpl implements LessonService {
     public LessonDTO updateLesson(LessonDTO request, MultipartFile videoFile) throws IOException {
         Lesson lesson = lessonRepository.findById(request.getId())
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
-        lesson.setTitle(request.getTitle());
-        lesson.setDescription(request.getDescription());
+//        lesson.setTitle(request.getTitle());
+//        lesson.setDescription(request.getDescription());
+        lessonMapper.dtoToEntity(request, lesson);
         if (videoFile != null && !videoFile.isEmpty()) {
             // Delete old video from S3
             String oldKey = FileUtil.getKeyFromUrl(lesson.getVideoUrl());

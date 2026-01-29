@@ -2,7 +2,7 @@ import { updateLesson, uploadLesson } from "utils/InstructorUtil/LessonUtil";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import DeleteLesson from "pages/instructor/Courses/LessonList/DeleteLesson/DeleteLesson";
-import ViewVideo from "pages/instructor/Courses/LessonList/ViewVideo/ViewVideo";
+import ViewVideo from "components/ViewVideo/ViewVideo";
 import EditLesson from "pages/instructor/Courses/LessonList/EditLesson/EditLesson";
 import { FaEdit, FaTrashAlt, FaPlus, FaTimes, FaVideo } from "react-icons/fa";
 import Swal from "sweetalert2";

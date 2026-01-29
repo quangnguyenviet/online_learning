@@ -1,0 +1,183 @@
+// // Design tokens
+// $overlay: rgba(0, 0, 0, 0.8);
+// $card-bg: #000;
+// $text: #1f2937;
+// $primary: #2563eb;
+// $muted: #6b7280;
+// $border: #e5e7eb;
+// $shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+
+// .modal {
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   width: 100%;
+//   height: 100%;
+//   background-color: $overlay;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   z-index: 1000;
+//   user-select: none;
+//   padding: 20px;
+//   opacity: 0;
+//   visibility: hidden;
+//   transition: opacity 300ms ease-in-out, visibility 300ms ease-in-out;
+//   backdrop-filter: blur(2px);
+
+//   &__bar {
+//     display: flex;
+//     align-items: center;
+//     justify-content: space-between;
+//     padding: 10px 12px;
+//     background: linear-gradient(90deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0));
+//     color: #e5e7eb;
+//   }
+
+//   &__title {
+//     font-weight: 600;
+//     letter-spacing: 0.2px;
+//   }
+
+//   &__content {
+//     position: relative;
+//     background-color: $card-bg;
+//     border-radius: 12px;
+//     box-shadow: $shadow;
+//     width: min(1100px, 90vw);
+//     max-height: 90vh;
+//     overflow: hidden;
+//     display: flex;
+//     flex-direction: column;
+//     border: 1px solid rgba(255, 255, 255, 0.1);
+//     padding: 12px;
+//     gap: 12px;
+//   }
+
+//   &__body {
+//     flex: 1;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+//     max-height: calc(90vh - 56px);
+//     overflow: hidden;
+//   }
+
+//   .video {
+//     display: block;
+//     width: 100%;
+//     height: auto;
+//     max-height: calc(90vh - 72px);
+//     aspect-ratio: 16 / 9;
+//     object-fit: contain;
+//     background: #000;
+//     border-radius: 8px;
+//   }
+// }
+
+// .modalActive {
+//   opacity: 1;
+//   visibility: visible;
+// }
+
+// .trigger {
+//   display: inline-flex;
+//   align-items: center;
+//   justify-content: center;
+//   cursor: pointer;
+//   padding: 4px;
+//   border-radius: 6px;
+//   transition: all 140ms ease;
+//   color: $muted;
+
+//   &:hover {
+//     color: $primary;
+//     background: rgba($primary, 0.06);
+//     transform: scale(1.1);
+//   }
+
+//   &:active {
+//     transform: scale(0.95);
+//   }
+// }
+
+// .closeButton {
+//   appearance: none;
+//   border: none;
+//   background: rgba(255, 255, 255, 0.08);
+//   color: #f3f4f6;
+//   width: 32px;
+//   height: 32px;
+//   border-radius: 50%;
+//   font-size: 18px;
+//   cursor: pointer;
+//   transition: background 140ms ease, transform 140ms ease;
+
+//   &:hover {
+//     background: rgba(255, 255, 255, 0.16);
+//     transform: scale(1.05);
+//   }
+
+//   &:active {
+//     transform: scale(0.95);
+//   }
+// }
+
+// .state {
+//   padding: 20px;
+//   text-align: center;
+//   color: #e5e7eb;
+//   font-weight: 500;
+// }
+
+// .stateError {
+//   color: #f87171;
+// }
+
+
+// Design tokens
+$primary: #2563eb;
+$muted: #6b7280;
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  transition: all 140ms ease;
+  color: $muted;
+
+  &:hover {
+    color: $primary;
+    background: rgba($primary, 0.06);
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.video {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: calc(90vh - 72px);
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  background: #000;
+  border-radius: 8px;
+}
+
+.state {
+  padding: 20px;
+  text-align: center;
+  color: #e5e7eb;
+  font-weight: 500;
+}
+
+.stateError {
+  color: #f87171;
+}
