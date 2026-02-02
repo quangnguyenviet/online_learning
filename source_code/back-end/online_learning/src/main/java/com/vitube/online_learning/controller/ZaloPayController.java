@@ -45,27 +45,8 @@ public class ZaloPayController {
      * @throws Exception Nếu xảy ra lỗi trong quá trình tạo đơn hàng.
      */
     @PostMapping("/create-order")
-    public ResponseEntity<String> createOrder(@RequestParam String courseId) throws Exception {
-        Map<String, Object> requestData = zaloPayService.createOrder(courseId);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-        StringBuilder form = new StringBuilder();
-        for (Map.Entry<String, Object> entry : requestData.entrySet()) {
-            form.append(URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8));
-            form.append("=");
-            form.append(URLEncoder.encode(entry.getValue().toString(), StandardCharsets.UTF_8));
-            form.append("&");
-        }
-        form.setLength(form.length() - 1); // Xóa ký tự & cuối cùng
-
-        HttpEntity<String> entity = new HttpEntity<>(form.toString(), headers);
-
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> response = restTemplate.postForEntity(ZALOPAY_ENDPOINT, entity, String.class);
-
-        return response;
+    public ResponseEntity<?> createOrder(@RequestParam String courseId) throws Exception {
+        return ResponseEntity.ok(zaloPayService.createOrder(courseId));
     }
 
     /**

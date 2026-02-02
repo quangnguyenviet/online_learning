@@ -3,6 +3,7 @@ package com.vitube.online_learning.service;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import com.vitube.online_learning.dto.response.ApiResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,5 +27,5 @@ public interface ZaloPayService {
      * @return Thông tin đơn hàng dưới dạng Map.
      * @throws Exception Lỗi xảy ra khi tạo đơn hàng.
      */
-    public Map<String, Object> createOrder(String courseId) throws Exception;
+    ApiResponse<?> createOrder(String courseId) throws Exception;
 }
