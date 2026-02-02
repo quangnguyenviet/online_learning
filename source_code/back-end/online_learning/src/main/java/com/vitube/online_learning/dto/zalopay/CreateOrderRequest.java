@@ -33,7 +33,8 @@ public class CreateOrderRequest {
     private String phone;
     private String email;
     private String address;
-//    @JsonProperty("callbackurl")
-//    private String callbackUrl;
+    @JsonProperty("callback_url")
+    private String callbackUrl;
+
 
 }

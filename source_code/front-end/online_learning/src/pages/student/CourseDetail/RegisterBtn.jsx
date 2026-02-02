@@ -1,66 +1,49 @@
 import { useEffect, useState } from "react";
 import GoToCourseBtn from "../../../components/GoToCourseBtn";
-import RegisterFreeCourseBtn from "./RegisterFreeCourseBtn";
-import RegisterProCourseBtn from "./RegisterProCourseBtn";
+import ZalopayApi from "service/apis/ZalopayApi";
 
 export default function RegisterBtn(props) {
     const URL_CHECK_REGISTER = "http://localhost:8080/online_learning/registers/check";
-    const [loading, setLoading] = useState(true); // ✅ mở lại loading
+    const [loading, setLoading] = useState(false);
     const [isRegistered, setIsRegistered] = useState(false); // state kiểm tra đăng ký
 
     const { course } = props;
     const token = localStorage.getItem("token");
 
-    const handleRegister = () => {
-        fetch("http://localhost:8080/online_learning/registers", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({
-                courseId: course.id,
-                studentId: null,
-            }),
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data);
-                if (data.status === 1000) {
-                    alert("Đăng ký khóa học thành công!");
-                    setIsRegistered(true); // ✅ cập nhật state sau khi đăng ký thành công
-                } else {
-                    alert("Đăng ký khóa học thất bại!");
-                }
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
+    const createZaloPayOrder = async () => {
+        try {
+            const response = await ZalopayApi.createOrder(course.id);
+            console.log("ZaloPay order created:", response);
+            return response;
+        } catch (error) {
+            console.error("Error creating ZaloPay order:", error);
+            throw error;
+        }
     };
 
-    useEffect(() => {
-        if (!course?.id) return;
+    // useEffect(() => {
+    //     if (!course?.id) return;
 
-        fetch(`${URL_CHECK_REGISTER}?courseId=${course.id}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.status === 1000 && data.data === true) {
-                    setIsRegistered(true); // ✅ dùng setState thay vì gán trực tiếp
-                }
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            })
-            .finally(() => {
-                setLoading(false); // ✅ đúng chính tả
-            });
-    }, [course?.id]);
+    //     fetch(`${URL_CHECK_REGISTER}?courseId=${course.id}`, {
+    //         method: "GET",
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //             Authorization: `Bearer ${token}`,
+    //         },
+    //     })
+    //         .then((response) => response.json())
+    //         .then((data) => {
+    //             if (data.status === 1000 && data.data === true) {
+    //                 setIsRegistered(true); // ✅ dùng setState thay vì gán trực tiếp
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             console.error("Error:", error);
+    //         })
+    //         .finally(() => {
+    //             setLoading(false); 
+    //         });
+    // }, [course?.id]);
 
     return (
         <>
@@ -69,14 +52,10 @@ export default function RegisterBtn(props) {
             ) : (
                 <>
                     {isRegistered ? (
-                        <GoToCourseBtn course={course} /> 
+                        // <GoToCourseBtn course={course} /> 
+                        <button>Go to Course</button>
                     ) : (
-                        (course.price === 0 ? (
-                            <RegisterFreeCourseBtn course={course} /> 
-                        ) : (
-                            <RegisterProCourseBtn course={course} /> 
-                        ))
-                        
+                        <button onClick={createZaloPayOrder}>Register Now</button>
                     )}
                 </>
             )}

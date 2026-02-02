@@ -48,9 +48,11 @@ public class ZaloPayServiceImpl implements ZaloPayService {
     @Value("${zalopay.key1}")
     private String KEY1;
 
-    // URL callback khi thanh toán hoàn tất
-    private static final String CALLBACK_URL =
-            "https://xxxx.ngrok-free.app/online_learning/zalopay/callback";
+    @Value("${zalopay.callbackUrl")
+    private String CALLBACK_URL;
+
+    @Value("${zalopay.redirectUrl")
+    private String REDIRECT_URL;
 
 
     public ApiResponse<?> createOrder(String courseId) throws Exception {
@@ -72,8 +74,9 @@ public class ZaloPayServiceImpl implements ZaloPayService {
         // create embed data
         JSONObject embedData = new JSONObject();
         embedData.put("courseId", courseId);
-        embedData.put("redirecturl", "http://localhost:3000/my-learning");
+        embedData.put("redirecturl", REDIRECT_URL);
         embedData.put("preferred_payment_method", new JSONArray());
+
 
         // create order data
         CreateOrderRequest request = CreateOrderRequest.builder()
@@ -87,6 +90,7 @@ public class ZaloPayServiceImpl implements ZaloPayService {
                 .description("Spring Boot - Đơn hàng #" + courseId)
                 .embedData(embedData.toString())
                 .email(currentUser.getEmail())
+                .callbackUrl(CALLBACK_URL)
                 .build();
 
         log.info("ZaloPay form data = {}", request);
