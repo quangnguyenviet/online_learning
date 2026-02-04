@@ -1,5 +1,6 @@
 package com.vitube.online_learning.dto.response;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import lombok.*;
@@ -10,7 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class StatisticResponse {
-    private float totalIncome = 0;
+    private BigDecimal totalIncome = BigDecimal.ZERO;
     private long totalRegistrations = 0;
     private int totalCourses = 0;
     private List<CourseStatisticResponse> courseStats;

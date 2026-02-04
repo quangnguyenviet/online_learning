@@ -10,12 +10,41 @@
     gap: 14px;
 }
 
+.imageWrapper {
+    position: relative;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
 .image {
     width: 100%;
     border-radius: 12px;
     object-fit: cover;
     aspect-ratio: 16 / 9;
     border: 1px solid #eef2f7;
+    display: block;
+}
+
+.discountBadge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    padding: 8px 12px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.discountValue {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .registered {
@@ -51,8 +80,21 @@
     letter-spacing: 0.5px;
 }
 
+.originalPrice {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.originalPriceText {
+    font-size: 14px;
+    color: #94a3b8;
+    text-decoration: line-through;
+    font-weight: 500;
+}
+
 .priceAmount {
-    font-size: 24px;
+    font-size: 28px;
     font-weight: 800;
     color: #be123c;
     display: flex;
@@ -68,7 +110,8 @@
 
 .priceNote {
     font-size: 12px;
-    color: #64748b;
+    color: #ef4444;
+    font-weight: 600;
 }
 
 .includes {

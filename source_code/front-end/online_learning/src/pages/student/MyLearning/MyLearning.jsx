@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CourseCard from "components/Course/CourseCard";
-import "./style.scss";
+import CourseCard from "components/Course/CourseCard/CourseCard";
+import styles from "./MyLearning.module.scss";
 
 export default function MyLearning() {
     const URL = "http://localhost:8080/online_learning/courses/learning";
@@ -20,6 +20,7 @@ export default function MyLearning() {
         })
             .then((response) => response.json())
             .then((data) => {
+                console.log(data);
                 setCourses(data.data || []);
                 setLoading(false);
             })
@@ -34,17 +35,17 @@ export default function MyLearning() {
     };
 
     return (
-        <section className="my-learning-section">
-            <div className="my-learning__container">
-                <h2 className="my-learning__title">
+        <section className={styles.myLearningSection}>
+            <div className={styles.myLearningContainer}>
+                <h2 className={styles.myLearningTitle}>
                     <i className="fas fa-book-reader"></i> Khóa học của tôi
                 </h2>
                 {loading ? (
-                    <div className="my-learning__loading">Đang tải...</div>
+                    <div className={styles.myLearningLoading}>Đang tải...</div>
                 ) : courses.length === 0 ? (
-                    <div className="my-learning__empty">Bạn chưa đăng ký khóa học nào.</div>
+                    <div className={styles.myLearningEmpty}>Bạn chưa đăng ký khóa học nào.</div>
                 ) : (
-                    <div className="my-learning__list">
+                    <div className={styles.myLearningList}>
                         {courses.map((item) => (
                             <CourseCard
                                 course={item}

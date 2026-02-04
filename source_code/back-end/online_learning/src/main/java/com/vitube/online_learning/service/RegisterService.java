@@ -1,5 +1,6 @@
 package com.vitube.online_learning.service;
 
+import com.vitube.online_learning.dto.RegisterDTO;
 import com.vitube.online_learning.dto.request.RegisterRequest;
 import com.vitube.online_learning.entity.Register;
 
@@ -20,7 +21,7 @@ public interface RegisterService {
      *
      * @param request Yêu cầu đăng ký.
      */
-    void createRegisterData(RegisterRequest request);
+    void createRegisterData(RegisterDTO request);
 
     /**
      * Kiểm tra xem người dùng đã đăng ký khóa học hay chưa.

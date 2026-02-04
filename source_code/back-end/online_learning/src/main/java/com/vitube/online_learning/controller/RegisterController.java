@@ -27,7 +27,7 @@ public class RegisterController {
      */
     @PostMapping()
     public ApiResponse<?> registerFreeCourse(@RequestBody RegisterRequest request) {
-        registerService.createRegisterData(request);
+//        registerService.createRegisterData(request);
 
         return ApiResponse.builder().status(1000).build();
     }

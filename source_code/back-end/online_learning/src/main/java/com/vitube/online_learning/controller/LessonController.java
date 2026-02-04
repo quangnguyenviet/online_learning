@@ -42,13 +42,7 @@ public class LessonController {
                 .build();
     }
 
-    /**
-     * API lấy danh sách bài học của một khóa học.
-     *
-     * @param courseId ID của khóa học.
-     * @return Phản hồi API chứa danh sách bài học.
-     */
-    @GetMapping("/{courseId}")
+    @GetMapping("/course/{courseId}")
     public ApiResponse<List<LessonResponse>> getLessons(@PathVariable("courseId") String courseId) {
         List<LessonResponse> responses = lessonService.getLessonOfCourse(courseId);
 

@@ -41,7 +41,7 @@ public class CourseController {
 
     public ApiResponse<Page<CourseDTO>> getCourses(
             @RequestParam(required = false) String type,
-            @RequestParam(required = false) String query,
+            @RequestParam(required = false) String query, // query is a search keyword
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "10") Integer size) {
         Page<CourseDTO> response = courseService.getCourses(type, query, page, size);

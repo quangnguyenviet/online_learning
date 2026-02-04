@@ -14,6 +14,7 @@ import com.vitube.online_learning.service.StatisticService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,7 +40,7 @@ public class StatisticServiceImpl implements StatisticService {
         StatisticResponse response = new StatisticResponse();
         List<CourseStatisticResponse> courseStatisticResponses = new ArrayList<>();
         long totalRegistrations = 0;
-        float totalIncome = 0;
+        BigDecimal totalIncome = BigDecimal.ZERO;
         int totalCourses = 0;
 
         // Tìm giảng viên theo ID
@@ -61,13 +62,13 @@ public class StatisticServiceImpl implements StatisticService {
             result.setTitle(course.getTitle());
 
             result.setTotalRegistrations(course.getRegisters().size());
-            float totalEarnings = 0;
+            BigDecimal totalEarnings = BigDecimal.ZERO;
             for (Register register : course.getRegisters()) {
-                totalEarnings += register.getPrice();
+                totalEarnings = totalEarnings.add(register.getPrice());
             }
             result.setTotalEarnings(totalEarnings);
             totalRegistrations += result.getTotalRegistrations();
-            totalIncome += result.getTotalEarnings();
+            totalIncome = totalIncome.add(totalEarnings);
 
             courseStatisticResponses.add(result);
         }

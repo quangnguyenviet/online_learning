@@ -1,10 +1,13 @@
 package com.vitube.online_learning.controller;
 
+import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
+import com.vitube.online_learning.dto.RegisterDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,55 +44,66 @@ public class ZaloPayController {
 
     @PostMapping("/create-order")
     public ResponseEntity<?> createOrder(@RequestParam String courseId) throws Exception {
+        log.info("Inside createOrder of ZaloPayController");
         return ResponseEntity.ok(zaloPayService.createOrder(courseId));
     }
 
     @PostMapping("/callback")
-    public ResponseEntity<String> handleCallback(@RequestBody Map<String, Object> payload) {
-        log.info("Inside handleCallback of ZaloPayController");
-        // log payload nhận được
-        log.info("Payload received: " + payload.toString());
+    public ResponseEntity<Map<String, Object>> handleCallback(
+            @RequestBody Map<String, Object> payload) {
+
+        log.info("ZaloPay callback received");
+        log.info("Payload: {}", payload);
+
+        Map<String, Object> response = new HashMap<>();
 
         try {
-            // Lấy các trường cần thiết từ payload
             String data = (String) payload.get("data");
             String reqMac = (String) payload.get("mac");
 
-            // Tính lại MAC để xác thực (dùng key2)
-            String calculatedMac = HMACUtil.HMacHexStringEncode(HMACUtil.HMACSHA256, KEY_2, data);
+            String calculatedMac = HMACUtil.HMacHexStringEncode(
+                    HMACUtil.HMACSHA256, KEY_2, data
+            );
 
             if (!calculatedMac.equals(reqMac)) {
-                return ResponseEntity.badRequest().body("Invalid MAC");
+                response.put("return_code", 0);
+                response.put("return_message", "Invalid MAC");
+                return ResponseEntity.ok(response); // STILL 200
             }
 
-            // Parse data JSON để lấy thông tin đơn hàng
             JSONObject dataJson = new JSONObject(data);
             String appTransId = dataJson.getString("app_trans_id");
+            String appUser = dataJson.getString("app_user");
+            BigDecimal price = BigDecimal.valueOf(dataJson.getLong("amount")).divide(BigDecimal.valueOf(100));
 
-            Float amount = dataJson.getFloat("amount");
-            long appTime = dataJson.getLong("app_time");
-            Date registerDate = new Date(appTime);
+            // get courseId from embeded_data
+            String embededDataStr = dataJson.getString("embed_data");
+            JSONObject embededData = new JSONObject(embededDataStr);
+            String courseId = embededData.getString("courseId");
 
-            System.out.println("thanh toan thanh cong");
-            String embedDataStr = dataJson.getString("embed_data"); // lấy chuỗi JSON từ key "embed_data"
-            JSONObject embedDataJson = new JSONObject(embedDataStr); // chuyển thành JSONObject
-            String courseId = embedDataJson.getString("courseId"); // lấy ra giá trị courseId
+            // create register data
+            RegisterDTO registerDTO = RegisterDTO.builder()
+                    .courseId(courseId)
+                    .studentEmail(appUser)
+                    .price(price)
+                    .build();
 
-            // Thêm thông tin đăng ký khóa học
-//            registerService.createRegisterData(RegisterRequest.builder()
-//                    .price(amount)
-//                    .registerDate(registerDate)
-//                    .courseId(courseId)
-//                    .studentId(dataJson.getString("app_user"))
-//                    .build());
+            log.info("RegisterDTO: {}", registerDTO);
 
-            // Trả về cho ZaloPay biết rằng bạn đã xử lý callback thành công
-            return ResponseEntity.ok("{\"return_code\":1, \"return_message\":\"Success\"}");
+            // update register table
+            registerService.createRegisterData(registerDTO);
+
+
+            response.put("return_code", 1);
+            response.put("return_message", "Success");
+            return ResponseEntity.ok(response);
 
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("{\"return_code\":0, \"return_message\":\"Server Error\"}");
+            log.error("Callback error", e);
+            response.put("return_code", 0);
+            response.put("return_message", "Server error");
+            return ResponseEntity.ok(response); // ⚠️ ALWAYS 200
         }
     }
+
 }

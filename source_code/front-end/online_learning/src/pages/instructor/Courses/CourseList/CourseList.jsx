@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import CourseCard from 'components/Course/CourseCard';
+import CourseCard from 'components/Course/CourseCard/CourseCard';
 import styles from './CourseList.module.scss';
 import CourseApi from 'service/apis/CourseApi';
 

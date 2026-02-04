@@ -8,6 +8,38 @@
     margin-bottom: 28px;
 }
 
+.levelInfo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 12px 0 14px 0;
+    padding: 8px 12px;
+    background: #f8fafc;
+    border-radius: 8px;
+    width: fit-content;
+}
+
+.levelIcon {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.levelText {
+    font-size: 14px;
+    font-weight: 500;
+    color: #475569;
+}
+
+.levelBadge {
+    padding: 4px 12px;
+    border-radius: 16px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
 .title {
     font-size: 32px;
     font-weight: 800;

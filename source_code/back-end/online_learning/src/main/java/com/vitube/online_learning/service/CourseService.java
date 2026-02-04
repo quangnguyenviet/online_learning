@@ -16,14 +16,8 @@ import com.vitube.online_learning.entity.Course;
  * Interface cung cấp các phương thức liên quan đến khóa học.
  */
 public interface CourseService {
-    /**
-     * Chuyển đổi đối tượng Course thành CourseResponse.
-     *
-     * @param course Đối tượng khóa học.
-     * @param type Loại chuyển đổi.
-     * @return Đối tượng phản hồi khóa học.
-     */
-    CourseDTO toDto(Course course, int type);
+
+    CourseDTO entityToDto(Course course);
 
     /**
      * Tạo mới một khóa học.
@@ -52,8 +46,7 @@ public interface CourseService {
      */
     void deleteCourse(String id);
 
-
-    Page<CourseDTO> getCourses(String type, String query, Integer page, Integer size);
+    Page<CourseDTO> getCourses(String type, String keyword, Integer page, Integer size);
 
     /**
      * Lấy danh sách các khóa học miễn phí.

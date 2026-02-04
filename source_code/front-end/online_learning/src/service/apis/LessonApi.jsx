@@ -33,5 +33,11 @@ class LessonApi {
         const json = response.data;
         return json;
     }
+
+    static async getLessonsByCourseId(courseId){
+        const response = await apiClient.get(`/lessons/course/${courseId}`);
+        const json = response.data;
+        return json;
+    }
 }
 export default LessonApi;

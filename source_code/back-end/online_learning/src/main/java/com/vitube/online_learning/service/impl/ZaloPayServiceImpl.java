@@ -48,10 +48,10 @@ public class ZaloPayServiceImpl implements ZaloPayService {
     @Value("${zalopay.key1}")
     private String KEY1;
 
-    @Value("${zalopay.callbackUrl")
+    @Value("${zalopay.callbackUrl}")
     private String CALLBACK_URL;
 
-    @Value("${zalopay.redirectUrl")
+    @Value("${zalopay.redirectUrl}")
     private String REDIRECT_URL;
 
 

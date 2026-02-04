@@ -1,6 +1,12 @@
 package com.vitube.online_learning.service.impl;
 
+import com.vitube.online_learning.dto.RegisterDTO;
+import com.vitube.online_learning.enums.ErrorCode;
+import com.vitube.online_learning.exception.AppException;
 import com.vitube.online_learning.service.UserService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.vitube.online_learning.dto.request.RegisterRequest;
@@ -15,6 +21,8 @@ import com.vitube.online_learning.service.RegisterService;
 import com.vitube.online_learning.service.SecurityContextService;
 
 import lombok.RequiredArgsConstructor;
+
+import java.time.LocalDate;
 
 /**
  * Lớp triển khai các phương thức liên quan đến đăng ký khóa học.
@@ -61,29 +69,33 @@ public class RegisterServiceImpl implements RegisterService {
      * @param request Yêu cầu đăng ký.
      */
     @Override
-    public void createRegisterData(RegisterRequest request) {
-        // Lấy thông tin sinh viên từ yêu cầu hoặc từ ngữ cảnh bảo mật
-        User student;
-        if (request.getStudentId() != null) {
-            student = userRepository.findById(request.getStudentId()).get();
-        } else {
-            student = userService.getCurrentUser();
-        }
-
+    public void createRegisterData(RegisterDTO request) {
+        User student = userRepository.findByEmail(request.getStudentEmail())
+                .orElseThrow(
+                        () -> new AppException(ErrorCode.USER_NOT_EXIST)
+                );
         // Lấy thông tin khóa học từ yêu cầu
-        Course course = courseRepository.findById(request.getCourseId()).get();
+        Course course = courseRepository.findById(request.getCourseId())
+                .orElseThrow(
+                        () -> new AppException(ErrorCode.NOT_FOUND)
+                );
 
         // Chuyển đổi yêu cầu thành đối tượng đăng ký
-        Register register = toEntity(request);
+        Register register = Register.builder()
+                .price(request.getPrice())
+                .course(course)
+                .student(student)
+                .registerDate(LocalDate.now())
+                .build();
 
         // Lưu thông tin đăng ký vào cơ sở dữ liệu
         registerRepository.save(register);
 
         // Cập nhật danh sách đăng ký của sinh viên và khóa học
-        student.getRegisters().add(register);
-        course.getRegisters().add(register);
-        userRepository.save(student);
-        courseRepository.save(course);
+//        student.getRegisters().add(register);
+//        course.getRegisters().add(register);
+//        userRepository.save(student);
+//        courseRepository.save(course);
     }
 
     /**

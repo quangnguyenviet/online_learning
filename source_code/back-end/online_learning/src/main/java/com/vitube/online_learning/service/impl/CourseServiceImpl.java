@@ -59,15 +59,9 @@ public class CourseServiceImpl implements CourseService {
     private final CategoryRepository categoryRepository;
     private final LessonMapper lessonMapper;
 
-    /**
-     * Chuyển đổi đối tượng Course thành CourseResponse.
-     *
-     * @param course Đối tượng khóa học.
-     * @param type Loại phản hồi (0: chung, 1: chi tiết).
-     * @return Đối tượng phản hồi khóa học.
-     */
+
     @Override
-    public CourseDTO toDto(Course course, int type) {
+    public CourseDTO entityToDto(Course course) {
         return null;
     }
 
@@ -277,7 +271,7 @@ public class CourseServiceImpl implements CourseService {
 
 
     @Override
-    public Page<CourseDTO> getCourses(String type, String query, Integer page, Integer size) {
+    public Page<CourseDTO> getCourses(String type, String keyword, Integer page, Integer size) {
 
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         Page<Course> coursePage;
@@ -286,8 +280,8 @@ public class CourseServiceImpl implements CourseService {
         // have type
         if (ValidateUtil.customValidateString(type)) {
             // have type and have quey
-            if (ValidateUtil.customValidateString(query)) {
-                coursePage = courseRepository.findByTitleContainingAndCategoryNameContaining(query, type, pageable);
+            if (ValidateUtil.customValidateString(keyword)) {
+                coursePage = courseRepository.findByTitleContainingAndCategoryNameContaining(keyword, type, pageable);
 
             }
             else { // have type, no query
@@ -296,15 +290,18 @@ public class CourseServiceImpl implements CourseService {
             }
         }
         else{ // no type
-            if(ValidateUtil.customValidateString(query)){ // no type, have query
-                coursePage = courseRepository.findByTitleContaining(query, pageable);
+            if(ValidateUtil.customValidateString(keyword)){ // no type, have query
+                coursePage = courseRepository.findByTitleContaining(keyword, pageable);
             }
             // no type, no query
             else{
                 coursePage = courseRepository.findAll(pageable);
             }
         }
-        Page<CourseDTO> responsePage = coursePage.map(course -> courseMapper.toDto(course));
+        Page<CourseDTO> responsePage = coursePage.map(course -> {
+            CourseDTO courseDTO = courseMapper.toDto(course);
+            return courseDTO;
+        });
         return responsePage;
     }
 

@@ -29,6 +29,7 @@ public class CourseDTO {
 //    private Integer minute;
 //    private Integer second;
     private String duration;
+    private Long totalDurationInSeconds;
     private String imageUrl;
     private Boolean published;
     private MultipartFile imageFile;

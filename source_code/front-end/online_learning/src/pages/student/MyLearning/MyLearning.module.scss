@@ -1,12 +1,12 @@
 @use '../../../_var.scss' as v;
 
-.my-learning-section {
+.myLearningSection {
   background: v.$background-color;
   min-height: 70vh;
   padding: 36px 0 48px 0;
 }
 
-.my-learning__container {
+.myLearningContainer {
   max-width: 1200px;
   margin: 0 auto;
   background: #fff;
@@ -15,7 +15,7 @@
   padding: 32px 24px 28px 24px;
 }
 
-.my-learning__title {
+.myLearningTitle {
   font-size: 2rem;
   font-weight: 700;
   color: v.$primary-color;
@@ -28,15 +28,15 @@
   }
 }
 
-.my-learning__loading,
-.my-learning__empty {
+.myLearningLoading,
+.myLearningEmpty {
   text-align: center;
   color: v.$primary-dark;
   font-size: 1.2rem;
   padding: 40px 0;
 }
 
-.my-learning__list {
+.myLearningList {
   display: flex;
   flex-wrap: wrap;
   gap: 32px;
@@ -48,18 +48,18 @@
 }
 
 @media (max-width: 900px) {
-  .my-learning__container {
+  .myLearningContainer {
     padding: 16px 4px 12px 4px;
   }
-  .my-learning__title {
+  .myLearningTitle {
     font-size: 1.3rem;
   }
-  .my-learning__list {
+  .myLearningList {
     gap: 16px;
   }
 }
 @media (max-width: 600px) {
-  .my-learning__list {
+  .myLearningList {
     flex-direction: column;
     gap: 10px;
     align-items: stretch;

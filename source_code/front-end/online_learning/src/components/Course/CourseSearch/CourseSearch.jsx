@@ -1,23 +1,29 @@
 import { useState, useEffect } from "react";
 import { getCourses } from "utils/CoursesUtil";
 import { useSelector } from "react-redux";
-import CourseList from "../CourseList";
+import CourseList from "../CourseList/CourseList";
 import "./style.scss";
+import CourseApi from "service/apis/CourseApi";
 
 export default function CourseSearch() {
     const [courses, setCourses] = useState([]);
     const query = useSelector((state) => state.search);
 
+    const fetchCourses = async () => {
+        try {
+            const response = await CourseApi.getCourses({ type: "", query: query, page: 0, size: 10 });
+            console.log(response);
+            setCourses(response.data.content);
+        } catch (error) {
+            console.error("Error fetching courses:", error);
+        }
+    };
+
     useEffect(() => {
-        getCourses({ query: query, type: "" })
-            .then((response) => {
-                const data = response.data;
-                setCourses(data);
-            })
-            .catch((error) => {
-                console.error("Error fetching courses:", error);
-            });
+        fetchCourses();
     }, [query]);
+
+
 
     return (
         <section className="course-search-section">

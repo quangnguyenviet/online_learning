@@ -96,6 +96,7 @@ public class LessonServiceImpl implements LessonService {
                 .duration(durationInSeconds)
                 .description(request.getDescription())
                 .createdAt(LocalDateTime.now())
+                .isPreview(false) // default to false
                 .build();
 
         Lesson addedLesson = lessonRepository.save(lesson);
@@ -120,7 +121,8 @@ public class LessonServiceImpl implements LessonService {
     public List<LessonResponse> getLessonOfCourse(String courseId) {
         List<LessonResponse> responses = new ArrayList<>();
 
-        Course course = courseRepository.findById(courseId).get();
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
         course.getLessons().forEach(lesson -> {
             responses.add(lessonMapper.lessonToLessonResponse(lesson));
         });
@@ -139,9 +141,10 @@ public class LessonServiceImpl implements LessonService {
         Lesson lesson = lessonRepository.findById(lessonId).
                 orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
         // delete video from S3
-        String key = FileUtil.getKeyFromUrl(lesson.getVideoUrl());
-        s3Service.deleteFile(key, S3DeleteEnum.VIDEO.name());
-
+        if (lesson.getVideoUrl() != null) {
+            String key = FileUtil.getKeyFromUrl(lesson.getVideoUrl());
+            s3Service.deleteFile(key, S3DeleteEnum.VIDEO.name());
+        }
         lessonRepository.delete(lesson);
         return null;
     }
@@ -200,7 +203,7 @@ public class LessonServiceImpl implements LessonService {
      */
     public LessonResponse lessonToLessonResponse(Lesson lesson) {
         LessonResponse lessonResponse = lessonMapper.lessonToLessonResponse(lesson);
-        lessonResponse.setDurationInSeconds(lesson.getDuration());
+        lessonResponse.setDuration(lesson.getDuration());
         return lessonResponse;
     }
 

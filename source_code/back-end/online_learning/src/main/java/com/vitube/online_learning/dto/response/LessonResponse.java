@@ -2,6 +2,8 @@ package com.vitube.online_learning.dto.response;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -13,11 +15,12 @@ public class LessonResponse implements Comparable<LessonResponse> {
     private String lessonKey;
     private String videoUrl;
     private String description;
-    private long durationInSeconds;
-    private Integer idx;
+    private long duration;
+    private LocalDateTime createdAt;
+
 
     @Override
     public int compareTo(LessonResponse o) {
-        return Integer.compare(this.getIdx(), o.getIdx());
+        return this.createdAt.compareTo(o.createdAt);
     }
 }

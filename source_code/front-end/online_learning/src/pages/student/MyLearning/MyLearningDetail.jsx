@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./MyLearningDetail.scss";
 import { getSignedUrl } from "utils/LessonUtil";
+import LessonApi from "service/apis/LessonApi";
 
 export default function MyLearningDetail() {
     const { courseId } = useParams();
@@ -11,38 +12,42 @@ export default function MyLearningDetail() {
     const [loading, setLoading] = useState(true);
     const [videoUrl, setVideoUrl] = useState("");
 
-    useEffect(() => {
-        const fetchLessons = async () => {
-            try {
-                const response = await fetch(URL, {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${localStorage.getItem("token")}`,
-                    },
-                });
-                const data = await response.json();
-                setLessons(data.data);
-                setLoading(false);
+    const fetchLessons = async () => {
+        try {
+            const {data} = await LessonApi.getLessonsByCourseId(courseId);
+            console.log(data);
 
-                if (data.data.length > 0) {
-                    const firstKey = data.data[0].lessonKey;
-                    const firstUrl = await getSignedUrl(firstKey);
-                    setVideoUrl(firstUrl.data);
-                }
-            } catch (error) {
-                console.error("Error:", error);
-                setLoading(false);
+            setLessons(data);
+            setLoading(false);
+            if (data.length > 0) {
+                const firstKey = data[0].lessonKey;
+                const firstUrl = await getSignedUrl(firstKey);
+                setVideoUrl(firstUrl.data);
             }
-        };
+        } catch (error) {
+            console.error("Error:", error);
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+       
 
         fetchLessons();
     }, [URL]);
 
-    const handleView = (lessonKey) => {
-        getSignedUrl(lessonKey)
+    const handleView = (lessonId) => {
+        // getSignedUrl(lessonKey)
+        //     .then((data) => {
+        //         setVideoUrl(data.data);
+        //     })
+        //     .catch((error) => {
+        //         console.error("Error:", error);
+        //     });
+        LessonApi.getSignedUrl(lessonId)
             .then((data) => {
-                setVideoUrl(data.data);
+                console.log(data);
+                setVideoUrl(data.data.presignedUrl);
             })
             .catch((error) => {
                 console.error("Error:", error);
@@ -62,7 +67,7 @@ export default function MyLearningDetail() {
                         <div className="my-learning-detail__video">
                             {videoUrl && (
                                 <div className="video-player">
-                                    <video width="100%" height="auto" controls autoPlay key={videoUrl}>
+                                    <video controls autoPlay key={videoUrl}>
                                         <source src={videoUrl} type="video/mp4" />
                                         Trình duyệt của bạn không hỗ trợ video.
                                     </video>
@@ -76,7 +81,7 @@ export default function MyLearningDetail() {
                                     <div
                                         key={lesson.lessonKey}
                                         className="lesson-card"
-                                        onClick={() => handleView(lesson.lessonKey)}
+                                        onClick={() => handleView(lesson.id)}
                                         tabIndex={0}
                                         role="button"
                                     >

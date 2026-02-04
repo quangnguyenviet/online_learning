@@ -1,4 +1,4 @@
-import CourseCard from "../CourseCard";
+import CourseCard from "../CourseCard/CourseCard";
 import { useNavigate } from "react-router-dom";
 import "./style.scss";
 

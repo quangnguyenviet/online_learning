@@ -1,9 +1,9 @@
 import './Course.scss';
 import { useSelector } from "react-redux";
-import CourseSearch from "components/Course/CourseSearch";
+import CourseSearch from "components/Course/CourseSearch/CourseSearch";
 import CourseApi from 'service/apis/CourseApi';
 import React, { useEffect } from 'react';
-import CourseList from './CourseList';
+import CourseList from './CourseList/CourseList';
 
 export default function Course() {
     const [courses, setCourses] = React.useState([]);
@@ -32,14 +32,7 @@ export default function Course() {
                 </h2>
                 {query === "" ? (
                     <div className="course-section__list">
-                        {/* <div className="course-section__column">
-                            <FreeCourse />
-                        </div>
-                        <div className="course-section__column">
-                            <PlusCourse />
-                        </div> */}
-                        <CourseList courses={courses} />
-                        
+                        <CourseList courses={courses} />              
                     </div>
                 ) : (
                     <CourseSearch />
