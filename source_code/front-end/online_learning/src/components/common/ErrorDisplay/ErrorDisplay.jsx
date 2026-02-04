@@ -1,5 +1,6 @@
 import styles from './ErrorDisplay.module.css';
 import { useState, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 const ErrorDisplay = ({message, onDismiss}) => {
     // Auto-dismiss the error after 5 seconds
     useEffect(() => {
@@ -11,13 +12,22 @@ const ErrorDisplay = ({message, onDismiss}) => {
         return () => clearTimeout(timer);
     }, [message, onDismiss]);
     if(!message) return null;
-    return (
+    // return (
+    //     <div className={styles.wrapper}>
+    //         <div className={styles.card}>
+    //             <span className={styles.message}>{message}</span>
+    //             <div className={styles.progress}></div>
+    //         </div>
+    //     </div>
+    // );
+    return createPortal(
         <div className={styles.wrapper}>
             <div className={styles.card}>
                 <span className={styles.message}>{message}</span>
                 <div className={styles.progress}></div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 }
 

@@ -3,7 +3,7 @@ import About from "../../pages/student/About";
 import Contact from "../../pages/student/Contact";
 import Error404 from "../../pages/common/Error404";
 import Home from "../../pages/student/Home/Home";
-import InforUser from "../../pages/student/InforUser";
+import InforUser from "../../pages/student/InforUser/InforUser";
 import Login from "../../pages/common/Login";
 import PrivateRouter from "../PrivateRouter";
 import CourseDetail from "../../pages/student/CourseDetail/CourseDetail";

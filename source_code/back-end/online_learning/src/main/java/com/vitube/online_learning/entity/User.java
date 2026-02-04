@@ -1,12 +1,15 @@
 package com.vitube.online_learning.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.*;
 
 import lombok.*;
+
+import com.vitube.online_learning.enums.GenderEnum;
 
 @Entity
 @Table(name = "user")
@@ -33,7 +36,17 @@ public class User {
     private String lastName;
 
     @Column
-    private Date dob;
+    private LocalDate dob;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender")
+    private GenderEnum gender;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
 //    private String bankName;
 //    private String accountNumber;

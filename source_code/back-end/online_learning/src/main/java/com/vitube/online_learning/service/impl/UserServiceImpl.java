@@ -1,5 +1,6 @@
 package com.vitube.online_learning.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.Set;
 
 import com.vitube.online_learning.dto.UserDTO;
 import com.vitube.online_learning.dto.request.UserCreationRequest;
+import com.vitube.online_learning.dto.request.UpdateUserRequest;
 import com.vitube.online_learning.enums.ErrorCode;
 import com.vitube.online_learning.enums.RoleEnum;
 import com.vitube.online_learning.exception.AppException;
@@ -54,6 +56,7 @@ public class UserServiceImpl implements UserService {
         User user = User.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .createdAt(LocalDateTime.now())
                 .build();
         user.setRoles(new ArrayList<>());
         if (request.getRoles() != null){
@@ -117,6 +120,30 @@ public class UserServiceImpl implements UserService {
     public UserDTO getMyInfo() {
         User user = getCurrentUser();
         return userMapper.userToUserDTO(user);
+    }
+
+    @Override
+    public UserDTO updateMyInfo(UpdateUserRequest request) {
+        User user = getCurrentUser();
+
+        if (ValidateUtil.customValidateString(request.getFirstName())) {
+            user.setFirstName(request.getFirstName());
+        }
+        if (ValidateUtil.customValidateString(request.getLastName())) {
+            user.setLastName(request.getLastName());
+        }
+        if (ValidateUtil.customValidateString(request.getPhoneNumber())) {
+            user.setPhoneNumber(request.getPhoneNumber());
+        }
+        if (request.getDob() != null) {
+            user.setDob(request.getDob());
+        }
+        if (request.getGender() != null) {
+            user.setGender(request.getGender());
+        }
+
+        User saved = userRepository.save(user);
+        return userMapper.userToUserDTO(saved);
     }
 
     @Override

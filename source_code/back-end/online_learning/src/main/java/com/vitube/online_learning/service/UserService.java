@@ -5,6 +5,7 @@ import java.util.List;
 import com.vitube.online_learning.dto.UserDTO;
 import com.vitube.online_learning.dto.request.UserCreationRequest;
 import com.vitube.online_learning.dto.request.UserRequest;
+import com.vitube.online_learning.dto.request.UpdateUserRequest;
 import com.vitube.online_learning.dto.response.UserResponse;
 import com.vitube.online_learning.entity.User;
 
@@ -41,6 +42,14 @@ public interface UserService {
      * @return Phản hồi thông tin của người dùng hiện tại.
      */
     UserDTO getMyInfo();
+
+    /**
+     * Cập nhật thông tin người dùng hiện tại.
+     *
+     * @param request Yêu cầu cập nhật người dùng.
+     * @return Phản hồi người dùng sau khi cập nhật.
+     */
+    UserDTO updateMyInfo(UpdateUserRequest request);
 
     User getCurrentUser();
 }
