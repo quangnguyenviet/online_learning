@@ -1,12 +1,10 @@
 package com.vitube.online_learning.entity;
 
+import jakarta.persistence.*;
+import lombok.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
-
-import jakarta.persistence.*;
-
-import lombok.*;
 
 @Getter
 @Setter

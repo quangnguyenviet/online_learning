@@ -1,17 +1,15 @@
 package com.vitube.online_learning.configuration;
 
-import java.io.IOException;
-
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.AuthenticationEntryPoint;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vitube.online_learning.dto.response.ApiResponse;
 import com.vitube.online_learning.enums.ErrorCode;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.AuthenticationEntryPoint;
+
+import java.io.IOException;
 
 /**
  * Entry point tùy chỉnh để xử lý truy cập không được phép.

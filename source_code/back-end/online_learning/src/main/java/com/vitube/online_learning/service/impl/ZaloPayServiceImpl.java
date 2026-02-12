@@ -8,7 +8,6 @@ import com.vitube.online_learning.entity.User;
 import com.vitube.online_learning.enums.ErrorCode;
 import com.vitube.online_learning.exception.AppException;
 import com.vitube.online_learning.repository.CourseRepository;
-import com.vitube.online_learning.service.SecurityContextService;
 import com.vitube.online_learning.service.UserService;
 import com.vitube.online_learning.service.ZaloPayService;
 import com.vitube.online_learning.utils.HMACUtil;
@@ -19,16 +18,11 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 /**

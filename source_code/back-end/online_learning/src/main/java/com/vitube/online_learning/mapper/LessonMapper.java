@@ -1,10 +1,12 @@
 package com.vitube.online_learning.mapper;
 
 import com.vitube.online_learning.dto.LessonDTO;
-import org.mapstruct.*;
-
 import com.vitube.online_learning.dto.response.LessonResponse;
 import com.vitube.online_learning.entity.Lesson;
+import org.mapstruct.BeanMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring")
 public interface LessonMapper {

@@ -1,13 +1,11 @@
 package com.vitube.online_learning.service;
 
-import java.util.List;
-
 import com.vitube.online_learning.dto.UserDTO;
-import com.vitube.online_learning.dto.request.UserCreationRequest;
-import com.vitube.online_learning.dto.request.UserRequest;
 import com.vitube.online_learning.dto.request.UpdateUserRequest;
-import com.vitube.online_learning.dto.response.UserResponse;
+import com.vitube.online_learning.dto.request.UserCreationRequest;
 import com.vitube.online_learning.entity.User;
+
+import java.util.List;
 
 /**
  * Interface cung cấp các phương thức liên quan đến người dùng.
@@ -52,4 +50,5 @@ public interface UserService {
     UserDTO updateMyInfo(UpdateUserRequest request);
 
     User getCurrentUser();
+
 }

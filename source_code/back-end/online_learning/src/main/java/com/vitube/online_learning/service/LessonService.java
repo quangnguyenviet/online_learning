@@ -1,15 +1,14 @@
 package com.vitube.online_learning.service;
 
-import java.io.IOException;
-import java.util.List;
-
 import com.vitube.online_learning.dto.LessonDTO;
 import com.vitube.online_learning.dto.request.CreateLessonRequest;
-import com.vitube.online_learning.dto.request.LessonRequest;
 import com.vitube.online_learning.dto.response.ApiResponse;
 import com.vitube.online_learning.dto.response.LessonResponse;
 import com.vitube.online_learning.entity.Lesson;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * Interface cung cấp các phương thức liên quan đến bài học.

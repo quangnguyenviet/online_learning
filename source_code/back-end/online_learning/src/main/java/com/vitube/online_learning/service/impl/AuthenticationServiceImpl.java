@@ -1,19 +1,8 @@
 package com.vitube.online_learning.service.impl;
 
-import java.text.ParseException;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.*;
-
-import com.vitube.online_learning.service.JWTService;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import com.nimbusds.jose.*;
-import com.nimbusds.jose.crypto.MACSigner;
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.MACVerifier;
-import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import com.vitube.online_learning.dto.request.AuthenticationRequest;
 import com.vitube.online_learning.dto.request.IntrospectRequest;
@@ -22,20 +11,25 @@ import com.vitube.online_learning.dto.request.RefreshRequest;
 import com.vitube.online_learning.dto.response.AuthenticationResponse;
 import com.vitube.online_learning.dto.response.IntrospectRespone;
 import com.vitube.online_learning.entity.InvalidToken;
-import com.vitube.online_learning.entity.Role;
 import com.vitube.online_learning.entity.User;
 import com.vitube.online_learning.enums.ErrorCode;
-import com.vitube.online_learning.enums.RoleEnum;
 import com.vitube.online_learning.exception.AppException;
 import com.vitube.online_learning.repository.InvalidTokenRepository;
 import com.vitube.online_learning.repository.UserRepository;
 import com.vitube.online_learning.service.AuthenticationService;
-
-import lombok.AccessLevel;
+import com.vitube.online_learning.service.JWTService;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.text.ParseException;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Lớp triển khai các phương thức liên quan đến xác thực.

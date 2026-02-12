@@ -1,12 +1,10 @@
 package com.vitube.online_learning.controller;
 
-import org.springframework.web.bind.annotation.*;
-
 import com.vitube.online_learning.dto.request.RegisterRequest;
 import com.vitube.online_learning.dto.response.ApiResponse;
 import com.vitube.online_learning.service.RegisterService;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Lớp điều khiển xử lý các yêu cầu liên quan đến đăng ký khóa học.

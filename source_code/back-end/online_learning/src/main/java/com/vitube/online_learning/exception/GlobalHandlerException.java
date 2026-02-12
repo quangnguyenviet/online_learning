@@ -1,10 +1,9 @@
 package com.vitube.online_learning.exception;
 
+import com.vitube.online_learning.dto.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
-import com.vitube.online_learning.dto.response.ApiResponse;
 
 /**
  * Lớp xử lý ngoại lệ toàn cục cho ứng dụng.

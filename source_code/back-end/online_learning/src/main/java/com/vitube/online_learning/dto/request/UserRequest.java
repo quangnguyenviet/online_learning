@@ -1,8 +1,8 @@
 package com.vitube.online_learning.dto.request;
 
-import java.util.Date;
-
 import lombok.Data;
+
+import java.util.Date;
 
 @Data
 public class UserRequest extends BaseRequest{

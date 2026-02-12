@@ -1,10 +1,11 @@
 package com.vitube.online_learning.entity;
 
-import java.util.Date;
-
-import jakarta.persistence.*;
-
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.*;
+
+import java.util.Date;
 
 @Entity
 @Table(name = "invalidToken")

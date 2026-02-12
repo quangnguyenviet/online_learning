@@ -1,7 +1,6 @@
 package com.vitube.online_learning.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.vitube.online_learning.dto.response.LessonResponse;
 import com.vitube.online_learning.dto.response.RequireResponse;
 import com.vitube.online_learning.enums.LevelEnum;
 import lombok.AllArgsConstructor;

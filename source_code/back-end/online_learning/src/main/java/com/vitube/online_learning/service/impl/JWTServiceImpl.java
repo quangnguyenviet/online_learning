@@ -12,7 +12,6 @@ import com.vitube.online_learning.exception.AppException;
 import com.vitube.online_learning.repository.InvalidTokenRepository;
 import com.vitube.online_learning.service.JWTService;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,8 +20,6 @@ import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
-import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service

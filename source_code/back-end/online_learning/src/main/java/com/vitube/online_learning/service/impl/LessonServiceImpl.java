@@ -1,5 +1,28 @@
 package com.vitube.online_learning.service.impl;
 
+import com.vitube.online_learning.dto.LessonDTO;
+import com.vitube.online_learning.dto.request.CreateLessonRequest;
+import com.vitube.online_learning.dto.response.ApiResponse;
+import com.vitube.online_learning.dto.response.LessonResponse;
+import com.vitube.online_learning.entity.Course;
+import com.vitube.online_learning.entity.Lesson;
+import com.vitube.online_learning.entity.User;
+import com.vitube.online_learning.enums.ErrorCode;
+import com.vitube.online_learning.enums.S3DeleteEnum;
+import com.vitube.online_learning.exception.AppException;
+import com.vitube.online_learning.mapper.LessonMapper;
+import com.vitube.online_learning.repository.CourseRepository;
+import com.vitube.online_learning.repository.LessonRepository;
+import com.vitube.online_learning.repository.RegisterRepository;
+import com.vitube.online_learning.service.LessonService;
+import com.vitube.online_learning.service.S3Service;
+import com.vitube.online_learning.service.UserService;
+import com.vitube.online_learning.utils.FileUtil;
+import com.vitube.online_learning.utils.VideoUtil;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -7,32 +30,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import com.vitube.online_learning.dto.LessonDTO;
-import com.vitube.online_learning.dto.request.CreateLessonRequest;
-import com.vitube.online_learning.dto.response.ApiResponse;
-import com.vitube.online_learning.entity.User;
-import com.vitube.online_learning.enums.ErrorCode;
-import com.vitube.online_learning.enums.S3DeleteEnum;
-import com.vitube.online_learning.exception.AppException;
-import com.vitube.online_learning.repository.RegisterRepository;
-import com.vitube.online_learning.service.UserService;
-import com.vitube.online_learning.utils.FileUtil;
-import org.springframework.stereotype.Service;
-
-import com.vitube.online_learning.dto.request.LessonRequest;
-import com.vitube.online_learning.dto.response.LessonResponse;
-import com.vitube.online_learning.entity.Course;
-import com.vitube.online_learning.entity.Lesson;
-import com.vitube.online_learning.mapper.LessonMapper;
-import com.vitube.online_learning.repository.CourseRepository;
-import com.vitube.online_learning.repository.LessonRepository;
-import com.vitube.online_learning.service.LessonService;
-import com.vitube.online_learning.service.S3Service;
-import com.vitube.online_learning.utils.VideoUtil;
-
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Lớp triển khai các phương thức liên quan đến bài học.

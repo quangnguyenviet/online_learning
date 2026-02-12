@@ -1,13 +1,12 @@
 package com.vitube.online_learning.entity;
 
+import com.vitube.online_learning.enums.LevelEnum;
+import jakarta.persistence.*;
+import lombok.*;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
-
-import com.vitube.online_learning.enums.LevelEnum;
-import jakarta.persistence.*;
-
-import lombok.*;
 
 /**
  * Lớp thực thể đại diện cho khóa học trong hệ thống.

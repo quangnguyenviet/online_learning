@@ -1,9 +1,8 @@
 package com.vitube.online_learning.enums;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
-
-import lombok.Getter;
 
 /**
  * Enum đại diện cho các mã lỗi trong hệ thống.

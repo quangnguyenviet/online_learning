@@ -1,6 +1,7 @@
 package com.vitube.online_learning.dto.request;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Lớp cơ sở cho các yêu cầu API.

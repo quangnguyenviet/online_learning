@@ -1,35 +1,28 @@
 package com.vitube.online_learning.service.impl;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import com.vitube.online_learning.dto.UserDTO;
-import com.vitube.online_learning.dto.request.UserCreationRequest;
 import com.vitube.online_learning.dto.request.UpdateUserRequest;
+import com.vitube.online_learning.dto.request.UserCreationRequest;
+import com.vitube.online_learning.entity.Role;
+import com.vitube.online_learning.entity.User;
 import com.vitube.online_learning.enums.ErrorCode;
 import com.vitube.online_learning.enums.RoleEnum;
 import com.vitube.online_learning.exception.AppException;
-import com.vitube.online_learning.utils.ValidateUtil;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-
-import com.vitube.online_learning.dto.request.UserRequest;
-import com.vitube.online_learning.dto.response.RoleResponse;
-import com.vitube.online_learning.dto.response.UserResponse;
-import com.vitube.online_learning.entity.Role;
-import com.vitube.online_learning.entity.User;
 import com.vitube.online_learning.mapper.RoleMapper;
 import com.vitube.online_learning.mapper.UserMapper;
 import com.vitube.online_learning.repository.RoleRepository;
 import com.vitube.online_learning.repository.UserRepository;
 import com.vitube.online_learning.service.UserService;
-
+import com.vitube.online_learning.utils.ValidateUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Lớp triển khai các phương thức liên quan đến người dùng.
@@ -38,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+
     private final UserRepository userRepository;
 
     private final UserMapper userMapper;

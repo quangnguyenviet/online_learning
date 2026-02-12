@@ -1,21 +1,19 @@
 package com.vitube.online_learning.controller;
 
-import java.util.List;
-
 import com.vitube.online_learning.dto.CourseDTO;
 import com.vitube.online_learning.dto.ObjectiveDTO;
 import com.vitube.online_learning.dto.request.CourseCreattionRequest;
 import com.vitube.online_learning.dto.request.UpdateCourseRequest;
+import com.vitube.online_learning.dto.response.ApiResponse;
+import com.vitube.online_learning.service.CourseService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import com.vitube.online_learning.dto.response.ApiResponse;
-import com.vitube.online_learning.service.CourseService;
-
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * Lớp điều khiển xử lý các yêu cầu liên quan đến khóa học.

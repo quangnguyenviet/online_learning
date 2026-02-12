@@ -1,6 +1,5 @@
 package com.vitube.online_learning.dto.zalopay;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

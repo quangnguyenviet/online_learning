@@ -1,14 +1,13 @@
 package com.vitube.online_learning.utils;
 
-import java.io.File;
-import java.io.IOException;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import net.bramp.ffmpeg.FFprobe;
 import net.bramp.ffmpeg.probe.FFmpegFormat;
 import net.bramp.ffmpeg.probe.FFmpegProbeResult;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Lớp tiện ích để xử lý các thao tác liên quan đến video.

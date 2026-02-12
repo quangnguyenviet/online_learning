@@ -1,27 +1,18 @@
 package com.vitube.online_learning.configuration;
 
-import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import com.vitube.online_learning.enums.ErrorCode;
-import com.vitube.online_learning.exception.AppException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationRunner;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import com.vitube.online_learning.entity.Role;
 import com.vitube.online_learning.entity.User;
 import com.vitube.online_learning.enums.RoleEnum;
 import com.vitube.online_learning.repository.RoleRepository;
 import com.vitube.online_learning.repository.UserRepository;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.List;
 
 @Configuration
 @Slf4j

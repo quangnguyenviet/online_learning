@@ -1,11 +1,10 @@
 package com.vitube.online_learning.entity;
 
-import java.util.Set;
-
 import com.vitube.online_learning.enums.RoleEnum;
 import jakarta.persistence.*;
-
 import lombok.*;
+
+import java.util.Set;
 
 @Entity
 @Table(name = "role")

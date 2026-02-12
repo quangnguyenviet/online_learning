@@ -1,24 +1,20 @@
 package com.vitube.online_learning.controller;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-
 import com.vitube.online_learning.dto.LessonDTO;
 import com.vitube.online_learning.dto.request.CreateLessonRequest;
-import com.vitube.online_learning.dto.request.LessonRequest;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
 import com.vitube.online_learning.dto.response.ApiResponse;
 import com.vitube.online_learning.dto.response.LessonResponse;
 import com.vitube.online_learning.service.LessonService;
 import com.vitube.online_learning.service.S3Service;
-
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * Lớp điều khiển xử lý các yêu cầu liên quan đến bài học.

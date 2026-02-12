@@ -1,7 +1,5 @@
 package com.vitube.online_learning.service;
 
-import java.text.ParseException;
-
 import com.nimbusds.jose.JOSEException;
 import com.vitube.online_learning.dto.request.AuthenticationRequest;
 import com.vitube.online_learning.dto.request.IntrospectRequest;
@@ -9,6 +7,8 @@ import com.vitube.online_learning.dto.request.LogoutRequest;
 import com.vitube.online_learning.dto.request.RefreshRequest;
 import com.vitube.online_learning.dto.response.AuthenticationResponse;
 import com.vitube.online_learning.dto.response.IntrospectRespone;
+
+import java.text.ParseException;
 
 /**
  * Interface cung cấp các phương thức liên quan đến xác thực.

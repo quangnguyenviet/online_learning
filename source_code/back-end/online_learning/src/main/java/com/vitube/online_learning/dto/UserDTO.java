@@ -2,6 +2,7 @@ package com.vitube.online_learning.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.vitube.online_learning.enums.GenderEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,8 +11,6 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-
-import com.vitube.online_learning.enums.GenderEnum;
 
 @Data
 @NoArgsConstructor

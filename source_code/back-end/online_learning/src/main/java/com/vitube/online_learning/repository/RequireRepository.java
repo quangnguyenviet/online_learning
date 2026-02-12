@@ -1,10 +1,9 @@
 package com.vitube.online_learning.repository;
 
-import java.util.List;
-
+import com.vitube.online_learning.entity.Require;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.vitube.online_learning.entity.Require;
+import java.util.List;
 
 public interface RequireRepository extends JpaRepository<Require, String> {
     // Custom query methods can be defined here if needed

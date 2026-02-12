@@ -1,45 +1,45 @@
 package com.vitube.online_learning.service.impl;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import com.vitube.online_learning.dto.CourseDTO;
 import com.vitube.online_learning.dto.LessonDTO;
 import com.vitube.online_learning.dto.ObjectiveDTO;
 import com.vitube.online_learning.dto.request.CourseCreattionRequest;
 import com.vitube.online_learning.dto.request.UpdateCourseRequest;
-import com.vitube.online_learning.entity.*;
+import com.vitube.online_learning.entity.Category;
+import com.vitube.online_learning.entity.Course;
+import com.vitube.online_learning.entity.Objective;
+import com.vitube.online_learning.entity.User;
 import com.vitube.online_learning.enums.ErrorCode;
 import com.vitube.online_learning.enums.S3DeleteEnum;
 import com.vitube.online_learning.exception.AppException;
 import com.vitube.online_learning.mapper.CourseMapper;
 import com.vitube.online_learning.mapper.LessonMapper;
 import com.vitube.online_learning.mapper.ObjectiveMapper;
+import com.vitube.online_learning.mapper.RequireMapper;
 import com.vitube.online_learning.repository.CategoryRepository;
-import com.vitube.online_learning.service.*;
+import com.vitube.online_learning.repository.CourseRepository;
+import com.vitube.online_learning.repository.UserRepository;
+import com.vitube.online_learning.service.CourseService;
+import com.vitube.online_learning.service.LessonService;
+import com.vitube.online_learning.service.S3Service;
+import com.vitube.online_learning.service.UserService;
 import com.vitube.online_learning.utils.FileUtil;
 import com.vitube.online_learning.utils.ValidateUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.vitube.online_learning.dto.request.CourseRequest;
-import com.vitube.online_learning.dto.response.LessonResponse;
-import com.vitube.online_learning.dto.response.RequireResponse;
-import com.vitube.online_learning.mapper.RequireMapper;
-import com.vitube.online_learning.repository.CourseRepository;
-import com.vitube.online_learning.repository.UserRepository;
-
-import lombok.RequiredArgsConstructor;
-
-import org.springframework.transaction.annotation.Transactional;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Lớp triển khai các phương thức liên quan đến khóa học.
@@ -386,19 +386,26 @@ public class CourseServiceImpl implements CourseService {
         return responseList;
     }
 
-
-    /**
-     * Cập nhật giá của khóa học.
-     *
-     * @param courseId ID của khóa học.
-     * @param price Giá mới của khóa học.
-     */
     @Override
-    public void setPrice(String courseId, Double price) {
-        Course course = courseRepository.findById(courseId).orElseThrow(() -> new RuntimeException("Course not found"));
-        course.setPrice(price);
-        courseRepository.save(course);
+    public long countCourseByInstructorId(String instructorId) {
+        return courseRepository.countCourseByInstructorId(instructorId);
     }
+
+    @Override
+    public long countPublishedCourseByInstructorId(String instructorId) {
+        return courseRepository.countCourseByInstructorIdAndPublished(instructorId, true);
+    }
+
+    @Override
+    public long countTotalStudentsByInstructorId(String instructorId) {
+        return courseRepository.countTotalStudentsByInstructorId(instructorId);
+    }
+
+    @Override
+    public long countTotalVideosByInstructorId(String instructorId) {
+        return courseRepository.countTotalVideosByInstructorId(instructorId);
+    }
+
 
     /**
      * Tạo khóa học mới với một khóa duy nhất.
@@ -428,4 +435,3 @@ public class CourseServiceImpl implements CourseService {
     }
 
 }
-

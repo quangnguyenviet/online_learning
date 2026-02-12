@@ -1,8 +1,9 @@
 package com.vitube.online_learning.configuration;
 
-import java.text.ParseException;
-import javax.crypto.spec.SecretKeySpec;
-
+import com.nimbusds.jose.JOSEException;
+import com.vitube.online_learning.dto.request.IntrospectRequest;
+import com.vitube.online_learning.service.AuthenticationService;
+import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
@@ -12,11 +13,8 @@ import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Component;
 
-import com.nimbusds.jose.JOSEException;
-import com.vitube.online_learning.dto.request.IntrospectRequest;
-import com.vitube.online_learning.service.AuthenticationService;
-
-import lombok.experimental.NonFinal;
+import javax.crypto.spec.SecretKeySpec;
+import java.text.ParseException;
 
 /**
  * Triển khai tùy chỉnh của JwtDecoder để giải mã và xác thực token JWT.

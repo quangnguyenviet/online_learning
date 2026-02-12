@@ -1,14 +1,5 @@
 package com.vitube.online_learning.controller;
 
-import java.text.ParseException;
-
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.nimbusds.jose.JOSEException;
 import com.vitube.online_learning.dto.request.AuthenticationRequest;
 import com.vitube.online_learning.dto.request.IntrospectRequest;
@@ -16,6 +7,14 @@ import com.vitube.online_learning.dto.request.LogoutRequest;
 import com.vitube.online_learning.dto.request.RefreshRequest;
 import com.vitube.online_learning.dto.response.ApiResponse;
 import com.vitube.online_learning.service.AuthenticationService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.text.ParseException;
 
 /**
  * Lớp điều khiển xử lý các yêu cầu liên quan đến xác thực.

@@ -5,7 +5,6 @@ import com.vitube.online_learning.dto.response.InstructorPaymentResponse;
 import com.vitube.online_learning.dto.response.InstructorStatisticResponse;
 import com.vitube.online_learning.dto.response.UserResponse;
 import com.vitube.online_learning.entity.InstructorPayment;
-import com.vitube.online_learning.entity.User;
 import com.vitube.online_learning.repository.InstructorPaymentRepository;
 import com.vitube.online_learning.service.InstructorPaymentService;
 import lombok.RequiredArgsConstructor;

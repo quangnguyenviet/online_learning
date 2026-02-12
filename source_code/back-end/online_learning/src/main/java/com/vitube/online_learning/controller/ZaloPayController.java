@@ -1,26 +1,19 @@
 package com.vitube.online_learning.controller;
 
-import java.math.BigDecimal;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.vitube.online_learning.dto.RegisterDTO;
-import lombok.extern.slf4j.Slf4j;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-
-import com.vitube.online_learning.dto.request.RegisterRequest;
 import com.vitube.online_learning.service.RegisterService;
 import com.vitube.online_learning.service.ZaloPayService;
 import com.vitube.online_learning.utils.HMACUtil;
-
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Lớp điều khiển xử lý các yêu cầu liên quan đến thanh toán qua ZaloPay.

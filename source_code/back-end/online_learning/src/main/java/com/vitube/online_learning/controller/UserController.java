@@ -1,19 +1,18 @@
 package com.vitube.online_learning.controller;
 
-import java.util.List;
-
 import com.vitube.online_learning.dto.UserDTO;
-import com.vitube.online_learning.dto.request.UserCreationRequest;
 import com.vitube.online_learning.dto.request.UpdateUserRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
-
+import com.vitube.online_learning.dto.request.UserCreationRequest;
 import com.vitube.online_learning.dto.response.ApiResponse;
 import com.vitube.online_learning.dto.response.UserResponse;
 import com.vitube.online_learning.service.UserService;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Lớp điều khiển xử lý các yêu cầu liên quan đến người dùng.
@@ -82,4 +81,6 @@ public class UserController {
 //        return ApiResponse.<List<String>>builder().status(1000).data(response).build();
         return null;
     }
+
+
 }

@@ -1,19 +1,6 @@
 package com.vitube.online_learning.service;
 
-import java.text.SimpleDateFormat;
-import java.util.*;
-
 import com.vitube.online_learning.dto.response.ApiResponse;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
-import com.vitube.online_learning.entity.Course;
-import com.vitube.online_learning.repository.CourseRepository;
-import com.vitube.online_learning.utils.HMACUtil;
-
-import lombok.RequiredArgsConstructor;
 
 /**
  * Interface cung cấp các phương thức liên quan đến dịch vụ ZaloPay.

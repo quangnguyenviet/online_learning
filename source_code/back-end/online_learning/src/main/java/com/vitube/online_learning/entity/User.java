@@ -1,15 +1,13 @@
 package com.vitube.online_learning.entity;
 
+import com.vitube.online_learning.enums.GenderEnum;
+import jakarta.persistence.*;
+import lombok.*;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
-
-import jakarta.persistence.*;
-
-import lombok.*;
-
-import com.vitube.online_learning.enums.GenderEnum;
 
 @Entity
 @Table(name = "user")

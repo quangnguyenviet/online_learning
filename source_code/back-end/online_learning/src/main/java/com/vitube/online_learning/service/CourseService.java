@@ -1,16 +1,14 @@
 package com.vitube.online_learning.service;
 
-import java.util.List;
-
 import com.vitube.online_learning.dto.CourseDTO;
 import com.vitube.online_learning.dto.ObjectiveDTO;
 import com.vitube.online_learning.dto.request.CourseCreattionRequest;
 import com.vitube.online_learning.dto.request.UpdateCourseRequest;
+import com.vitube.online_learning.entity.Course;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.vitube.online_learning.dto.request.CourseRequest;
-import com.vitube.online_learning.entity.Course;
+import java.util.List;
 
 /**
  * Interface cung cấp các phương thức liên quan đến khóa học.
@@ -78,11 +76,11 @@ public interface CourseService {
      */
     List<CourseDTO> getMyCourses();
 
-    /**
-     * Thiết lập giá cho khóa học.
-     *
-     * @param courseId ID của khóa học.
-     * @param price Giá của khóa học.
-     */
-    void setPrice(String courseId, Double price);
+    long countCourseByInstructorId(String instructorId);
+
+    long countPublishedCourseByInstructorId(String instructorId);
+
+    long countTotalStudentsByInstructorId(String instructorId);
+
+    long countTotalVideosByInstructorId(String instructorId);
 }
