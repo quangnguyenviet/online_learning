@@ -1,7 +1,7 @@
 package com.vitube.online_learning.repository;
 
 import com.vitube.online_learning.entity.Register;
-import com.vitube.online_learning.repository.projection.RegistrationStats;
+import com.vitube.online_learning.repository.projection.RegistrationStatsP;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,7 +27,7 @@ public interface RegisterRepository extends JpaRepository<Register, String> {
     GROUP BY DATE(r.register_date)
     ORDER BY registrationDay DESC
 """, nativeQuery = true)
-    List<RegistrationStats> countRegistrationsStatsByDay(
+    List<RegistrationStatsP> countRegistrationsStatsByDay(
             @Param("instructorId") String instructorId
     );
     
@@ -43,7 +43,7 @@ public interface RegisterRepository extends JpaRepository<Register, String> {
     GROUP BY YEARWEEK(r.register_date, 1)
     ORDER BY registrationDay DESC
 """, nativeQuery = true)
-    List<RegistrationStats> countRegistrationsStatsByWeek(
+    List<RegistrationStatsP> countRegistrationsStatsByWeek(
             @Param("instructorId") String instructorId
     );
     
@@ -59,7 +59,7 @@ public interface RegisterRepository extends JpaRepository<Register, String> {
     GROUP BY LAST_DAY(r.register_date)
     ORDER BY registrationDay DESC
 """, nativeQuery = true)
-    List<RegistrationStats> countRegistrationsStatsByMonth(
+    List<RegistrationStatsP> countRegistrationsStatsByMonth(
             @Param("instructorId") String instructorId
     );
 

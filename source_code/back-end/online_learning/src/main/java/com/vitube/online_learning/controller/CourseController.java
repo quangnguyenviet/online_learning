@@ -140,5 +140,16 @@ public class CourseController {
                 .data(response)
                 .build();
     }
-
+    
+    @PreAuthorize("hasAuthority('SCOPE_INSTRUCTOR')")
+    @PatchMapping("/{id}/publish")
+    public ApiResponse<CourseDTO> updateCoursePublishedStatus(
+            @PathVariable String id,
+            @RequestParam Boolean published) {
+        CourseDTO response = courseService.updatePublishedStatus(id, published);
+        return ApiResponse.<CourseDTO>builder()
+                .status(1000)
+                .data(response)
+                .build();
+    }
 }

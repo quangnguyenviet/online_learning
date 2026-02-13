@@ -36,6 +36,15 @@ public class InstructorDashboardController {
                 .build();
     }
 
-
-
+    @PreAuthorize("hasAuthority('SCOPE_INSTRUCTOR')")
+    @GetMapping("/instructor/stats/courses")
+    public ApiResponse<?> getInstructorCoursesStats(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size) {
+        log.info("Inside getInstructorCoursesStats() of InstructorDashboardController, page={}, size={}", page, size);
+        return ApiResponse.builder()
+                .status(1000)
+                .data(instructorDashboardService.getInstructorCoursesStats(page, size))
+                .build();
+    }
 }

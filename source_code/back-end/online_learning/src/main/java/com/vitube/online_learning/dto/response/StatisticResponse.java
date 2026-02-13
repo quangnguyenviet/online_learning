@@ -14,5 +14,5 @@ public class StatisticResponse {
     private BigDecimal totalIncome = BigDecimal.ZERO;
     private long totalRegistrations = 0;
     private int totalCourses = 0;
-    private List<CourseStatisticResponse> courseStats;
+    private List<CourseStatsResponse> courseStats;
 }

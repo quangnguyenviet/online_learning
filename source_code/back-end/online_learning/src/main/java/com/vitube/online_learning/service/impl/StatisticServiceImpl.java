@@ -1,6 +1,6 @@
 package com.vitube.online_learning.service.impl;
 
-import com.vitube.online_learning.dto.response.CourseStatisticResponse;
+import com.vitube.online_learning.dto.response.CourseStatsResponse;
 import com.vitube.online_learning.dto.response.InstructorStatisticResponse;
 import com.vitube.online_learning.dto.response.StatisticResponse;
 import com.vitube.online_learning.entity.Course;
@@ -38,7 +38,7 @@ public class StatisticServiceImpl implements StatisticService {
      */
     public StatisticResponse getCourseStatistic(String instructorId) {
         StatisticResponse response = new StatisticResponse();
-        List<CourseStatisticResponse> courseStatisticResponses = new ArrayList<>();
+        List<CourseStatsResponse> courseStatsRespons = new ArrayList<>();
         long totalRegistrations = 0;
         BigDecimal totalIncome = BigDecimal.ZERO;
         int totalCourses = 0;
@@ -58,7 +58,7 @@ public class StatisticServiceImpl implements StatisticService {
 
         // Tính toán thống kê cho từng khóa học
         for (Course course : courses) {
-            CourseStatisticResponse result = new CourseStatisticResponse();
+            CourseStatsResponse result = new CourseStatsResponse();
             result.setTitle(course.getTitle());
 
             result.setTotalRegistrations(course.getRegisters().size());
@@ -70,9 +70,9 @@ public class StatisticServiceImpl implements StatisticService {
             totalRegistrations += result.getTotalRegistrations();
             totalIncome = totalIncome.add(totalEarnings);
 
-            courseStatisticResponses.add(result);
+            courseStatsRespons.add(result);
         }
-        response.setCourseStats(courseStatisticResponses);
+        response.setCourseStats(courseStatsRespons);
         response.setTotalCourses(totalCourses);
         response.setTotalRegistrations(totalRegistrations);
         response.setTotalIncome(totalIncome);

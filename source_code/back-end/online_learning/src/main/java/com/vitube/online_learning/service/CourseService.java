@@ -83,4 +83,6 @@ public interface CourseService {
     long countTotalStudentsByInstructorId(String instructorId);
 
     long countTotalVideosByInstructorId(String instructorId);
+
+    CourseDTO updatePublishedStatus(String id, Boolean published);
 }

@@ -1,15 +1,21 @@
 package com.vitube.online_learning.service.impl;
 
+import com.vitube.online_learning.dto.response.CourseStatsResponse;
 import com.vitube.online_learning.dto.response.InstructorRegistrationChartResponse;
 import com.vitube.online_learning.dto.response.InstructorStatsSummaryResponse;
 import com.vitube.online_learning.entity.User;
+import com.vitube.online_learning.repository.CourseRepository;
 import com.vitube.online_learning.repository.RegisterRepository;
-import com.vitube.online_learning.repository.projection.RegistrationStats;
+import com.vitube.online_learning.repository.projection.CourseStatsP;
+import com.vitube.online_learning.repository.projection.RegistrationStatsP;
 import com.vitube.online_learning.service.CourseService;
 import com.vitube.online_learning.service.InstructorDashboardService;
 import com.vitube.online_learning.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -27,6 +33,7 @@ public class InstructorDashboardServiceImpl implements InstructorDashboardServic
     private final CourseService courseService;
     private final RegisterRepository registerRepository;
     private final UserService userService;
+    private final CourseRepository courseRepository;
 
     @Override
     public InstructorStatsSummaryResponse getInstructorDashboardSummary() {
@@ -62,7 +69,7 @@ public class InstructorDashboardServiceImpl implements InstructorDashboardServic
         User instructor = userService.getCurrentUser();
         String instructorId = instructor.getId();
 
-        List<RegistrationStats> list;
+        List<RegistrationStatsP> list;
         List<String> labels = new ArrayList<>();
         List<Integer> totals = new ArrayList<>();
         LocalDate today = LocalDate.now();
@@ -112,5 +119,27 @@ public class InstructorDashboardServiceImpl implements InstructorDashboardServic
         response.setTotalRegistrations(totals);
 
         return response;
+    }
+
+    @Override
+    public Page<CourseStatsResponse> getInstructorCoursesStats(int page, int size) {
+        User instructor = userService.getCurrentUser();
+        String instructorId = instructor.getId();
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<CourseStatsP> courseStatsPage = courseRepository.findTopCoursesByInstructor(instructorId, pageable);
+
+        return courseStatsPage.map(this::mapToCourseStatsResponse);
+    }
+
+    private CourseStatsResponse mapToCourseStatsResponse(CourseStatsP projection) {
+        return CourseStatsResponse.builder()
+                .id(projection.getId())
+                .title(projection.getTitle())
+                .totalRegistrations(projection.getTotalRegistrations() != null ? projection.getTotalRegistrations() : 0)
+                .totalEarnings(projection.getTotalEarnings() != null ? projection.getTotalEarnings() : BigDecimal.ZERO)
+                .totalDurationInSeconds(projection.getTotalDurationInSeconds() != null ? projection.getTotalDurationInSeconds() : 0L)
+                .published(projection.getPublished())
+                .build();
     }
 }

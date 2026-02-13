@@ -406,6 +406,11 @@ public class CourseServiceImpl implements CourseService {
         return courseRepository.countTotalVideosByInstructorId(instructorId);
     }
 
+    @Override
+    public CourseDTO updatePublishedStatus(String id, Boolean published) {
+        return null;
+    }
+
 
     /**
      * Tạo khóa học mới với một khóa duy nhất.

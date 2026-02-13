@@ -67,7 +67,7 @@ public class ZaloPayController {
             JSONObject dataJson = new JSONObject(data);
             String appTransId = dataJson.getString("app_trans_id");
             String appUser = dataJson.getString("app_user");
-            BigDecimal price = BigDecimal.valueOf(dataJson.getLong("amount")).divide(BigDecimal.valueOf(100));
+            BigDecimal price = BigDecimal.valueOf(dataJson.getLong("amount"));
 
             // get courseId from embeded_data
             String embededDataStr = dataJson.getString("embed_data");

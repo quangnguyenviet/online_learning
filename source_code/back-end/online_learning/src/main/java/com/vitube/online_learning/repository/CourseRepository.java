@@ -1,6 +1,7 @@
 package com.vitube.online_learning.repository;
 
 import com.vitube.online_learning.entity.Course;
+import com.vitube.online_learning.repository.projection.CourseStatsP;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -33,4 +34,21 @@ public interface CourseRepository extends  JpaRepository<Course, String> {
 
     @Query("SELECT COUNT(l) FROM Lesson l JOIN l.course c WHERE c.instructor.id = :instructorId")
     long countTotalVideosByInstructorId(@Param("instructorId") String instructorId);
+
+    @Query(value = """
+        SELECT 
+            c.id AS id,
+            c.title AS title,
+            c.published AS published,
+            COALESCE(SUM(r.price), 0) AS totalEarnings,
+            COUNT(r.id) AS totalRegistrations,
+            COALESCE(SUM(l.duration), 0) AS totalDurationInSeconds
+        FROM course c
+        LEFT JOIN register r ON r.course_id = c.id
+        LEFT JOIN lesson l ON l.course_id = c.id
+        WHERE c.instructor_id = :instructorId
+        GROUP BY c.id, c.title, c.published
+        ORDER BY totalEarnings DESC
+    """, nativeQuery = true)
+    Page<CourseStatsP> findTopCoursesByInstructor(@Param("instructorId") String instructorId, Pageable pageable);
 }

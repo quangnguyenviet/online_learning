@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import CourseCard from 'components/Course/CourseCard/CourseCard';
+import CourseListItem from 'components/Course/CourseListItem/CourseListItem';
 import styles from './CourseList.module.scss';
 import CourseApi from 'service/apis/CourseApi';
 
@@ -31,6 +31,14 @@ export default function CourseList() {
         navigate('/instructor/courses/add-new');
     };
 
+    const handleEditCourse = (courseId) => {
+        navigate(`/instructor/courses/${courseId}`);
+    };
+
+    const handleViewReport = (courseId) => {
+        navigate(`/instructor/courses/${courseId}/report`);
+    };
+
     return (
         <section className={styles['instructor-course-list-section']}>
             <div className={styles['instructor-course-list__header']}>
@@ -46,13 +54,13 @@ export default function CourseList() {
             ) : courses.length === 0 ? (
                 <div className={styles['instructor-course-list__empty']}>Bạn chưa tạo khóa học nào.</div>
             ) : (
-                <div className={styles['instructor-course-list__grid']}>
+                <div className={styles['instructor-course-list__list']}>
                     {courses.map((course) => (
-                        <CourseCard
+                        <CourseListItem
                             course={course}
                             key={course.id}
-                            handleClick={(id) => navigate(`/instructor/courses/${id}`)}
-                            showPrice={true}
+                            onEdit={handleEditCourse}
+                            onViewReport={handleViewReport}
                         />
                     ))}
                 </div>

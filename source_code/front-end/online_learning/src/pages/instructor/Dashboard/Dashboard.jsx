@@ -16,6 +16,14 @@ export default function InstructorDashboard() {
 		averageRating: 0.0
 	});
 
+	const [coursesData, setCoursesData] = useState({
+		courses: [],
+		totalPages: 0,
+		totalElements: 0,
+		currentPage: 0,
+		pageSize: 5
+	});
+
 	// dashboard summary data
 	const stats = [
 		{ 
@@ -55,65 +63,6 @@ export default function InstructorDashboard() {
 		},
 	];
 
-	// 3. Danh sách khóa học tiêu biểu
-	const featuredCourses = [
-		{ 
-			id: 1,
-			name: "React Fundamentals", 
-			status: "Published",
-			category: "Lập trình Web",
-			students: 312, 
-			revenue: "28.5M₫",
-			rating: 4.8,
-			lastUpdated: "2 ngày trước",
-			statusColor: "success"
-		},
-		{ 
-			id: 2,
-			name: "Advanced JavaScript", 
-			status: "Published",
-			category: "Lập trình Web",
-			students: 198, 
-			revenue: "18.2M₫",
-			rating: 4.6,
-			lastUpdated: "5 ngày trước",
-			statusColor: "success"
-		},
-		{ 
-			id: 3,
-			name: "Node.js API Design", 
-			status: "Draft",
-			category: "Backend",
-			students: 0, 
-			revenue: "0₫",
-			rating: 0,
-			lastUpdated: "1 giờ trước",
-			statusColor: "warning"
-		},
-		{ 
-			id: 4,
-			name: "Python for Beginners", 
-			status: "Published",
-			category: "Lập trình",
-			students: 245, 
-			revenue: "22.1M₫",
-			rating: 4.9,
-			lastUpdated: "1 tuần trước",
-			statusColor: "success"
-		},
-		{ 
-			id: 5,
-			name: "UI/UX Design Basics", 
-			status: "Published",
-			category: "Thiết kế",
-			students: 154, 
-			revenue: "16.6M₫",
-			rating: 4.7,
-			lastUpdated: "3 ngày trước",
-			statusColor: "success"
-		},
-	];
-
 	const fetchDashboardSummary = async () => {
 		try {
 			const response = await InstructorDashboardApi.getInstructorDashboardSummary();
@@ -127,9 +76,30 @@ export default function InstructorDashboard() {
 		}
 	};
 
+	const fetchCoursesStats = async (page = 0, size = 1) => {
+		try {
+			const response = await InstructorDashboardApi.getCoursesStats(page, size);
+			if (response.status === 1000 && response.data) {
+				const data = response.data;
+				console.log("Courses Stats Data:", data);
+				setCoursesData({
+					courses: data.content || [],
+					totalPages: data.totalPages || 0,
+					totalElements: data.totalElements || 0,
+					currentPage: data.number || 0,
+					pageSize: data.size || 5
+				});
+			}
+		} catch (error) {
+			console.error("Error fetching courses stats:", error);
+		}
+	};
+
 	useEffect(() => {
 		// call api to fetch dashboard summary
 		fetchDashboardSummary();
+		// call api to fetch courses stats
+		fetchCoursesStats();
 	}, []);
 
 	return (
@@ -141,7 +111,10 @@ export default function InstructorDashboard() {
 			<StatsGrid stats={stats} />
 
 			{/* 3. Danh sách khóa học */}
-			<CoursesSection featuredCourses={featuredCourses} />
+			<CoursesSection 
+				coursesData={coursesData} 
+				onPageChange={fetchCoursesStats}
+			/>
 		</div>
 	);
 }

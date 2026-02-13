@@ -1,5 +1,6 @@
 package com.vitube.online_learning.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -9,8 +10,13 @@ import java.math.BigDecimal;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CourseStatisticResponse {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class CourseStatsResponse {
+    private String id;
     private String title;
     private int totalRegistrations;
     private BigDecimal totalEarnings;
+    private long totalDurationInSeconds;
+    private Boolean published;
+
 }
