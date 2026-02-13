@@ -408,7 +408,13 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public CourseDTO updatePublishedStatus(String id, Boolean published) {
-        return null;
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
+
+        course.setPublished(published);
+        Course saved = courseRepository.save(course);
+
+        return courseMapper.toDto(saved);
     }
 
 
