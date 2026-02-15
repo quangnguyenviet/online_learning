@@ -36,6 +36,13 @@ export default function CourseListItem(props) {
         setIsModalOpen(false);
     };
 
+    const calculateDiscountedPrice = (price, discount) => {
+        if (discount > 0) {
+            return price - (price * discount / 100);
+        }
+        return price;
+    };
+
     return (
         <div className="course-list-item">
             <div className="course-list-item__image-wrapper">
@@ -72,7 +79,7 @@ export default function CourseListItem(props) {
                 <div className="course-list-item__pricing">
                     <div className="course-list-item__price">
                         <span className="course-list-item__price-label">Giá:</span>
-                        <span className="course-list-item__price-value">{formatCurrency(course.price)} VND</span>
+                        <span className="course-list-item__price-value">{formatCurrency(calculateDiscountedPrice(course.price, course.discount))} VND</span>
                         {course.discount > 0 && (
                             <span className="course-list-item__discount">-{course.discount}%</span>
                         )}
