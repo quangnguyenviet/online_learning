@@ -39,8 +39,14 @@ export default function CourseList() {
         navigate(`/instructor/courses/${courseId}/report`);
     };
 
-    const handlePublishCourse = (courseId) => {
-        navigate(`/instructor/courses/${courseId}`);
+    const handlePublishCourse = async (courseId) => {
+        try {
+            const response = await CourseApi.publishCourse(courseId);
+            console.log('Published course:', response);
+            fetchCourses(); // Refresh the course list
+        } catch (error) {
+            console.error('Error publishing course:', error);
+        }
     };
 
     return (

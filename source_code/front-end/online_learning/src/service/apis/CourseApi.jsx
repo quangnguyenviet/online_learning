@@ -28,6 +28,7 @@ class CourseApi {
     }
 
     // instructor only
+
     // static async getMyCourses(){
     //     const response = await apiClient.get(`/courses/my-courses`);
     //     const json = response.data;
@@ -47,6 +48,12 @@ class CourseApi {
 
     static async getCourseById(courseId){
         const response = await apiClient.get(`/courses/${courseId}`);
+        const json = response.data;
+        return json;
+    }
+
+    static async publishCourse(courseId, isPublished){
+        const response = await apiClient.patch(`/instructor/courses/${courseId}/publish?published=${isPublished}`);
         const json = response.data;
         return json;
     }

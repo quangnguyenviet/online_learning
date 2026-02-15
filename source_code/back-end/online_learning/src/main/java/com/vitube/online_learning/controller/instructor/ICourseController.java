@@ -1,14 +1,12 @@
 package com.vitube.online_learning.controller.instructor;
 
+import com.vitube.online_learning.dto.CourseDTO;
 import com.vitube.online_learning.dto.response.ApiResponse;
 import com.vitube.online_learning.service.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/instructor/courses")
@@ -23,6 +21,18 @@ public class ICourseController {
                                                      @RequestParam(defaultValue = "10") int size) {
         Page<?> response = courseService.getMyCourses(page, size);
         return ApiResponse.builder()
+                .status(1000)
+                .data(response)
+                .build();
+    }
+
+    @PreAuthorize("hasAuthority('SCOPE_INSTRUCTOR')")
+    @PatchMapping("/{id}/publish")
+    public ApiResponse<CourseDTO> updateCoursePublishedStatus(
+            @PathVariable String id,
+            @RequestParam(defaultValue = "true") Boolean published) {
+        CourseDTO response = courseService.updatePublishedStatus(id, published);
+        return ApiResponse.<CourseDTO>builder()
                 .status(1000)
                 .data(response)
                 .build();

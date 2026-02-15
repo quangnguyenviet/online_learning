@@ -11,6 +11,7 @@ import PublishControl from "./components/PublishControl";
 import useEditModal from "./hooks/useEditModal";
 import { useSuccess } from "components/common/SucessDisplay/SuccessDisplay";
 import Objective from "./components/Objective";
+import CourseApi from "service/apis/CourseApi";
 
 export const ModalContext = createContext(null);
 
@@ -35,9 +36,17 @@ export default function ViewDetail() {
             });
     }, [courseId]);
 
-    const handleTogglePublish = () => {
-        console.log("Toggle publish status");
-        // TODO: Implement publish/unpublish logic
+    const handleTogglePublish = async (isPublished) => {
+        console.log("Toggle publish status", isPublished);
+
+        try {
+            const response = await CourseApi.publishCourse(courseId, isPublished);
+            console.log("Publish response:", response);
+            showSuccess("Cập nhật trạng thái khóa học thành công!");
+            setData(prev => ({ ...prev, published: isPublished }));
+        } catch (error) {
+            console.error("Error updating publish status:", error);
+        }
     };
 
     if (loading) {
@@ -58,8 +67,10 @@ export default function ViewDetail() {
                 <h1 className={styles.mainTitle}>📘 Chi tiết khóa học</h1>
 
                 <PublishControl 
-                    isPublished={false} 
-                    onToggle={handleTogglePublish} 
+                    isPublished={data.published} 
+                    onToggle={handleTogglePublish}
+                    courseTitle={data.title}
+                    courseId={courseId}
                 />
 
                 <CourseSection

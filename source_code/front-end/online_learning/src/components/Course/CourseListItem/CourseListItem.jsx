@@ -1,8 +1,13 @@
 import { FaEdit, FaChartBar, FaUsers, FaCheck, FaTimes, FaRegClock } from 'react-icons/fa';
+import { useState } from 'react';
+import Modal from 'react-modal';
 import "./CourseListItem.scss";
+
+Modal.setAppElement('#root');
 
 export default function CourseListItem(props) {
     const { course, onEdit, onViewReport, onPublish } = props;
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const formatCurrency = (value) => {
         return value?.toLocaleString() || 0;
@@ -21,6 +26,15 @@ export default function CourseListItem(props) {
     };
 
     const isPublished = course.status === 'PUBLISHED' || course.published === true;
+
+    const handlePublish = () => {
+        onPublish?.(course.id);
+        setIsModalOpen(false);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
 
     return (
         <div className="course-list-item">
@@ -125,7 +139,7 @@ export default function CourseListItem(props) {
                         </button>
                         <button
                             className="course-list-item__btn course-list-item__btn--publish"
-                            onClick={() => onPublish?.(course.id)}
+                            onClick={() => setIsModalOpen(true)}
                             title="Xuất bản"
                         >
                             <FaCheck /> Xuất bản
@@ -133,6 +147,43 @@ export default function CourseListItem(props) {
                     </>
                 )}
             </div>
+
+            <Modal
+                isOpen={isModalOpen}
+                onRequestClose={closeModal}
+                className="course-list-item__modal"
+                overlayClassName="course-list-item__modal-overlay"
+            >
+                <div className="course-list-item__modal-header">
+                    <h2>Xác nhận xuất bản khóa học</h2>
+                    <button
+                        className="course-list-item__modal-close"
+                        onClick={closeModal}
+                    >
+                        ×
+                    </button>
+                </div>
+                <div className="course-list-item__modal-body">
+                    <p>Bạn có chắc chắn muốn xuất bản khóa học "<strong>{course.title}</strong>"?</p>
+                    <p className="course-list-item__modal-note">
+                        Sau khi xuất bản, khóa học sẽ hiển thị cho học viên và không thể chỉnh sửa một số thông tin cơ bản.
+                    </p>
+                </div>
+                <div className="course-list-item__modal-footer">
+                    <button
+                        className="course-list-item__modal-btn course-list-item__modal-btn--cancel"
+                        onClick={closeModal}
+                    >
+                        Hủy
+                    </button>
+                    <button
+                        className="course-list-item__modal-btn course-list-item__modal-btn--confirm"
+                        onClick={handlePublish}
+                    >
+                        <FaCheck /> Xuất bản
+                    </button>
+                </div>
+            </Modal>
         </div>
     );
 }
