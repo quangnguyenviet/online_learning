@@ -5,6 +5,7 @@ import com.vitube.online_learning.dto.LessonDTO;
 import com.vitube.online_learning.dto.ObjectiveDTO;
 import com.vitube.online_learning.dto.request.CourseCreattionRequest;
 import com.vitube.online_learning.dto.request.UpdateCourseRequest;
+import com.vitube.online_learning.dto.response.InstructorCourseResponse;
 import com.vitube.online_learning.entity.Category;
 import com.vitube.online_learning.entity.Course;
 import com.vitube.online_learning.entity.Objective;
@@ -19,6 +20,7 @@ import com.vitube.online_learning.mapper.RequireMapper;
 import com.vitube.online_learning.repository.CategoryRepository;
 import com.vitube.online_learning.repository.CourseRepository;
 import com.vitube.online_learning.repository.UserRepository;
+import com.vitube.online_learning.repository.projection.InstructorCourseP;
 import com.vitube.online_learning.service.CourseService;
 import com.vitube.online_learning.service.LessonService;
 import com.vitube.online_learning.service.S3Service;
@@ -362,28 +364,40 @@ public class CourseServiceImpl implements CourseService {
     /**
      * Lấy danh sách các khóa học của giảng viên hiện tại.
      *
-     * @return Danh sách phản hồi khóa học của giảng viên hiện tại.
+     * @return Trang danh sách phản hồi khóa học của giảng viên hiện tại.
      */
     @Override
-    public List<CourseDTO> getMyCourses() {
+    public Page<InstructorCourseResponse> getMyCourses(int page, int size) {
         User instructor = userService.getCurrentUser();
-        List<CourseDTO> responseList = new ArrayList<>();
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
 
-        instructor.getCourses().forEach(course -> {
-            CourseDTO response = courseMapper.toDto(course);
+        Page<InstructorCourseP> coursePS = courseRepository.findCoursesByInstructorId(instructor.getId(), pageable);
 
-            response.setDuration(
-                    calculateCourseDuration(response.getLessons())
-            );
+        // map to InstructorCourseResponse
+        return coursePS.map(courseP -> {
+            InstructorCourseResponse res = new InstructorCourseResponse();
+            res.setId(courseP.getId());
+            res.setTitle(courseP.getTitle());
+            res.setPrice(courseP.getPrice());
+            res.setDiscount(courseP.getDiscount());
+            res.setImageUrl(courseP.getImageUrl());
+            res.setPublished(courseP.getPublished());
+            res.setCategoryName(courseP.getCategoryName());
+            res.setCreatedAt(courseP.getCreatedAt());
+            res.setUpdatedAt(courseP.getUpdatedAt());
+            res.setNumberOfLessons(courseP.getNumberOfLessons());
+            res.setTotalRegistrations(courseP.getTotalRegistrations());
+            res.setTotalEarnings(courseP.getTotalEarnings());
 
-            response.setNumberOfLessons(
-                    response.getLessons() != null ? response.getLessons().size() : 0
-            );
+            // Format duration string from seconds
+            long totalSeconds = courseP.getTotalDurationInSeconds() != null ? courseP.getTotalDurationInSeconds() : 0;
+            long hours = totalSeconds / 3600;
+            long minutes = (totalSeconds % 3600) / 60;
+            long seconds = totalSeconds % 60;
+            res.setDuration(hours + "h " + minutes + "m " + seconds + "s");
 
-            responseList.add(response);
+            return res;
         });
-
-        return responseList;
     }
 
     @Override

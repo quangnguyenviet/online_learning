@@ -13,7 +13,7 @@ export default function CourseList() {
         try {
             const response = await CourseApi.getMyCourses();
             console.log('Fetched courses:', response);
-            const data = response.data;
+            const data = response.data.content;
             setCourses(data);
             setLoading(false);
             return response;
@@ -39,6 +39,10 @@ export default function CourseList() {
         navigate(`/instructor/courses/${courseId}/report`);
     };
 
+    const handlePublishCourse = (courseId) => {
+        navigate(`/instructor/courses/${courseId}`);
+    };
+
     return (
         <section className={styles['instructor-course-list-section']}>
             <div className={styles['instructor-course-list__header']}>
@@ -61,6 +65,7 @@ export default function CourseList() {
                             key={course.id}
                             onEdit={handleEditCourse}
                             onViewReport={handleViewReport}
+                            onPublish={handlePublishCourse}
                         />
                     ))}
                 </div>

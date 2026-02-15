@@ -2,6 +2,7 @@ package com.vitube.online_learning.repository;
 
 import com.vitube.online_learning.entity.Course;
 import com.vitube.online_learning.repository.projection.CourseStatsP;
+import com.vitube.online_learning.repository.projection.InstructorCourseP;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -51,4 +52,27 @@ public interface CourseRepository extends  JpaRepository<Course, String> {
         ORDER BY totalEarnings DESC
     """, nativeQuery = true)
     Page<CourseStatsP> findTopCoursesByInstructor(@Param("instructorId") String instructorId, Pageable pageable);
+
+    // get courses for instructor
+    @Query(value = """
+        SELECT 
+            c.id AS id,
+            c.title AS title,
+            c.price AS price,
+            c.discount AS discount,
+            c.image_url AS imageUrl,
+            c.published AS published,
+            cat.name AS categoryName,
+            c.created_at AS createdAt,
+            (SELECT COUNT(l.id) FROM lesson l WHERE l.course_id = c.id) AS numberOfLessons,
+            (SELECT COALESCE(SUM(l.duration), 0) FROM lesson l WHERE l.course_id = c.id) AS totalDurationInSeconds,
+            (SELECT COUNT(r.id) FROM register r WHERE r.course_id = c.id) AS totalRegistrations,
+            (SELECT COALESCE(SUM(r.price), 0) FROM register r WHERE r.course_id = c.id) AS totalEarnings
+        FROM course c
+        LEFT JOIN category cat ON c.category_id = cat.id
+        WHERE c.instructor_id = :instructorId
+    """, nativeQuery = true)
+    Page<InstructorCourseP> findCoursesByInstructorId(@Param("instructorId") String instructorId, Pageable pageable);
+
+    Page<Course> findByInstructorId(String instructorId, Pageable pageable);
 }

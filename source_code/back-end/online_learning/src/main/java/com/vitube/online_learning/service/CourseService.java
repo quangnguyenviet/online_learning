@@ -74,7 +74,7 @@ public interface CourseService {
      *
      * @return Danh sách phản hồi khóa học của người dùng.
      */
-    List<CourseDTO> getMyCourses();
+    Page<?> getMyCourses(int page, int size);
 
     long countCourseByInstructorId(String instructorId);
 

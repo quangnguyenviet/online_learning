@@ -1,11 +1,23 @@
-import { FaEdit, FaChartBar, FaUsers, FaCheck, FaTimes } from 'react-icons/fa';
+import { FaEdit, FaChartBar, FaUsers, FaCheck, FaTimes, FaRegClock } from 'react-icons/fa';
 import "./CourseListItem.scss";
 
 export default function CourseListItem(props) {
-    const { course, onEdit, onViewReport } = props;
+    const { course, onEdit, onViewReport, onPublish } = props;
 
     const formatCurrency = (value) => {
         return value?.toLocaleString() || 0;
+    };
+
+    const formatDate = (dateString) => {
+        if (!dateString) return "Chưa có";
+        const date = new Date(dateString);
+        return date.toLocaleDateString('vi-VN', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
     };
 
     const isPublished = course.status === 'PUBLISHED' || course.published === true;
@@ -22,7 +34,10 @@ export default function CourseListItem(props) {
 
             <div className="course-list-item__content">
                 <div className="course-list-item__header">
-                    <h3 className="course-list-item__title">{course.title}</h3>
+                    <div>
+                        <h3 className="course-list-item__title">{course.title}</h3>
+                        <p className="course-list-item__category">{course.categoryName}</p>
+                    </div>
                     <div className={`course-list-item__status ${isPublished ? 'published' : 'unpublished'}`}>
                         {isPublished ? (
                             <>
@@ -40,17 +55,31 @@ export default function CourseListItem(props) {
                     {course.shortDesc || "Mô tả khóa học chưa có"}
                 </p>
 
+                <div className="course-list-item__pricing">
+                    <div className="course-list-item__price">
+                        <span className="course-list-item__price-label">Giá:</span>
+                        <span className="course-list-item__price-value">{formatCurrency(course.price)} VND</span>
+                        {course.discount > 0 && (
+                            <span className="course-list-item__discount">-{course.discount}%</span>
+                        )}
+                    </div>
+                    <div className="course-list-item__created-date">
+                        <span className="course-list-item__created-label">Ngày tạo:</span>
+                        <span className="course-list-item__created-value">{formatDate(course.createdAt)}</span>
+                    </div>
+                </div>
+
                 <div className="course-list-item__stats">
                     <div className="course-list-item__stat">
                         <FaUsers className="course-list-item__stat-icon" />
                         <span className="course-list-item__stat-label">Học viên:</span>
-                        <span className="course-list-item__stat-value">{course.studentCount || 0}</span>
+                        <span className="course-list-item__stat-value">{course.totalRegistrations || 0}</span>
                     </div>
 
                     <div className="course-list-item__stat">
                         <span className="course-list-item__stat-label">Doanh thu:</span>
                         <span className="course-list-item__stat-value">
-                            {formatCurrency(course.revenue)} VND
+                            {formatCurrency(course.totalEarnings)} VND
                         </span>
                     </div>
 
@@ -58,24 +87,51 @@ export default function CourseListItem(props) {
                         <span className="course-list-item__stat-label">Bài học:</span>
                         <span className="course-list-item__stat-value">{course.numberOfLessons || 0}</span>
                     </div>
+
+                    <div className="course-list-item__stat">
+                        <FaRegClock className="course-list-item__stat-icon" />
+                        <span className="course-list-item__stat-label">Thời lượng:</span>
+                        <span className="course-list-item__stat-value">{course.duration || "Chưa có"}</span>
+                    </div>
                 </div>
             </div>
 
             <div className="course-list-item__actions">
-                <button
-                    className="course-list-item__btn course-list-item__btn--edit"
-                    onClick={() => onEdit(course.id)}
-                    title="Chỉnh sửa"
-                >
-                    <FaEdit /> Chỉnh sửa
-                </button>
-                <button
-                    className="course-list-item__btn course-list-item__btn--report"
-                    onClick={() => onViewReport(course.id)}
-                    title="Xem báo cáo"
-                >
-                    <FaChartBar /> Báo cáo
-                </button>
+                {isPublished ? (
+                    <>
+                        <button
+                            className="course-list-item__btn course-list-item__btn--edit"
+                            onClick={() => onEdit(course.id)}
+                            title="Chỉnh sửa"
+                        >
+                            <FaEdit /> Chỉnh sửa
+                        </button>
+                        <button
+                            className="course-list-item__btn course-list-item__btn--report"
+                            onClick={() => onViewReport(course.id)}
+                            title="Xem báo cáo"
+                        >
+                            <FaChartBar /> Báo cáo
+                        </button>
+                    </>
+                ) : (
+                    <>
+                        <button
+                            className="course-list-item__btn course-list-item__btn--edit"
+                            onClick={() => onEdit(course.id)}
+                            title="Tiếp tục chỉnh sửa"
+                        >
+                            <FaEdit /> Tiếp tục chỉnh sửa
+                        </button>
+                        <button
+                            className="course-list-item__btn course-list-item__btn--publish"
+                            onClick={() => onPublish?.(course.id)}
+                            title="Xuất bản"
+                        >
+                            <FaCheck /> Xuất bản
+                        </button>
+                    </>
+                )}
             </div>
         </div>
     );

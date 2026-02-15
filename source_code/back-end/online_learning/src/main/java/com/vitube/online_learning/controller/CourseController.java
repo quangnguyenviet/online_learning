@@ -104,15 +104,15 @@ public class CourseController {
                 .build();
     }
 
-    @PreAuthorize("hasAuthority('SCOPE_INSTRUCTOR')")
-    @GetMapping("/my-courses")
-    public ApiResponse<List<CourseDTO>> getMyCourses() {
-        List<CourseDTO> response = courseService.getMyCourses();
-        return ApiResponse.<List<CourseDTO>>builder()
-                .status(1000)
-                .data(response)
-                .build();
-    }
+//    @PreAuthorize("hasAuthority('SCOPE_INSTRUCTOR')")
+//    @GetMapping("/my-courses")
+//    public ApiResponse<?> getMyCourses() {
+//        List<CourseDTO> response = courseService.getMyCourses();
+//        return ApiResponse.builder()
+//                .status(1000)
+//                .data(response)
+//                .build();
+//    }
 
 
 
