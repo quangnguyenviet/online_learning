@@ -24,6 +24,15 @@ public interface CourseRepository extends  JpaRepository<Course, String> {
 
     Page<Course> findByCategoryNameContaining(String categoryName, Pageable pageable);
 
+    // New: methods that filter only published courses
+    Page<Course> findByTitleContainingAndPublished(String title, Boolean published, Pageable pageable);
+
+    Page<Course> findByTitleContainingAndCategoryNameContainingAndPublished(String title, String categoryName, Boolean published, Pageable pageable);
+
+    Page<Course> findByCategoryNameContainingAndPublished(String categoryName, Boolean published, Pageable pageable);
+
+    Page<Course> findAllByPublished(Boolean published, Pageable pageable);
+
     Boolean existsByIdAndInstructorId(String id, String instructorId);
 
     long countCourseByInstructorId(String instructorId);

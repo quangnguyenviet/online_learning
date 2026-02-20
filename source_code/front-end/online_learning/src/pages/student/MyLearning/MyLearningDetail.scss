@@ -100,6 +100,7 @@
   transition: background 0.2s, box-shadow 0.2s, border 0.2s;
   border: 1.5px solid transparent;
   padding: 10px 12px;
+  position: relative;
 
   &:hover, &:focus {
     background: v.$primary-light;
@@ -107,6 +108,23 @@
     border: 1.5px solid v.$primary-dark;
     color: #fff;
     outline: none;
+  }
+
+  &.lesson-card--active {
+    background: v.$primary-light;
+    box-shadow: 0 4px 16px rgba(0,80,158,0.13);
+    border: 1.5px solid v.$primary-dark;
+    color: #fff;
+  }
+
+  &.lesson-card--active .lesson-card__title,
+  &.lesson-card--active .lesson-card__desc {
+    color: #fff;
+  }
+
+  &--completed {
+    border-color: #4caf50;
+    background: #f1f8f4;
   }
 
   &__body {
@@ -121,6 +139,33 @@
     margin-bottom: 4px;
     color: v.$primary-dark;
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  &__check-icon {
+    color: #4caf50;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    animation: checkAppear 0.3s ease-in-out;
+  }
+
+  &__completed-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #4caf50;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
   }
 
   &__desc {
@@ -128,6 +173,20 @@
     font-size: 0.98rem;
     margin-bottom: 0;
     width: 100%;
+  }
+}
+
+@keyframes checkAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 

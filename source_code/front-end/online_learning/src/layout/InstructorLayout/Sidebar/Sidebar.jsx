@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { FaChalkboardTeacher, FaBook, FaUser, FaSignOutAlt, FaBell, FaChevronDown } from "react-icons/fa";
+import { FaChalkboardTeacher, FaBook, FaUser, FaSignOutAlt, FaBell, FaChevronDown, FaUserGraduate } from "react-icons/fa";
 import { logout } from "utils/AuthUtil";
 import { useState } from "react";
 import styles from "./Sidebar.module.scss";
@@ -86,6 +86,19 @@ export default function Sidebar() {
                     >
                         <FaBell />
                         <span>Thông báo</span>
+                    </NavLink>
+                </li>
+
+                <li className={styles['sidebar__nav-item']}>
+                    <NavLink
+                        to="/"
+                        end
+                        className={({ isActive }) => 
+                            `${styles['sidebar__nav-link']}${isActive ? ' ' + styles.active : ''}`
+                        }
+                    >
+                        <FaUserGraduate />
+                        <span>Trang học sinh</span>
                     </NavLink>
                 </li>
 

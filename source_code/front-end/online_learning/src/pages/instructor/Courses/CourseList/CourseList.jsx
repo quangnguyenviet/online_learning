@@ -3,11 +3,14 @@ import { useEffect, useState } from 'react';
 import CourseListItem from 'components/Course/CourseListItem/CourseListItem';
 import styles from './CourseList.module.scss';
 import CourseApi from 'service/apis/CourseApi';
+import { useError } from 'components/common/ErrorDisplay/ErrorDisplay';
 
 export default function CourseList() {
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+
+    const { ErrorDisplay, showError } = useError();
 
     const fetchCourses = async () => {
         try {
@@ -36,12 +39,13 @@ export default function CourseList() {
     };
 
     const handleViewReport = (courseId) => {
-        navigate(`/instructor/courses/${courseId}/report`);
+        showError("Chức năng đang được phát triển. Vui lòng quay lại sau.");
+        // navigate(`/instructor/courses/${courseId}/report`);
     };
 
     const handlePublishCourse = async (courseId) => {
         try {
-            const response = await CourseApi.publishCourse(courseId);
+            const response = await CourseApi.publishCourse(courseId, true);
             console.log('Published course:', response);
             fetchCourses(); // Refresh the course list
         } catch (error) {
@@ -50,7 +54,10 @@ export default function CourseList() {
     };
 
     return (
+        <>
+        <ErrorDisplay />
         <section className={styles['instructor-course-list-section']}>
+            
             <div className={styles['instructor-course-list__header']}>
                 <h2 className={styles['instructor-course-list__title']}>
                     <i className="fas fa-book"></i> Khóa học của tôi
@@ -77,5 +84,7 @@ export default function CourseList() {
                 </div>
             )}
         </section>
+        </>
+        
     );
 }

@@ -1,6 +1,7 @@
 package com.vitube.online_learning.service.impl;
 
 import com.vitube.online_learning.dto.LessonDTO;
+import com.vitube.online_learning.dto.LessonProgressDTO;
 import com.vitube.online_learning.dto.request.CreateLessonRequest;
 import com.vitube.online_learning.dto.response.ApiResponse;
 import com.vitube.online_learning.dto.response.LessonResponse;
@@ -14,6 +15,7 @@ import com.vitube.online_learning.mapper.LessonMapper;
 import com.vitube.online_learning.repository.CourseRepository;
 import com.vitube.online_learning.repository.LessonRepository;
 import com.vitube.online_learning.repository.RegisterRepository;
+import com.vitube.online_learning.service.LessonProgressService;
 import com.vitube.online_learning.service.LessonService;
 import com.vitube.online_learning.service.S3Service;
 import com.vitube.online_learning.service.UserService;
@@ -44,6 +46,7 @@ public class LessonServiceImpl implements LessonService {
     private final VideoUtil videoUtil;
     private final RegisterRepository registerRepository;
     private final UserService userService;
+    private final LessonProgressService lessonProgressService;
 
     /**
      * Tạo khóa duy nhất cho bài học.
@@ -116,12 +119,23 @@ public class LessonServiceImpl implements LessonService {
      */
     @Override
     public List<LessonResponse> getLessonOfCourse(String courseId) {
+        User currentUser = userService.getCurrentUser();
+        String uid = currentUser.getId();
+        validateCourseAccess(uid, courseId);
+
         List<LessonResponse> responses = new ArrayList<>();
 
         Course course = courseRepository.findById(courseId)
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
         course.getLessons().forEach(lesson -> {
-            responses.add(lessonMapper.lessonToLessonResponse(lesson));
+            // get lessonProgress by uid and lessonId
+            LessonProgressDTO lessonProgressDTO = lessonProgressService.getLessonProgress(uid, lesson.getId());
+
+            LessonResponse lessonResponse = lessonMapper.lessonToLessonResponse(lesson);
+            lessonResponse.setLessonProgressDTO(lessonProgressDTO);
+
+
+            responses.add(lessonResponse);
         });
         Collections.sort(responses);
         return responses;
@@ -228,5 +242,14 @@ public class LessonServiceImpl implements LessonService {
                 .build();
         return lessonDTO;
 
+    }
+    private void validateCourseAccess(String userId, String courseId) {
+        boolean hasAccess =
+                registerRepository.existsByStudentIdAndCourseId(userId, courseId) ||
+                        courseRepository.existsByIdAndInstructorId(courseId, userId);
+
+        if (!hasAccess) {
+            throw new AppException(ErrorCode.FORBIDDEN);
+        }
     }
 }

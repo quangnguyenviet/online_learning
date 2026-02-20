@@ -19,6 +19,7 @@ export default function CourseList(props) {
                     key={course.id}
                     handleClick={handleClick}
                     showPrice={true}
+                    showProgress={false}
                 />
             ))}
         </div>

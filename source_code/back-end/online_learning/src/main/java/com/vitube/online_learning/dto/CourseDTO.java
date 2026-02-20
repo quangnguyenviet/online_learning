@@ -33,4 +33,5 @@ public class CourseDTO {
     private CategoryDTO category;
     private int categoryId;
     private List<LessonDTO> lessons;
+    private Long completionPercentage;
 }

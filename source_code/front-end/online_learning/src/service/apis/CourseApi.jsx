@@ -27,6 +27,18 @@ class CourseApi {
         return json;
     }
 
+    // student
+    static async getLearningCourses(page, size){
+        const response = await apiClient.get(`/courses/learning`, {
+            params: {
+                page,
+                size
+            }
+        });
+        const json = response.data;
+        return json;
+    }
+
     // instructor only
 
     // static async getMyCourses(){

@@ -8,11 +8,13 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {LessonProgressMapper.class})
 public interface LessonMapper {
 
     LessonResponse lessonToLessonResponse(Lesson lesson);
 
+    
+    
     LessonDTO entityToDto(Lesson lesson);
 
     @BeanMapping(nullValuePropertyMappingStrategy  = NullValuePropertyMappingStrategy.IGNORE)

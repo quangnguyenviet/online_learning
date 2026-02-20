@@ -39,4 +39,7 @@ public class Lesson {
     private Boolean isPreview;
 
     private LocalDateTime createdAt;
+
+//    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private List<LessonProgress> lessonProgress;
 }

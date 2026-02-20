@@ -2,7 +2,7 @@ import { FaBook, FaRegClock } from 'react-icons/fa';
 import "./CourseCard.scss";
 
 export default function CourseCard(props) {
-    const { course, handleClick, showPrice } = props;
+    const { course, handleClick, showPrice, showProgress = true } = props;
 
     const getLevelClass = (level) => {
         if (!level) return "beginner";
@@ -74,6 +74,20 @@ export default function CourseCard(props) {
                             <FaBook /> {course.numberOfLessons} bài học
                         </span>
                     </div>
+                    {showProgress && course.completionPercentage !== undefined && course.completionPercentage !== null && (
+                        <div className="course-card__progress">
+                            <div className="course-card__progress-info">
+                                <span className="course-card__progress-label">Tiến độ học</span>
+                                <span className="course-card__progress-percent">{Math.round(course.completionPercentage)}%</span>
+                            </div>
+                            <div className="course-card__progress-bar">
+                                <div 
+                                    className="course-card__progress-fill" 
+                                    style={{ width: `${course.completionPercentage}%` }}
+                                ></div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

@@ -28,7 +28,7 @@ export default function Course() {
         <section className="course-section">
             <div className="course-section__container">
                 <h2 className="course-section__title">
-                    <i className="fas fa-graduation-cap"></i> Khóa học nổi bật
+                    <i className="fas fa-graduation-cap"></i> Khóa học của chúng tôi
                 </h2>
                 {query === "" ? (
                     <div className="course-section__list">

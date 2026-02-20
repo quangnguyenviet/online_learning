@@ -2,6 +2,8 @@ package com.vitube.online_learning.repository;
 
 import com.vitube.online_learning.entity.Register;
 import com.vitube.online_learning.repository.projection.RegistrationStatsP;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -62,5 +64,7 @@ public interface RegisterRepository extends JpaRepository<Register, String> {
     List<RegistrationStatsP> countRegistrationsStatsByMonth(
             @Param("instructorId") String instructorId
     );
+
+    Page<Register> findByStudentId(String userId, Pageable pageable);
 
 }

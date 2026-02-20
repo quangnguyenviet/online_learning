@@ -96,9 +96,12 @@ public class CourseController {
      * @return Phản hồi API chứa danh sách các khóa học đang học.
      */
     @GetMapping("/learning")
-    public ApiResponse<List<CourseDTO>> getLearningCourses() {
-        List<CourseDTO> response = courseService.getLearningCourses();
-        return ApiResponse.<List<CourseDTO>>builder()
+    public ApiResponse<Page<CourseDTO>> getLearningCourses(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size
+    ) {
+        Page<CourseDTO> response = courseService.getLearningCourses(page, size);
+        return ApiResponse.<Page<CourseDTO>>builder()
                 .status(1000)
                 .data(response)
                 .build();

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CourseCard from "components/Course/CourseCard/CourseCard";
 import styles from "./MyLearning.module.scss";
+import CourseApi from "service/apis/CourseApi";
 
 export default function MyLearning() {
     const URL = "http://localhost:8080/online_learning/courses/learning";
@@ -10,25 +11,23 @@ export default function MyLearning() {
     const token = localStorage.getItem("token");
     const navigate = useNavigate();
 
+    const fetchMyLearningCourses = async () => {
+        try {
+            const response = await CourseApi.getLearningCourses(0, 10);
+            console.log("Fetched learning courses:", response);
+            setCourses(response.data.content || []);
+        } catch (error) {
+            console.error("Error fetching learning courses:", error);
+        } finally {
+            setLoading(false);
+        }    
+    };
+        
+
     useEffect(() => {
-        fetch(URL, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data);
-                setCourses(data.data || []);
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-                setLoading(false);
-            });
-    }, [token]);
+        fetchMyLearningCourses();
+    }, []);
+    
 
     const handleClick = (courseId) => {
         navigate(`/my-learning/${courseId}`);

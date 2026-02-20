@@ -12,14 +12,7 @@ const ErrorDisplay = ({message, onDismiss}) => {
         return () => clearTimeout(timer);
     }, [message, onDismiss]);
     if(!message) return null;
-    // return (
-    //     <div className={styles.wrapper}>
-    //         <div className={styles.card}>
-    //             <span className={styles.message}>{message}</span>
-    //             <div className={styles.progress}></div>
-    //         </div>
-    //     </div>
-    // );
+  
     return createPortal(
         <div className={styles.wrapper}>
             <div className={styles.card}>
@@ -50,6 +43,7 @@ export const useError = () => {
         ),
         // Methods to control the error display
         showError,
-        dismissError
+        dismissError,
+        errorMessage
     };
 }

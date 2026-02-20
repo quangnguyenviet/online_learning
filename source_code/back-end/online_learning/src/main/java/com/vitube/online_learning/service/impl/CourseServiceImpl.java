@@ -6,10 +6,7 @@ import com.vitube.online_learning.dto.ObjectiveDTO;
 import com.vitube.online_learning.dto.request.CourseCreattionRequest;
 import com.vitube.online_learning.dto.request.UpdateCourseRequest;
 import com.vitube.online_learning.dto.response.InstructorCourseResponse;
-import com.vitube.online_learning.entity.Category;
-import com.vitube.online_learning.entity.Course;
-import com.vitube.online_learning.entity.Objective;
-import com.vitube.online_learning.entity.User;
+import com.vitube.online_learning.entity.*;
 import com.vitube.online_learning.enums.ErrorCode;
 import com.vitube.online_learning.enums.S3DeleteEnum;
 import com.vitube.online_learning.exception.AppException;
@@ -19,20 +16,15 @@ import com.vitube.online_learning.mapper.ObjectiveMapper;
 import com.vitube.online_learning.mapper.RequireMapper;
 import com.vitube.online_learning.repository.CategoryRepository;
 import com.vitube.online_learning.repository.CourseRepository;
+import com.vitube.online_learning.repository.RegisterRepository;
 import com.vitube.online_learning.repository.UserRepository;
 import com.vitube.online_learning.repository.projection.InstructorCourseP;
-import com.vitube.online_learning.service.CourseService;
-import com.vitube.online_learning.service.LessonService;
-import com.vitube.online_learning.service.S3Service;
-import com.vitube.online_learning.service.UserService;
+import com.vitube.online_learning.service.*;
 import com.vitube.online_learning.utils.FileUtil;
 import com.vitube.online_learning.utils.ValidateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -60,11 +52,13 @@ public class CourseServiceImpl implements CourseService {
     private final S3Service s3Service;
     private final CategoryRepository categoryRepository;
     private final LessonMapper lessonMapper;
+    private final LessonProgressService lessonProgressService;
+    private final RegisterRepository registerRepository;
 
 
     @Override
     public CourseDTO entityToDto(Course course) {
-        return null;
+        return courseMapper.toDto(course);
     }
 
     /**
@@ -269,7 +263,24 @@ public class CourseServiceImpl implements CourseService {
      * @param id ID của khóa học.
      */
     @Override
-    public void deleteCourse(String id) {}
+    @Transactional
+    public void deleteCourse(String id) {
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
+
+        // Delete image from S3 if exists
+        String imageUrl = course.getImageUrl();
+        if (imageUrl != null && imageUrl.contains("/")) {
+            String key = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
+            try {
+                s3Service.deleteFile(key, S3DeleteEnum.IMAGE.name());
+            } catch (Exception e) {
+                log.warn("Failed to delete course image from S3: {}", key);
+            }
+        }
+
+        courseRepository.delete(course);
+    }
 
 
     @Override
@@ -283,21 +294,21 @@ public class CourseServiceImpl implements CourseService {
         if (ValidateUtil.customValidateString(type)) {
             // have type and have quey
             if (ValidateUtil.customValidateString(keyword)) {
-                coursePage = courseRepository.findByTitleContainingAndCategoryNameContaining(keyword, type, pageable);
+                coursePage = courseRepository.findByTitleContainingAndCategoryNameContainingAndPublished(keyword, type, true, pageable);
 
             }
             else { // have type, no query
-                coursePage = courseRepository.findByCategoryNameContaining(type, pageable);
+                coursePage = courseRepository.findByCategoryNameContainingAndPublished(type, true, pageable);
 
             }
         }
         else{ // no type
             if(ValidateUtil.customValidateString(keyword)){ // no type, have query
-                coursePage = courseRepository.findByTitleContaining(keyword, pageable);
+                coursePage = courseRepository.findByTitleContainingAndPublished(keyword, true, pageable);
             }
             // no type, no query
             else{
-                coursePage = courseRepository.findAll(pageable);
+                coursePage = courseRepository.findAllByPublished(true, pageable);
             }
         }
         Page<CourseDTO> responsePage = coursePage.map(course -> {
@@ -344,19 +355,36 @@ public class CourseServiceImpl implements CourseService {
     /**
      * Lấy danh sách các khóa học mà người dùng đang học.
      *
-     * @return Danh sách phản hồi khóa học đang học.
+     * @return Trang danh sách phản hồi khóa học đang học.
      */
     @Override
-    public List<CourseDTO> getLearningCourses() {
-        List<CourseDTO> responses = new ArrayList<>();
-
+    public Page<CourseDTO> getLearningCourses(int page, int size) {
         User user = userService.getCurrentUser();
-        user.getRegisters().forEach(registration -> {
-            CourseDTO response = courseMapper.toDto(registration.getCourse());
-            responses.add(response);
+        String uid = user.getId();
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Register> registrationPage =
+                registerRepository.findByStudentId(uid, pageable);
+
+        return registrationPage.map(registration -> {
+            Course course = registration.getCourse();
+            CourseDTO response = courseMapper.toDto(course);
+
+            long finished = lessonProgressService
+                    .countFinishedLessons(uid, course.getId());
+
+            int totalLessons = course.getLessons().size();
+
+            long completion = 0;
+            if (totalLessons > 0) {
+                completion = (finished * 100) / totalLessons;
+            }
+
+            response.setCompletionPercentage(completion);
+            return response;
         });
-        return responses;
     }
+
 
 
 

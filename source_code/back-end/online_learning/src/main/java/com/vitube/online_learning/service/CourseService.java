@@ -65,7 +65,7 @@ public interface CourseService {
      *
      * @return Danh sách phản hồi khóa học đang học.
      */
-    List<CourseDTO> getLearningCourses();
+    Page<CourseDTO> getLearningCourses(int page, int size);
 
 
 

@@ -21,4 +21,5 @@ public class LessonDTO {
     private String courseId;
     private LocalDateTime createdAt;
     private Boolean isPreview;
+    private LessonProgressDTO lessonProgress;
 }
