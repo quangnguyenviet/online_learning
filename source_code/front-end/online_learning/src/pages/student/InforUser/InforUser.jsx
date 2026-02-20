@@ -130,7 +130,7 @@ export default function InforUser() {
                         <span className={styles['user-role']}>Học viên</span>
                     </div>
 
-                    <div className={styles['user-profile-card__stats']}>
+                    {/* <div className={styles['user-profile-card__stats']}>
                         <div className={styles['stat-item']}>
                             <span className={styles['stat-label']}>Khóa học đã tham gia</span>
                             <span className={styles['stat-value']}>{userStat.stats.coursesEnrolled}</span>
@@ -143,14 +143,14 @@ export default function InforUser() {
                             <span className={styles['stat-label']}>Tổng giờ học</span>
                             <span className={styles['stat-value']}>{userStat.stats.totalLearningHours}h</span>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* Details Section */}
                 <div className={styles['user-details']}>
                     <UserInfoSection userInfo={userInfo} />
 
-                    <div className={`${styles['user-details__section']} ${styles['courses-section']}`}>
+                    {/* <div className={`${styles['user-details__section']} ${styles['courses-section']}`}>
                         <h3>Khóa Học Của Tôi</h3>
                         <div className={styles['courses-section__list']}>
                             {enrolledCourses.map(course => (
@@ -171,7 +171,7 @@ export default function InforUser() {
                                 </div>
                             ))}
                         </div>
-                    </div>
+                    </div> */}
 
                     <div className={styles['user-details__actions']}>
                         <button className={`${styles.button} ${styles['button--secondary']}`}>

@@ -4,7 +4,8 @@ import {
     FaPlayCircle,
     FaExclamationCircle,
     FaDotCircle,
-    FaGraduationCap
+    FaGraduationCap,
+    FaTags
 } from "react-icons/fa";
 import styles from "./CourseDescription.module.scss";
 import ViewVideo from "components/ViewVideo/ViewVideo";
@@ -30,6 +31,8 @@ export default function CourseDescription({ course }) {
         return colorMap[level] || "#666";
     };
 
+    const categoryName = course?.category?.name || "";
+
     console.log(course);
     return (
         <div className={styles.container}>
@@ -45,6 +48,13 @@ export default function CourseDescription({ course }) {
                         >
                             {getLevelText(course.level)}
                         </span>
+                    </div>
+                )}
+                {categoryName && (
+                    <div className={styles.categoryInfo}>
+                        <FaTags className={styles.categoryIcon} />
+                        <span className={styles.categoryText}>Danh mục: </span>
+                        <span className={styles.categoryBadge}>{categoryName}</span>
                     </div>
                 )}
                 <p className={styles.description}>{course.description}</p>

@@ -40,6 +40,38 @@
     letter-spacing: 0.5px;
 }
 
+.categoryInfo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 14px 0;
+    padding: 8px 12px;
+    background: #f8fafc;
+    border-radius: 8px;
+    width: fit-content;
+}
+
+.categoryIcon {
+    font-size: 18px;
+    color: #3b82f6;
+    flex-shrink: 0;
+}
+
+.categoryText {
+    font-size: 14px;
+    font-weight: 500;
+    color: #475569;
+}
+
+.categoryBadge {
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: #e0f2fe;
+    color: #0369a1;
+    font-size: 12px;
+    font-weight: 600;
+}
+
 .title {
     font-size: 32px;
     font-weight: 800;
