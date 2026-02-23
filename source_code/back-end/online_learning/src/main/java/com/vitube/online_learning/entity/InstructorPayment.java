@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
  * Chứa thông tin về thanh toán và liên kết với thống kê của giảng viên.
  */
 @Entity
-@Table(name = "instructor_payment")
+@Table(name = "instructor_payments")
 @Getter
 @Setter
 @NoArgsConstructor

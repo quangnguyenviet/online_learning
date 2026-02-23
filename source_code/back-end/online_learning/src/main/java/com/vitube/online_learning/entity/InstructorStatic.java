@@ -9,7 +9,7 @@ import lombok.Setter;
  * Chứa thông tin về tháng, năm, tổng số lượt đăng ký và tổng thu nhập.
  */
 @Entity
-@Table(name = "instructor_statistic")
+@Table(name = "instructor_statistics")
 @Getter
 @Setter
 public class InstructorStatic {

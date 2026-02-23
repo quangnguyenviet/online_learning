@@ -49,6 +49,10 @@ public class SecurityConfig {
     @Lazy
     private MyJwtDecoder myJwtDecoder;
 
+    @Value("${frontend_url}")
+    private String frontendUrl;
+
+
     /**
      * Cấu hình chuỗi bộ lọc bảo mật.
      * Thiết lập các quy tắc phân quyền, xử lý token JWT, và tắt CSRF.
@@ -91,7 +95,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000")); // Chỉ định Frontend cụ thể
+        configuration.setAllowedOrigins(List.of(frontendUrl)); // Chỉ định Frontend cụ thể
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true); // Cho phép gửi Cookie / Authorization header

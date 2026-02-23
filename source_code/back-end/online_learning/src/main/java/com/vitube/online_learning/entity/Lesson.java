@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "lesson")
+@Table(name = "lessons")
 public class Lesson {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -33,7 +33,7 @@ public class Lesson {
     private long duration;
 
     @ManyToOne
-    @JoinColumn(name = "courseId")
+    @JoinColumn(name = "course_id")
     private Course course;
 
     private Boolean isPreview;

@@ -21,11 +21,11 @@ public interface RegisterRepository extends JpaRepository<Register, String> {
     SELECT 
         DATE(r.register_date) AS registrationDay,
         COUNT(r.id) AS totalRegistrations
-    FROM register r
-    JOIN course c ON r.course_id = c.id
+    FROM registers r
+    JOIN courses c ON r.course_id = c.id
     WHERE c.instructor_id = :instructorId
-      AND r.register_date >= CURDATE() - INTERVAL 6 DAY
-      AND r.register_date <= CURDATE()
+      AND r.register_date >= CURRENT_DATE - INTERVAL '6 days'
+      AND r.register_date <= CURRENT_DATE
     GROUP BY DATE(r.register_date)
     ORDER BY registrationDay DESC
 """, nativeQuery = true)
@@ -36,13 +36,13 @@ public interface RegisterRepository extends JpaRepository<Register, String> {
     
     @Query(value = """
     SELECT 
-        STR_TO_DATE(CONCAT(YEARWEEK(r.register_date, 1), ' Monday'), '%X%V %W') AS registrationDay,
+        date_trunc('week', r.register_date)::date AS registrationDay,
         COUNT(r.id) AS totalRegistrations
-    FROM register r
-    JOIN course c ON r.course_id = c.id
+    FROM registers r
+    JOIN courses c ON r.course_id = c.id
     WHERE c.instructor_id = :instructorId
-      AND r.register_date >= CURDATE() - INTERVAL 12 WEEK
-    GROUP BY YEARWEEK(r.register_date, 1)
+      AND r.register_date >= CURRENT_DATE - INTERVAL '12 weeks'
+    GROUP BY date_trunc('week', r.register_date)
     ORDER BY registrationDay DESC
 """, nativeQuery = true)
     List<RegistrationStatsP> countRegistrationsStatsByWeek(
@@ -52,13 +52,13 @@ public interface RegisterRepository extends JpaRepository<Register, String> {
     
     @Query(value = """
     SELECT 
-        LAST_DAY(r.register_date) AS registrationDay,
+        (date_trunc('month', r.register_date) + INTERVAL '1 month - 1 day')::date AS registrationDay,
         COUNT(r.id) AS totalRegistrations
-    FROM register r
-    JOIN course c ON r.course_id = c.id
+    FROM registers r
+    JOIN courses c ON r.course_id = c.id
     WHERE c.instructor_id = :instructorId
-      AND r.register_date >= CURDATE() - INTERVAL 12 MONTH
-    GROUP BY LAST_DAY(r.register_date)
+      AND r.register_date >= CURRENT_DATE - INTERVAL '12 months'
+    GROUP BY date_trunc('month', r.register_date)
     ORDER BY registrationDay DESC
 """, nativeQuery = true)
     List<RegistrationStatsP> countRegistrationsStatsByMonth(

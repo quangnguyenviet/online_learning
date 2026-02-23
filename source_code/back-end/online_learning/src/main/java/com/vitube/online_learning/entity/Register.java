@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "register")
+@Table(name = "registers")
 public class Register {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

@@ -3,6 +3,8 @@ package com.vitube.online_learning.entity;
 import com.vitube.online_learning.enums.GenderEnum;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -10,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -36,8 +38,13 @@ public class User {
     @Column
     private LocalDate dob;
 
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "gender")
+//    private GenderEnum gender;
+
     @Enumerated(EnumType.STRING)
-    @Column(name = "gender")
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "gender", columnDefinition = "gender_enum")
     private GenderEnum gender;
 
     @Column(name = "phone_number")
@@ -52,7 +59,7 @@ public class User {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "user_role",
+            name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_name")
     )

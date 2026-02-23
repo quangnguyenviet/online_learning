@@ -31,10 +31,6 @@
 		<java.version>21</java.version>
 	</properties>
 
-
-
-
-
 	<dependencies>
 
 <!--		spring data jpa-->
@@ -49,10 +45,10 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
-<!--		support connect with mysql-->
+<!--		support connect with postgres-->
 		<dependency>
-			<groupId>com.mysql</groupId>
-			<artifactId>mysql-connector-j</artifactId>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 <!--		-->
@@ -85,27 +81,11 @@
 			<artifactId>spring-security-crypto</artifactId>
 		</dependency>
 
-<!--		create jwt-->
-<!--		<dependency>-->
-<!--			<groupId>com.nimbusds</groupId>-->
-<!--			<artifactId>nimbus-jose-jwt</artifactId>-->
-<!--			<version>9.37.3</version>-->
-<!--		</dependency>-->
-<!--		-->
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
 		</dependency>
 
-
-<!--		<dependency>-->
-<!--			<groupId>com.cloudinary</groupId>-->
-<!--			<artifactId>cloudinary-http44</artifactId>-->
-<!--			<version>1.33.0</version>-->
-<!--		</dependency>-->
-
-<!--		 up anh len aws-->
 		<dependency>
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>s3</artifactId>
@@ -125,7 +105,7 @@
 			<version>20230227</version>
 		</dependency>
 
-<!--	 lay do dai video-->
+<!--		lay do dai video-->
 		<dependency>
 			<groupId>net.bramp.ffmpeg</groupId>
 			<artifactId>ffmpeg</artifactId>
@@ -145,18 +125,13 @@
         </dependency>
         <dependency>
             <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-mysql</artifactId>
+            <artifactId>flyway-database-postgresql</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
-
-
-
-
-
 
 
     </dependencies>

@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "objective")
+@Table(name = "objectives")
 @Entity
 public class Objective {
     @Id

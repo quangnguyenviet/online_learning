@@ -12,7 +12,7 @@ import java.util.Set;
  * Lớp thực thể đại diện cho khóa học trong hệ thống.
  * Chứa thông tin về khóa học như tiêu đề, giá, giảm giá, trạng thái xuất bản, và các liên kết với các thực thể khác.
  */
-@Table(name = "course")
+@Table(name = "courses")
 @Entity
 @Getter
 @Setter

@@ -53,10 +53,11 @@ public interface CourseRepository extends  JpaRepository<Course, String> {
             COALESCE(SUM(r.price), 0) AS totalEarnings,
             COUNT(r.id) AS totalRegistrations,
             COALESCE(SUM(l.duration), 0) AS totalDurationInSeconds
-        FROM course c
-        LEFT JOIN register r ON r.course_id = c.id
-        LEFT JOIN lesson l ON l.course_id = c.id
+        FROM courses c
+        LEFT JOIN registers r ON r.course_id = c.id
+        LEFT JOIN lessons l ON l.course_id = c.id
         WHERE c.instructor_id = :instructorId
+          AND c.published = true
         GROUP BY c.id, c.title, c.published
         ORDER BY totalEarnings DESC
     """, nativeQuery = true)
@@ -73,13 +74,14 @@ public interface CourseRepository extends  JpaRepository<Course, String> {
             c.published AS published,
             cat.name AS categoryName,
             c.created_at AS createdAt,
-            (SELECT COUNT(l.id) FROM lesson l WHERE l.course_id = c.id) AS numberOfLessons,
-            (SELECT COALESCE(SUM(l.duration), 0) FROM lesson l WHERE l.course_id = c.id) AS totalDurationInSeconds,
-            (SELECT COUNT(r.id) FROM register r WHERE r.course_id = c.id) AS totalRegistrations,
-            (SELECT COALESCE(SUM(r.price), 0) FROM register r WHERE r.course_id = c.id) AS totalEarnings
-        FROM course c
-        LEFT JOIN category cat ON c.category_id = cat.id
+            (SELECT COUNT(l.id) FROM lessons l WHERE l.course_id = c.id) AS numberOfLessons,
+            (SELECT COALESCE(SUM(l.duration), 0) FROM lessons l WHERE l.course_id = c.id) AS totalDurationInSeconds,
+            (SELECT COUNT(r.id) FROM registers r WHERE r.course_id = c.id) AS totalRegistrations,
+            (SELECT COALESCE(SUM(r.price), 0) FROM registers r WHERE r.course_id = c.id) AS totalEarnings
+        FROM courses c
+        LEFT JOIN categories cat ON c.category_id = cat.id
         WHERE c.instructor_id = :instructorId
+          AND c.published = true
     """, nativeQuery = true)
     Page<InstructorCourseP> findCoursesByInstructorId(@Param("instructorId") String instructorId, Pageable pageable);
 
