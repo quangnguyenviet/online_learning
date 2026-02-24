@@ -1,7 +1,9 @@
 import styles from './ErrorDisplay.module.css';
 import { useState, useEffect, useCallback } from 'react';
+import { memo } from 'react';
 import { createPortal } from 'react-dom';
-const ErrorDisplay = ({message, onDismiss}) => {
+
+const ErrorDisplayComponent = ({message, onDismiss}) => {
     // Auto-dismiss the error after 5 seconds
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -23,6 +25,7 @@ const ErrorDisplay = ({message, onDismiss}) => {
         document.body
     );
 }
+export const ErrorDisplay = memo(ErrorDisplayComponent);
 
 export const useError = () => {
     // State to hold the current error message
@@ -30,12 +33,12 @@ export const useError = () => {
     const showError = useCallback((message) => {
         setErrorMessage(message);
     }, []);
-    const dismissError = () => {
+    const dismissError = useCallback(() => {
         setErrorMessage(null);
-    };
+    }, []);
     return {
         // Component that renders the error display
-        ErrorDisplay: () => (
+        ErrorDisplay2: () => (
             <ErrorDisplay
                 message={errorMessage}
                 onDismiss={dismissError}
