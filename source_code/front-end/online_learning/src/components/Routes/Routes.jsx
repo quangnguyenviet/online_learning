@@ -24,7 +24,7 @@ import InstructorPayment from "pages/admin/InstructorPayment";
 import AdminLayout from "layout/AdminLayout";
 import { User } from "pages/admin/User";
 import AdminLogin from "pages/admin/AdminLogin";
-import Signup from "pages/student/SignUp";
+import Signup from "pages/student/SignUp/SignUp";
 import SignupInstructor from "pages/instructor/SignUp/SignUp";
 import Logout from "components/Logout";
 import AddNewCourse from "pages/instructor/Courses/AddNewCourse/AddNewCourse";

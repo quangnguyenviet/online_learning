@@ -7,6 +7,7 @@ import { useError } from 'components/common/ErrorDisplay/ErrorDisplay';
 export default function Signup() {
   const navigate = useNavigate();
   const {ErrorDisplay, showError} = useError();
+  const [isLoading, setIsLoading] = useState(false);
 
   const createUser = async (data) => {
     try {
@@ -18,7 +19,7 @@ export default function Signup() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
@@ -31,10 +32,9 @@ export default function Signup() {
 
     delete data.password2; // delete confirm password field
 
-    createUser(data);
-
-    
-
+    setIsLoading(true);
+    await createUser(data);
+    setIsLoading(false);
   };
 
   return (
@@ -64,7 +64,9 @@ export default function Signup() {
         </div>
 
 
-        <button type="submit" className={styles.btnSubmit}>Đăng ký</button>
+        <button type="submit" className={styles.btnSubmit} disabled={isLoading}>
+          {isLoading ? 'Đang đăng ký...' : 'Đăng ký'}
+        </button>
         <div className={styles.formFooter}>
           <p>Đã có tài khoản? <Link to="/login">Đăng nhập</Link></p>
         </div>

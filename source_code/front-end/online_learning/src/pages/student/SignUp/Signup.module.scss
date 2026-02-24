@@ -32,7 +32,13 @@
   h2 {
     text-align: center;
     margin-bottom: 10px;
-    color: var(--color-text);
+    color: #1a1a1a;
+    font-weight: 700;
+    font-size: 24px;
+    text-rendering: geometricPrecision;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.5px;
   }
 
   p {
@@ -75,10 +81,16 @@
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
 
-    &:hover {
+    &:hover:not(:disabled) {
       background-color: var(--color-primary-hover);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      background-color: var(--color-primary);
     }
   }
 
