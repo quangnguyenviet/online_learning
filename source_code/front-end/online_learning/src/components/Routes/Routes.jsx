@@ -4,7 +4,7 @@ import Contact from "../../pages/student/Contact";
 import Error404 from "../../pages/common/Error404";
 import Home from "../../pages/student/Home/Home";
 import InforUser from "../../pages/student/InforUser/InforUser";
-import Login from "../../pages/common/Login";
+import Login from "../../pages/common/Login/Login";
 import PrivateRouter from "../PrivateRouter";
 import CourseDetail from "../../pages/student/CourseDetail/CourseDetail";
 import MyLearning from "../../pages/student/MyLearning/MyLearning";

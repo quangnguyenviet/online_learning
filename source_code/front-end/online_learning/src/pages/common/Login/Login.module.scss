@@ -19,7 +19,13 @@
 
   h2 {
     margin-bottom: 12px;
-    color: var(--color-text);
+    color: #1a1a1a;
+    font-weight: 700;
+    font-size: 24px;
+    text-rendering: geometricPrecision;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.5px;
   }
 
   p {
