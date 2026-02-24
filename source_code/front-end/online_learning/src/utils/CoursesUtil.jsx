@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8080/online_learning/courses";
+const BASE_URL = `${process.env.REACT_APP_API_URL}/courses`;
 
 // const token = localStorage.getItem("token");
 

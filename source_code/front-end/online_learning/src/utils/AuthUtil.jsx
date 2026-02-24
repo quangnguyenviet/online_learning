@@ -31,7 +31,7 @@ export async function authenticate(data) {
 export function logout(redirectUrl = '/login') {
     const token = localStorage.getItem("token");
     
-    fetch('http://localhost:8080/online_learning/auth/logout', {
+    fetch(`${BASE_URL}/auth/logout`, {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json',
