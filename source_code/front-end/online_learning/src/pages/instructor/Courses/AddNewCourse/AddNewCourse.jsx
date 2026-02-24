@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FaCloudUploadAlt, FaSave, FaTimes, FaPlus } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import styles from './AddNewCourse.module.scss';
 import { useError } from 'components/common/ErrorDisplay/ErrorDisplay';
 import CategoryApi from 'service/apis/CategoryApi';
@@ -7,6 +8,7 @@ import CourseApi from 'service/apis/CourseApi';
 import { useLoading } from 'components/common/Loading/Loading';
 
 export default function AddNewCourse() {
+    const navigate = useNavigate();
     const [thumbnail, setThumbnail] = useState(null);
     const [categories, setCategories] = useState([]);
 
@@ -97,9 +99,9 @@ export default function AddNewCourse() {
         try {
             const response = await CourseApi.createCourse(formData);
             hideLoading();
-            // Redirect to course details or another page if needed
-            // window.location.href = `/instructor/courses/${response.data.id}`;
+            navigate('/instructor/courses');
         } catch (error) {
+            hideLoading();
             showError('Đã xảy ra lỗi khi tạo khóa học. Vui lòng thử lại sau.');
         }
 
@@ -207,7 +209,7 @@ export default function AddNewCourse() {
                                         <p>Kéo thả hoặc nhấp để tải lên</p>
                                     </div>
                                 )}
-                                <input type="file" name='imageFile' required onChange={handleFileChange} />
+                                <input type="file" name='imageFile' required onChange={handleFileChange} accept="image/*" />
                             </div>
                         </section>
 
