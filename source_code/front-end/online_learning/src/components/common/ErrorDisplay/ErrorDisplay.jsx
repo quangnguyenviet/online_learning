@@ -37,13 +37,6 @@ export const useError = () => {
         setErrorMessage(null);
     }, []);
     return {
-        // Component that renders the error display
-        ErrorDisplay2: () => (
-            <ErrorDisplay
-                message={errorMessage}
-                onDismiss={dismissError}
-            />
-        ),
         // Methods to control the error display
         showError,
         dismissError,
