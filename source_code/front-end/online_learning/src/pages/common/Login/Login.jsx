@@ -4,10 +4,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import AuthApi from 'service/apis/AuthApi';
 import { useError } from 'components/common/ErrorDisplay/ErrorDisplay';
+import { ErrorDisplay } from 'components/common/ErrorDisplay/ErrorDisplay';
 
 export default function Login() {
     const navigate = useNavigate();
-    const { ErrorDisplay, showError } = useError();
+    const { showError, dismissError, errorMessage } = useError();
     const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async (e) => {
@@ -44,7 +45,7 @@ export default function Login() {
 
     return (
         <>
-        <ErrorDisplay />
+        <ErrorDisplay message={errorMessage} onDismiss={dismissError} />
          <div className={styles['login-container']}>
             <Link to="/" className={styles['back-to-home']}>← Trang chủ</Link>
 
