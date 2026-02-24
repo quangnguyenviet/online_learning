@@ -81,7 +81,6 @@ public interface CourseRepository extends  JpaRepository<Course, String> {
         FROM courses c
         LEFT JOIN categories cat ON c.category_id = cat.id
         WHERE c.instructor_id = :instructorId
-          AND c.published = true
     """, nativeQuery = true)
     Page<InstructorCourseP> findCoursesByInstructorId(@Param("instructorId") String instructorId, Pageable pageable);
 
