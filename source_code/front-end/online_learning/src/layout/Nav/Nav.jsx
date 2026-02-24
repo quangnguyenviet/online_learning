@@ -34,10 +34,10 @@ function Nav() {
     return (
         <nav className={styles['navbar']}>
             <div className={styles['navbar__container']}>
-                <div className={styles['navbar__logo']}>
+                <Link to="/" className={styles['navbar__logo']}>
                     <img src="https://png.pngtree.com/png-vector/20240708/ourmid/pngtree-cartoon-turtle-png-image_13034273.png" alt="logo" />
                     <span>Online Learning</span>
-                </div>
+                </Link>
                 <ul className={styles['navbar__menu']}>
                     <li><NavLink to="/" className={styles['navbar__link']}>Trang chủ</NavLink></li>
                     <li><NavLink to="/contact" className={styles['navbar__link']}>Liên hệ</NavLink></li>

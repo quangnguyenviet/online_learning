@@ -1,4 +1,4 @@
-import LayoutDefault from "../../layout/StudentLayout";
+import LayoutDefault from "../../layout/StudentLayout/StudentLayout";
 import About from "../../pages/student/About";
 import Contact from "../../pages/student/Contact";
 import Error404 from "../../pages/common/Error404";
@@ -10,7 +10,7 @@ import CourseDetail from "../../pages/student/CourseDetail/CourseDetail";
 import MyLearning from "../../pages/student/MyLearning/MyLearning";
 import MyLearningDetail from "../../pages/student/MyLearning/MyLearningDetail";
 import UploadVideo from "../../pages/student/UploadVideo";
-import StudentLayout from "../../layout/StudentLayout";
+import StudentLayout from "../../layout/StudentLayout/StudentLayout";
 import InstructorLayout from "../../layout/InstructorLayout";
 import Dashboard from "../../pages/instructor/Dashboard/Dashboard";
 import * as Guard from "service/Guard";
