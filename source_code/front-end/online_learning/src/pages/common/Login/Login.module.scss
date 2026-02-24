@@ -74,9 +74,16 @@
       border-radius: 6px;
       font-size: 16px;
       cursor: pointer;
+      transition: all 0.3s ease;
 
-      &:hover {
+      &:hover:not(:disabled) {
         background-color: var(--color-primary-hover);
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        background-color: var(--color-primary);
       }
     }
   }

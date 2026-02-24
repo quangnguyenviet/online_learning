@@ -1,42 +1,45 @@
 import styles from './Login.module.scss';
 import StorageService from 'service/StorageService';
 import { Link, useNavigate } from 'react-router-dom';
-import React from 'react';
+import React, { useState } from 'react';
 import AuthApi from 'service/apis/AuthApi';
 import { useError } from 'components/common/ErrorDisplay/ErrorDisplay';
 
 export default function Login() {
     const navigate = useNavigate();
     const { ErrorDisplay, showError } = useError();
+    const [isLoading, setIsLoading] = useState(false);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         const formData = new FormData(e.target);
         const data = Object.fromEntries(formData.entries());
 
-        AuthApi.login(data)
-            .then((response) => {
-                if (response.status === 1000) {
-                    const data = response.data;
-                    StorageService.saveToken(data.token);
-                    StorageService.saveRole(data.roles);
-                    if (data.roles.includes('ADMIN')) {
-                        navigate('/admin/dashboard');
-                    }
-                    else if (data.roles.includes('INSTRUCTOR')) {
-                        navigate('/instructor/dashboard');
-                    }
-                    else if (data.roles.includes('STUDENT')) {
-                        navigate('/');
-                    }
+        try {
+            const response = await AuthApi.login(data);
+            if (response.status === 1000) {
+                const data = response.data;
+                StorageService.saveToken(data.token);
+                StorageService.saveRole(data.roles);
+                if (data.roles.includes('ADMIN')) {
+                    navigate('/admin/dashboard');
                 }
-                else{
-                    console.log('Login failed:', response);
+                else if (data.roles.includes('INSTRUCTOR')) {
+                    navigate('/instructor/dashboard');
                 }
-            })
-            .catch((error) => {
-                showError(error.response?.data?.message || 'Đã có lỗi xảy ra trong quá trình đăng nhập.');
-            });
+                else if (data.roles.includes('STUDENT')) {
+                    navigate('/');
+                }
+            }
+            else{
+                console.log('Login failed:', response);
+            }
+        } catch (error) {
+            showError(error.response?.data?.message || 'Đã có lỗi xảy ra trong quá trình đăng nhập.');
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -58,7 +61,9 @@ export default function Login() {
                 </div>
 
                 <div className={styles['form-actions']}>
-                    <button type="submit">Đăng nhập</button>
+                    <button type="submit" disabled={isLoading}>
+                        {isLoading ? 'Đang đăng nhập...' : 'Đăng nhập'}
+                    </button>
                 </div>
 
                 <div className={styles['form-footer']}>
@@ -69,7 +74,6 @@ export default function Login() {
                         <li><Link to="/signup/instructor">Đăng ký giảng viên</Link></li>
                     </ul>
 
-                    {/* <p><Link to="/" className="back-home">← Quay về trang chủ</Link></p> */}
                 </div>
             </form>
         </div>
