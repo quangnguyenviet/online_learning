@@ -2,6 +2,7 @@ package com.vitube.online_learning.service;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -9,15 +10,8 @@ import java.io.IOException;
  */
 public interface S3Service {
 
-    /**
-     * Tải lên file vào bucket private.
-     *
-     * @param file Tệp tin cần tải lên.
-     * @param key Khóa định danh của tệp tin.
-     * @return URL của tệp tin sau khi tải lên.
-     * @throws IOException Lỗi xảy ra khi xử lý tệp.
-     */
-    public String uploadPrivate(MultipartFile file, String key) throws IOException;
+
+    public String uploadPrivate(File file, String key) throws IOException;
 
     /**
      * Tải lên file vào bucket public (có thể truy cập trực tiếp qua URL).

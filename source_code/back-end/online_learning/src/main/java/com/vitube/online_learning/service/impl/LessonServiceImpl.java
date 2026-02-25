@@ -9,16 +9,14 @@ import com.vitube.online_learning.entity.Course;
 import com.vitube.online_learning.entity.Lesson;
 import com.vitube.online_learning.entity.User;
 import com.vitube.online_learning.enums.ErrorCode;
+import com.vitube.online_learning.enums.LessonStatusEnum;
 import com.vitube.online_learning.enums.S3DeleteEnum;
 import com.vitube.online_learning.exception.AppException;
 import com.vitube.online_learning.mapper.LessonMapper;
 import com.vitube.online_learning.repository.CourseRepository;
 import com.vitube.online_learning.repository.LessonRepository;
 import com.vitube.online_learning.repository.RegisterRepository;
-import com.vitube.online_learning.service.LessonProgressService;
-import com.vitube.online_learning.service.LessonService;
-import com.vitube.online_learning.service.S3Service;
-import com.vitube.online_learning.service.UserService;
+import com.vitube.online_learning.service.*;
 import com.vitube.online_learning.utils.FileUtil;
 import com.vitube.online_learning.utils.VideoUtil;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +45,7 @@ public class LessonServiceImpl implements LessonService {
     private final RegisterRepository registerRepository;
     private final UserService userService;
     private final LessonProgressService lessonProgressService;
+    private final VideoService videoService;
 
     /**
      * Tạo khóa duy nhất cho bài học.
@@ -59,6 +58,8 @@ public class LessonServiceImpl implements LessonService {
         return now.format(formatter);
     }
 
+
+
     /**
      * Tạo bài học mới và tải video lên S3.
      *
@@ -68,23 +69,6 @@ public class LessonServiceImpl implements LessonService {
      */
     @Override
     public ApiResponse<?> createLesson(CreateLessonRequest request, MultipartFile videoFile) throws IOException {
-        String key = FileUtil.generateFileName(videoFile.getOriginalFilename());
-
-        // Upload video to S3
-        String videoUrl = s3Service.uploadPrivate(videoFile, key);
-
-        // Create temp file to get video duration
-        File tempFile = File.createTempFile("video", ".mp4");
-        videoFile.transferTo(tempFile);
-
-        // Đảm bảo tệp được chuyển thành công
-        if (!tempFile.exists()) {
-            throw new RuntimeException("Temp file transfer failed.");
-        }
-
-        // Lấy thời lượng video
-        long durationInSeconds = videoUtil.getVideoDuration(tempFile);
-
         // Tạo bài học
         Lesson lesson = Lesson.builder()
                 .title(request.getTitle())
@@ -92,17 +76,20 @@ public class LessonServiceImpl implements LessonService {
                         .orElseThrow(
                                 () -> new AppException(ErrorCode.NOT_FOUND)
                         ))
-                .videoUrl(videoUrl)
-                .duration(durationInSeconds)
                 .description(request.getDescription())
                 .createdAt(LocalDateTime.now())
+                .status(LessonStatusEnum.PROCESSING.name())
                 .isPreview(false) // default to false
                 .build();
 
         Lesson addedLesson = lessonRepository.save(lesson);
 
-        // Xóa tệp tạm
-        tempFile.delete();
+        File tempFile = File.createTempFile("upload", ".mp4");
+        videoFile.transferTo(tempFile);
+
+        // Tải video lên S3
+        videoService.processVideo(addedLesson.getId(), tempFile.getAbsolutePath());
+
 
         LessonDTO lessonDTO = lessonMapper.entityToDto(addedLesson);
         return ApiResponse.builder()
@@ -165,45 +152,26 @@ public class LessonServiceImpl implements LessonService {
     public LessonDTO updateLesson(LessonDTO request, MultipartFile videoFile) throws IOException {
         Lesson lesson = lessonRepository.findById(request.getId())
                 .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
-//        lesson.setTitle(request.getTitle());
-//        lesson.setDescription(request.getDescription());
+
+        String oldVideoUrl = lesson.getVideoUrl();
         lessonMapper.dtoToEntity(request, lesson);
+
         if (videoFile != null && !videoFile.isEmpty()) {
-            // Delete old video from S3
-            String oldKey = FileUtil.getKeyFromUrl(lesson.getVideoUrl());
-            s3Service.deleteFile(oldKey, S3DeleteEnum.VIDEO.name());
-
-            // Upload new video to S3
-            String newKey = FileUtil.generateFileName(videoFile.getOriginalFilename());
-            String newVideoUrl = s3Service.uploadPrivate(videoFile, newKey);
-            lesson.setVideoUrl(newVideoUrl);
-
-            // Create temp file to get video duration
-            File tempFile = null;
-            try {
-                tempFile = File.createTempFile("video", ".mp4");
-                videoFile.transferTo(tempFile);
-
-                // Ensure the file was transferred successfully
-                if (!tempFile.exists()) {
-                    throw new RuntimeException("Temp file transfer failed.");
-                }
-
-                // Get video duration
-                long newDurationInSeconds = videoUtil.getVideoDuration(tempFile);
-                lesson.setDuration(newDurationInSeconds);
-            } catch (IOException e) {
-                throw new RuntimeException("Error processing video file", e);
-            } finally {
-                // Delete temp file
-                if (tempFile != null && tempFile.exists()) {
-                    tempFile.delete();
-                }
+            // Delete old video from S3 if it exists
+            if (oldVideoUrl != null) {
+                String oldKey = FileUtil.getKeyFromUrl(oldVideoUrl);
+                s3Service.deleteFile(oldKey, S3DeleteEnum.VIDEO.name());
             }
+
+            lesson.setStatus(LessonStatusEnum.PROCESSING.name());
+            File tempFile = File.createTempFile("update", ".mp4");
+            videoFile.transferTo(tempFile);
+
+            videoService.processVideo(lesson.getId(), tempFile.getAbsolutePath());
         }
+
         Lesson updatedLesson = lessonRepository.save(lesson);
         return lessonMapper.entityToDto(updatedLesson);
-
     }
 
     /**
@@ -252,4 +220,5 @@ public class LessonServiceImpl implements LessonService {
             throw new AppException(ErrorCode.FORBIDDEN);
         }
     }
+
 }

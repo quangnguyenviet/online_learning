@@ -38,4 +38,10 @@ public class ICourseController {
                 .build();
     }
 
+    @GetMapping("/{id}")
+    public ApiResponse<CourseDTO> getCourseById(@PathVariable String id) {
+        CourseDTO response = courseService.getCourseById(id);
+        return ApiResponse.<CourseDTO>builder().status(1000).data(response).build();
+    }
+
 }

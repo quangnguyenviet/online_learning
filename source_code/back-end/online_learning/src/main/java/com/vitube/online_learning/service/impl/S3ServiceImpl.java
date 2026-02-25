@@ -18,7 +18,9 @@ import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
 import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.time.Duration;
 
 /**
@@ -54,15 +56,16 @@ public class S3ServiceImpl implements S3Service {
      * @throws IOException Lỗi xảy ra khi xử lý tệp.
      */
     @Override
-    public String uploadPrivate(MultipartFile file, String key) throws IOException {
+    public String uploadPrivate(File file, String key) throws IOException {
         log.info("Inside uploadPrivate - Uploading to bucket: {}, region: {}, key: {}", videoBucketName, region, key);
+        String contentType = Files.probeContentType(file.toPath());
         PutObjectRequest putRequest = PutObjectRequest.builder()
                 .bucket(videoBucketName)
                 .key(key)
-                .contentType(file.getContentType())
+                .contentType(contentType)
                 .build();
 
-        s3Client.putObject(putRequest, RequestBody.fromBytes(file.getBytes()));
+        s3Client.putObject(putRequest, RequestBody.fromFile(file));
 
 //        return String.format("https://%s.s3.amazonaws.com/%s", videoBucketName, key);
         return s3Client.utilities().getUrl(builder -> builder.bucket(videoBucketName).key(key)).toString();

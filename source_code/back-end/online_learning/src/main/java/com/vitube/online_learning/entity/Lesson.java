@@ -32,6 +32,8 @@ public class Lesson {
 
     private long duration;
 
+    private String status;
+
     @ManyToOne
     @JoinColumn(name = "course_id")
     private Course course;
