@@ -4,13 +4,14 @@ import CourseListItem from 'components/Course/CourseListItem/CourseListItem';
 import styles from './CourseList.module.scss';
 import CourseApi from 'service/apis/CourseApi';
 import { useError } from 'components/common/ErrorDisplay/ErrorDisplay';
+import { ErrorDisplay } from 'components/common/ErrorDisplay/ErrorDisplay';
 
 export default function CourseList() {
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
-    const { ErrorDisplay, showError } = useError();
+    const { showError, dismissError, errorMessage } = useError();
 
     const fetchCourses = async () => {
         try {
@@ -55,7 +56,7 @@ export default function CourseList() {
 
     return (
         <>
-        <ErrorDisplay />
+        <ErrorDisplay errorMessage={errorMessage} onDismiss={dismissError} />
         <section className={styles['instructor-course-list-section']}>
             
             <div className={styles['instructor-course-list__header']}>

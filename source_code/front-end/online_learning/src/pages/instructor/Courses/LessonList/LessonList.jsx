@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import DeleteLesson from "pages/instructor/Courses/LessonList/DeleteLesson/DeleteLesson";
 import ViewVideo from "components/ViewVideo/ViewVideo";
@@ -9,6 +9,8 @@ import styles from "./LessonList.module.scss";
 import { useSuccess, SuccessDisplay } from "components/common/SucessDisplay/SuccessDisplay";
 import { useLoading } from "components/common/Loading/Loading";
 import LessonApi from "service/apis/LessonApi";
+import { useError } from "components/common/ErrorDisplay/ErrorDisplay";
+import { ErrorDisplay } from "components/common/ErrorDisplay/ErrorDisplay";
 
 
 export function LessonList(props) {
@@ -20,8 +22,11 @@ export function LessonList(props) {
     const [newLesson, setNewLesson] = useState({ title: "", description: "", video: null });
     const [editForm, setEditForm] = useState({ title: "", description: "", video: null });
 
+    const { showError, dismissError, errorMessage} = useError();
     const { successMessage, showSuccess, dismissSuccess } = useSuccess();
     const { GlobalLoading, showLoading, hideLoading } = useLoading();
+
+    
 
     const toggleEdit = (lesson) => {
         if (editingLessonId === lesson.id) {
@@ -77,6 +82,23 @@ export function LessonList(props) {
 
     const handleAddLesson = async () => {
         console.log("Adding new lesson:", newLesson);
+        
+        // Validate input
+        if (!newLesson.title.trim()) {
+            showError("Vui lòng nhập tên bài học");
+            return;
+        }
+        
+        if (!newLesson.description.trim()) {
+            showError("Vui lòng nhập mô tả bài học");
+            return;
+        }
+        
+        if (!newLesson.video) {
+            showError("Vui lòng chọn file video");
+            return;
+        }
+        
         const formData = new FormData();
         formData.append("title", newLesson.title);
         formData.append("description", newLesson.description);
@@ -99,6 +121,7 @@ export function LessonList(props) {
 
     return (
         <div className={styles.lessons}>
+            <ErrorDisplay message={errorMessage} onDismiss={dismissError} />
             <SuccessDisplay
                 message={successMessage}
                 onDismiss={dismissSuccess}
@@ -160,12 +183,14 @@ export function LessonList(props) {
                     <input
                         type="text"
                         value={newLesson.title}
+                        required={true}
                         onChange={(e) => handleNewLessonChange("title", e.target.value)}
                     />
                     <label>Mô tả bài học:</label>
                     <textarea
                         rows="3"
                         value={newLesson.description}
+                        required={true}
                         onChange={(e) => handleNewLessonChange("description", e.target.value)}
                     />
                     <label>Upload video:</label>

@@ -3,6 +3,7 @@ import { FaCloudUploadAlt, FaSave, FaTimes, FaPlus } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import styles from './AddNewCourse.module.scss';
 import { useError } from 'components/common/ErrorDisplay/ErrorDisplay';
+import { ErrorDisplay } from 'components/common/ErrorDisplay/ErrorDisplay';
 import CategoryApi from 'service/apis/CategoryApi';
 import CourseApi from 'service/apis/CourseApi';
 import { useLoading } from 'components/common/Loading/Loading';
@@ -32,7 +33,7 @@ export default function AddNewCourse() {
 
 
 
-    const { ErrorDisplay, showError } = useError();
+    const { showError, dismissError, errorMessage } = useError();
     const { LocalLoading, showLoading, hideLoading } = useLoading();
 
     const fetchCategories = async () => {
@@ -60,51 +61,66 @@ export default function AddNewCourse() {
         document.getElementById('addNewCourseForm').requestSubmit();
 
     }
-    const handCreateCourse = async (e) => {
-        e.preventDefault();
-        showLoading();
-        console.log('Creating course...');
-        const formData = new FormData(e.target);
-        console.log(...formData);
-        // check category
+    const validateFormData = (formData) => {
         if (!formData.get('categoryId') || formData.get('categoryId') === "") {
             showError('Vui lòng chọn danh mục cho khóa học.');
-            return;
+            return false;
         }
-        // check level
         if (!formData.get('level') || formData.get('level') === "") {
             showError('Vui lòng chọn mức độ cho khóa học.');
-            return;
+            return false;
         }
-        // check discount if not present set to 0
-        const discount = formData.get('discount');
-        if (!discount) {
+        return true;
+    };
+
+    const prepareFormData = (formData) => {
+        // Set default discount if not provided
+        if (!formData.get('discount')) {
             formData.set('discount', '0');
         }
 
-        // append learning objectives
+        // Append learning objectives
         objectives.forEach(obj => {
-            // check if obj is not empty
             if (obj.trim() !== '') {
                 formData.append('objectives', obj);
             }
         });
 
-        // append price
+        // Set price
         formData.set('price', priceValue || '0');
+    };
 
+    const handleCreateSuccess = () => {
+        hideLoading();
+        navigate('/instructor/courses');
+    };
 
-        console.log(...formData);
+    const handleCreateError = () => {
+        hideLoading();
+        showError('Đã xảy ra lỗi khi tạo khóa học. Vui lòng thử lại sau.');
+    };
 
-        try {
-            const response = await CourseApi.createCourse(formData);
+    const handCreateCourse = async (e) => {
+        e.preventDefault();
+        showLoading();
+        
+        const formData = new FormData(e.target);
+
+        // Validate form data
+        if (!validateFormData(formData)) {
             hideLoading();
-            navigate('/instructor/courses');
-        } catch (error) {
-            hideLoading();
-            showError('Đã xảy ra lỗi khi tạo khóa học. Vui lòng thử lại sau.');
+            return;
         }
 
+        // Prepare form data
+        prepareFormData(formData);
+
+        try {
+            await CourseApi.createCourse(formData);
+            handleCreateSuccess();
+        } catch (error) {
+            handleCreateError();
+        }
     }
 
     const handleAddObjective = () => {
@@ -121,7 +137,7 @@ export default function AddNewCourse() {
 
     return (
         <>
-            <ErrorDisplay />
+            <ErrorDisplay errorMessage={errorMessage} onDismiss={dismissError} />
             <LocalLoading />
             <div className={styles.container}>
                 <header className={styles.header}>

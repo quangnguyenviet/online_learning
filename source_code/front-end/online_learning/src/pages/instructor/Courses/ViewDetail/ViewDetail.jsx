@@ -6,12 +6,12 @@ import { getCourseById } from "utils/CoursesUtil";
 import { LessonList } from "pages/instructor/Courses/LessonList/LessonList";
 import CourseSection from "./components/CourseSection";
 import GeneralInfo from "./components/GeneralInfo";
-import CourseRequirements from "./components/CourseRequirements";
 import PublishControl from "./components/PublishControl";
 import useEditModal from "./hooks/useEditModal";
 import { useSuccess } from "components/common/SucessDisplay/SuccessDisplay";
 import Objective from "./components/Objective";
 import CourseApi from "service/apis/CourseApi";
+
 
 export const ModalContext = createContext(null);
 
@@ -23,17 +23,20 @@ export default function ViewDetail() {
     const { openModal, setShowModal, CustomModal } = useEditModal({ data, setData });
     const {SuccessDisplay, showSuccess} = useSuccess();
 
+    const fetchCourseById = async (id) => {
+        try {
+            const response = await CourseApi.getCourseById(id);
+            setData(response.data);
+            setLoading(false);
+            console.log(response);
+        } catch (error) {
+            console.error("Error fetching course by ID:", error);
+            throw error;
+        }
+    };
+
     useEffect(() => {
-        getCourseById(courseId)
-            .then((response) => {
-                setData(response.data);
-                setLoading(false);
-                console.log(response.data);
-            })
-            .catch((error) => {
-                console.error("Error fetching course:", error);
-                setLoading(false);
-            });
+        fetchCourseById(courseId);
     }, [courseId]);
 
     const handleTogglePublish = async (isPublished) => {
