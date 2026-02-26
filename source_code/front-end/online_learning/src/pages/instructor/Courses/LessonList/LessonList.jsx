@@ -121,6 +121,20 @@ export function LessonList(props) {
         }
     };
 
+    const handleTogglePreview = async (lessonId, currentPreviewStatus) => {
+        try {
+            showLoading('Đang cập nhật...');
+            await LessonApi.updateLessonPreview(lessonId, !currentPreviewStatus);
+            await refreshLessons();
+            showSuccess(!currentPreviewStatus ? "Bài học được chuyển sang chế độ preview!" : "Bài học đã tắt chế độ preview!");
+        } catch (error) {
+            console.error("Error updating lesson preview:", error);
+            showError("Cập nhật chế độ preview thất bại!");
+        } finally {
+            hideLoading();
+        }
+    };
+
     const refreshLessons = async () => {
         showSuccess("Thêm bài học thành công!");
         try {
@@ -190,6 +204,7 @@ export function LessonList(props) {
                         onToggleEdit={toggleEdit}
                         onDelete={handleDelete}
                         onSaveEdit={handleSaveEdit}
+                        onTogglePreview={handleTogglePreview}
                     />
                 ))}
             </div>

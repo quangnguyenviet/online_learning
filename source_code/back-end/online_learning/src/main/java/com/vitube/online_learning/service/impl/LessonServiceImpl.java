@@ -211,6 +211,15 @@ public class LessonServiceImpl implements LessonService {
         return lessonDTO;
 
     }
+
+    @Override
+    public void updateLessonPreview(String lessonId, Boolean isPreview) {
+        Lesson lesson = lessonRepository.findById(lessonId)
+                .orElseThrow(() -> new AppException(ErrorCode.NOT_FOUND));
+        lesson.setIsPreview(isPreview);
+        lessonRepository.save(lesson);
+    }
+
     private void validateCourseAccess(String userId, String courseId) {
         boolean hasAccess =
                 registerRepository.existsByStudentIdAndCourseId(userId, courseId) ||

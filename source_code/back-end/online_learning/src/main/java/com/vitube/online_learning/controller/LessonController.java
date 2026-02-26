@@ -83,4 +83,14 @@ public class LessonController {
                 .data(response)
                 .build();
     }
+
+    // update lesson isPreview
+    @PatchMapping("/{lessonId}/preview")
+    @PreAuthorize("hasAuthority('SCOPE_INSTRUCTOR')")
+    public ApiResponse<?> updateLessonIsPreview(@PathVariable String lessonId, @RequestBody LessonDTO request ) {
+        lessonService.updateLessonPreview(lessonId, request.getIsPreview());
+        return ApiResponse.builder()
+                .status(1000)
+                .build();
+    }
 }

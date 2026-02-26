@@ -39,5 +39,13 @@ class LessonApi {
         const json = response.data;
         return json;
     }
+
+    static async updateLessonPreview(lessonId, isPreview){
+        const response = await apiClient.patch(`/lessons/${lessonId}/preview`, {
+            isPreview: isPreview
+        });
+        const json = response.data;
+        return json;
+    }
 }
 export default LessonApi;

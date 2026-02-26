@@ -75,8 +75,8 @@ public class User {
     @OneToMany(mappedBy = "instructor")
     private List<InstructorStatic> instructorStatics;
 
-    @OneToMany(mappedBy = "user")
-    private Set<LessonProgress> lessonProgresses;
+//    @OneToMany(mappedBy = "user")
+//    private Set<LessonProgress> lessonProgresses;
 
 
 //    @OneToMany(mappedBy = "student")

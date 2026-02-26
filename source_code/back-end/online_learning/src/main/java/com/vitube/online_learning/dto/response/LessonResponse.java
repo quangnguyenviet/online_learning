@@ -16,6 +16,7 @@ public class LessonResponse implements Comparable<LessonResponse> {
     private String lessonKey;
     private String videoUrl;
     private String description;
+    private Boolean isPreview;
     private long duration;
     private LocalDateTime createdAt;
     private LessonProgressDTO lessonProgressDTO;

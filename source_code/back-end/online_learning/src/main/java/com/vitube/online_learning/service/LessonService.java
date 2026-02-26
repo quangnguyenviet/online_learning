@@ -51,4 +51,6 @@ public interface LessonService {
     LessonResponse lessonToLessonResponse(Lesson lesson);
 
     LessonDTO getSignedUrl(LessonDTO request);
+
+    void updateLessonPreview(String lessonId, Boolean isPreview);
 }

@@ -12,13 +12,21 @@ export default function LessonItem({
     onToggleEdit,
     onDelete,
     onSaveEdit,
+    onTogglePreview,
 }) {
+    const previewInputId = `lesson-preview-${lesson.id}`;
+
     return (
         <div className={styles.lessonCard}>
             <div className={styles.lessonHeader}>
                 <strong className={styles.lessonTitle}>
                     <span className={styles.orderChip}>#{index + 1}</span>
                     {lesson.title}
+                    {lesson.isPreview && (
+                        <span className={styles.previewBadge} title="Chế độ preview">
+                            Preview
+                        </span>
+                    )}
                 </strong>
                 <div className={styles.lessonActions}>
                     <ViewVideo lessonId={lesson.id}>
@@ -26,6 +34,21 @@ export default function LessonItem({
                             <FaVideo />
                         </button>
                     </ViewVideo>
+                    <div className={styles.previewToggle} title="Chế độ preview">
+                        <label className={styles.previewLabel} htmlFor={previewInputId}>
+                            Preview
+                        </label>
+                        <label className={styles.switch}>
+                            <input
+                                id={previewInputId}
+                                className={styles.switchInput}
+                                type="checkbox"
+                                checked={!!lesson.isPreview}
+                                onChange={() => onTogglePreview(lesson.id, lesson.isPreview)}
+                            />
+                            <span className={styles.switchSlider} />
+                        </label>
+                    </div>
                     <button type="button" onClick={() => onToggleEdit(lesson)} title="Chỉnh sửa">
                         {isEditing ? <FaTimes /> : <FaEdit />}
                     </button>

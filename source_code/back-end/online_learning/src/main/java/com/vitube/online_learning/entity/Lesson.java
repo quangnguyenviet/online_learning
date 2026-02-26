@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * Lớp thực thể đại diện cho bài học trong khóa học.
@@ -43,6 +42,6 @@ public class Lesson {
 
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<LessonProgress> lessonProgress;
+//    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private List<LessonProgress> lessonProgress;
 }
