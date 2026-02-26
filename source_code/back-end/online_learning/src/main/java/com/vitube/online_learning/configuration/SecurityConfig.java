@@ -69,6 +69,7 @@ public class SecurityConfig {
                     .permitAll()
                     .requestMatchers(HttpMethod.GET, PUBLIC_GET)
                     .permitAll()
+                    .requestMatchers("/ws/**").permitAll()
                     .anyRequest()
                     .authenticated();
         });

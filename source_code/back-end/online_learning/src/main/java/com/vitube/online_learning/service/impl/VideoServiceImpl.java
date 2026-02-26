@@ -9,17 +9,21 @@ import com.vitube.online_learning.utils.FileUtil;
 import com.vitube.online_learning.utils.VideoUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class VideoServiceImpl implements VideoService {
     private final LessonRepository lessonRepository;
     private final VideoUtil videoUtil;
     private final S3Service s3Service;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @Override
     @Async
@@ -46,9 +50,15 @@ public class VideoServiceImpl implements VideoService {
 
             file.delete();
 
+            // publish event
+            messagingTemplate.convertAndSend("/topic/lesson-status" + lessonId, lesson.getStatus());
+            log.info("publish event to /topic/lesson-status" + lessonId + " with status: " + lesson.getStatus() + "");
+
         } catch (Exception e) {
             // Nếu fail → cập nhật trạng thái FAIL
             lessonRepository.updateStatus(lessonId, LessonStatusEnum.FAILED.name());
+            messagingTemplate.convertAndSend("/topic/lesson-status" + lessonId, LessonStatusEnum.FAILED.name());
         }
+
     }
 }

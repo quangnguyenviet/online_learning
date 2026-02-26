@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Table(name = "lesson_progresses")
 public class LessonProgress {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

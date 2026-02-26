@@ -63,9 +63,9 @@ public class LessonProgressServiceImpl implements LessonProgressService {
 
     @Override
     public LessonProgressDTO getLessonProgress(String userId, String lessonId) {
-        return lessonProgressRepository.findByUserIdAndLessonId(userId, lessonId)
-                .map(lessonProgressMapper::entityToDto)
+        LessonProgress lessonProgress = lessonProgressRepository.findByUserIdAndLessonId(userId, lessonId)
                 .orElse(null);
+        return lessonProgressMapper.entityToDto(lessonProgress);
     }
 
 
