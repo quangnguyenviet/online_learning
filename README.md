@@ -1,158 +1,147 @@
-# Turtle Online Learning - Hướng dẫn cài đặt & chạy dự án
+# 🎓 Online Learning Platform - Hệ thống Học Trực Tuyến
+
+Đây là một nền tảng học trực tuyến toàn diện cho phép **Giảng viên** tạo khóa học và **Học viên** có thể đăng ký, thanh toán và học tập một cách dễ dàng. Dự án được xây dựng với kiến trúc mạnh mẽ, đảm bảo tính mở rộng và bảo mật cao.
 
 ---
 
-## PHẦN BACKEND
+## 📋 Mục Lục
 
-### Yêu cầu
-- **Java 21** hoặc cao hơn ([Tải JDK](https://vntalking.com/huong-dan-download-va-cai-dat-jdk-java-development-kit.html))
-- **Maven 3.8** hoặc cao hơn ([Tải Maven](https://viblo.asia/p/cai-dat-maven-tren-mac-va-windows-6BAMYVXBGnjz))
-- **MySQL** ([Tải MySQL](https://www.thegioididong.com/game-app/huong-dan-cach-tai-cai-dat-mysql-ban-moi-nhat-chi-tiet-tung-1299084))
-- **FFmpeg** đã cài đặt và cấu hình
-
-### Hướng dẫn cài đặt FFmpeg
-1. Tải FFmpeg tại: [Google Drive Link](https://drive.google.com/drive/folders/1W8yWbGigS4UgH5fIUo5hoBDmYAqlG7Jn?usp=sharing)
-2. Giải nén và đặt vào ổ đĩa `D:\`
-3. Thêm đường dẫn `D:\ffmpeg-master-latest-win64-gpl-shared\bin` vào biến môi trường `PATH`:
-   - Control Panel → System and Security → System → Advanced system settings
-   - Chọn "Environment Variables"
-   - Tìm biến `Path` → Edit → Thêm đường dẫn trên
-   - Nhấn OK để lưu
-4. Kiểm tra bằng lệnh:
-   ```bash
-   ffmpeg -version
-   ```
-
-### Chạy dự án backend trên IntelliJ
-
-1. **Clone repository:**
-   ```bash
-   git clone <repo-url>
-   cd online_learning
-   ```
-
-2. **Cấu hình database**  
-   Sửa file `src/main/resources/application.properties`:
-   ```properties
-   spring.datasource.url=jdbc:mysql://localhost:3306/online_learning
-   spring.datasource.username=your_username
-   spring.datasource.password=your_password
-   ```
-   > Thay `your_username` và `your_password` bằng thông tin MySQL của bạn.
-
-3. **Tạo database trong MySQL:**
-   ```sql
-   create database online_learning;
-   ```
-
-4. **File .env :**  
-   Tải tại [Google Drive](https://drive.google.com/drive/folders/1xHSBbIkQuKiJpxfwNxa56hErQ0Vw34I9?usp=sharing)
-
-5. **Xem video hướng dẫn chi tiết để chạy dự án:**  
-   [Video hướng dẫn](https://drive.google.com/drive/folders/1xHSBbIkQuKiJpxfwNxa56hErQ0Vw34I9?usp=sharing)
-
-6. **Tạo trigger cho CSDL để ứng dụng chạy đúng:**  
-   Sau khi chạy dự án lần đầu, hãy chạy các lệnh SQL sau trong MySQL Workbench hoặc terminal để tạo trigger:
-
-   ```sql
-   DELIMITER $$
-
-   CREATE TRIGGER trg_update_instructor_statistic_after_insert
-   AFTER INSERT ON register
-   FOR EACH ROW
-   BEGIN
-       DECLARE v_instructor_id VARCHAR(255);
-       DECLARE v_month INT;
-       DECLARE v_year INT;
-       DECLARE v_stat_id VARCHAR(255);
-
-       -- Lấy instructor từ khóa học
-       SELECT instructor_id INTO v_instructor_id
-       FROM course
-       WHERE id = NEW.course_id;
-
-       -- Lấy tháng và năm từ ngày đăng ký
-       SET v_month = MONTH(NEW.register_date);
-       SET v_year = YEAR(NEW.register_date);
-
-       -- Tạo ID thống kê (theo instructor + tháng + năm)
-       SET v_stat_id = CONCAT(v_instructor_id, '_', v_month, '_', v_year);
-
-       -- Nếu đã có bản ghi thống kê → cập nhật
-       IF EXISTS (SELECT 1 FROM instructor_statistic WHERE id = v_stat_id) THEN
-           UPDATE instructor_statistic
-           SET 
-               total_registrations = total_registrations + 1,
-               total_earnings = total_earnings + IFNULL(NEW.price, 0)
-           WHERE id = v_stat_id;
-       ELSE
-           -- Nếu chưa có → thêm mới
-           INSERT INTO instructor_statistic (
-               id, month, year, total_registrations, total_earnings, instructor_id
-           ) VALUES (
-               v_stat_id, v_month, v_year, 1, IFNULL(NEW.price, 0), v_instructor_id
-           );
-       END IF;
-   END$$
-
-   DELIMITER ;
-
-   DELIMITER $$
-
-   CREATE TRIGGER trg_create_payment_after_statistic_insert
-   AFTER INSERT ON instructor_statistic
-   FOR EACH ROW
-   BEGIN
-       DECLARE v_payment_id VARCHAR(255);
-
-       -- Tạo id cho instructor_payment (vd: thêm prefix 'pay_' trước id thống kê)
-       SET v_payment_id = CONCAT('pay_', NEW.id);
-
-       -- Thêm bản ghi vào bảng instructor_payment, để paid_at là NULL
-       INSERT INTO instructor_payment (
-           id, statistic_id, paid_at
-       ) VALUES (
-           v_payment_id, NEW.id, NULL
-       );
-   END$$
-
-   DELIMITER ;
-   ```
+- [Tính Năng Chính](#-tính-năng-chính)
+- [Công Nghệ Sử Dụng](#️-công-nghệ-sử-dụng)
+- [Cấu Trúc Dự Án](#-cấu-trúc-dự-án)
+- [Hướng Dẫn Cài Đặt](#-hướng-dẫn-cài-đặt)
+- [Lộ Trình Phát Triển](#-lộ-trình-phát-triển)
 
 ---
 
-## PHẦN FRONTEND
+## 🚀 Tính Năng Chính
 
-### Yêu cầu hệ thống
-- **Node.js** >= 16.x
-- **npm** >= 8.x hoặc **yarn**
-- Đã cài đặt backend API (chạy song song)
+### 👨‍🏫 Dành cho Giảng viên (Instructor)
 
-### Hướng dẫn cài đặt & chạy frontend
+- ✅ **Quản lý khóa học**: Tạo mới, chỉnh sửa và xóa các khóa học chuyên nghiệp
+- ✅ **Quản lý nội dung**: Tổ chức bài học theo chương, quản lý tài liệu và video bài giảng
+- ✅ **Kiểm soát hiển thị**: Tính năng Publish/Unpublish để kiểm soát thời gian ra mắt khóa học
+- ✅ **Dashboard thống kê**: Theo dõi số lượng học viên, doanh thu và tương tác
+- 🔧 **Báo cáo chuyên sâu**: *(Đang phát triển)* Xem chi tiết tỷ lệ hoàn thành và phản hồi
 
-1. **Clone source code:**
-   ```bash
-   git clone <repo-url>
-   cd source_code/front-end/online_learning
-   ```
+### 👨‍🎓 Dành cho Học viên (Student)
 
-2. **Cài đặt dependencies:**
-   ```bash
-   npm install
+- ✅ **Khám phá khóa học**: Tìm kiếm khóa học thông minh theo danh mục
+- ✅ **Đăng ký dễ dàng**: Quy trình đăng ký khóa học nhanh chóng
+- ✅ **Theo dõi tiến độ**: Progress tracking để biết mức độ hoàn thành
+- ✅ **Thanh toán tích hợp**: Hỗ trợ thanh toán qua ví điện tử ZaloPay
 
+### 🛡️ Hệ Thống & Bảo Mật
 
-3. **Chạy dự án:**
-   ```bash
-   npm start
-
-   - Truy cập [http://localhost:3000](http://localhost:3000) trên trình duyệt.
-
-### Một số lưu ý
-- Đảm bảo backend đã chạy trước khi sử dụng frontend.
-- Nếu gặp lỗi về SCSS, kiểm tra lại đường dẫn import và cài đặt đúng các package liên quan (`sass`, `node-sass`).
-- Để sử dụng đầy đủ icon, hãy đảm bảo đã cài đặt các package như `react-icons` và/hoặc FontAwesome.
+- ✅ **Xác thực người dùng**: Hệ thống Đăng ký/Đăng nhập bảo mật
+- ✅ **JWT Authentication**: Bảo vệ tài nguyên API và xác thực phiên làm việc
+- ✅ **Spring Security**: Quản lý phân quyền và bảo mật tổng thể
 
 ---
 
+## 🛠️ Công Nghệ Sử Dụng
+
+### Backend
+- **Framework**: Spring Boot (Java)
+- **Security**: Spring Security & JWT
+- **Database**: MySQL/PostgreSQL
+- **Storage**: Firebase Storage (Quản lý hình ảnh và video)
+- **Real-time**: WebSocket (STOMP)
+
+### Frontend
+- **Framework**: React.js 19
+- **Styling**: SASS/SCSS
+- **State Management**: Redux
+- **HTTP Client**: Axios
+- **Icons**: React Icons, FontAwesome
+- **UI Components**: React Modal, SweetAlert2
+
+### Third-party Services
+- **Payment Gateway**: ZaloPay Sandbox
+- **Cloud Storage**: Firebase Storage
+- **Analytics**: Firebase Analytics
+
+---
+
+## 📁 Cấu Trúc Dự Án
+
+```
+online_learning/
+├── source_code/
+│   ├── back-end/
+│   │   └── online_learning/        # Spring Boot Backend
+│   │       ├── src/
+│   │       ├── pom.xml
+│   │       └── RUN_GUIDE.md
+│   │
+│   └── front-end/
+│       └── online_learning/         # React Frontend
+│           ├── src/
+│           ├── package.json
+│           └── HUONG_DAN_CHAY_DU_AN.md
+│
+├── finalReport/                     # Báo cáo dự án
+├── plan/                           # Kế hoạch
+└── weeklyReport/                   # Báo cáo tuần
+```
+
+---
+
+## 💻 Hướng Dẫn Cài Đặt
+
+### Yêu Cầu Hệ Thống
+
+**Backend:**
+- Java JDK 17 trở lên
+- Maven 3.6+
+- MySQL/PostgreSQL
+- IDE: IntelliJ IDEA / Eclipse
+
+**Frontend:**
+- Node.js >= 16.x
+- npm >= 8.x hoặc yarn
+
+### Cài Đặt Backend
+
+Chi tiết xem tại: [source_code/back-end/online_learning/RUN_GUIDE.md](source_code/back-end/online_learning/BACKEND_RUN_GUIDE.md.md)
 
 
+### Cài Đặt Frontend
+
+Chi tiết xem tại: [source_code/front-end/online_learning/HUONG_DAN_CHAY_DU_AN.md](source_code/front-end/online_learning/FRONTEND_RUN_GUIDE.md.md)
+
+
+### Cấu Hình Môi Trường
+
+**Frontend** - Tạo file `.env`:
+```env
+REACT_APP_BASE_URL=http://localhost:8080/online_learning
+```
+
+---
+
+## 📅 Lộ Trình Phát Triển
+
+- [ ] Hoàn thiện hệ thống báo cáo chi tiết cho giảng viên
+- [ ] Tích hợp thông báo qua Email
+- [ ] Thêm tính năng chat trực tiếp giữa giảng viên và học viên
+- [ ] Xây dựng forum thảo luận cho mỗi bài học
+
+---
+
+## 📞 Hỗ Trợ
+
+Nếu gặp vấn đề khi cài đặt hoặc sử dụng:
+1. Kiểm tra hướng dẫn chi tiết trong thư mục tương ứng
+2. Xem phần troubleshooting trong file HUONG_DAN_CHAY_DU_AN.md
+3. Kiểm tra logs trong console/terminal
+
+---
+
+## 📄 License
+
+Dự án này được phát triển cho mục đích học tập và nghiên cứu.
+
+---
+
+**Chúc bạn cài đặt và sử dụng thành công! 🎉**
