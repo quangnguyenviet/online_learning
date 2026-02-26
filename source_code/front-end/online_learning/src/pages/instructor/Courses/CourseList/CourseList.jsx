@@ -41,6 +41,7 @@ export default function CourseList() {
 
     const handleViewReport = (courseId) => {
         showError("Chức năng đang được phát triển. Vui lòng quay lại sau.");
+        console.log('View report for course:', courseId);
         // navigate(`/instructor/courses/${courseId}/report`);
     };
 
@@ -56,7 +57,7 @@ export default function CourseList() {
 
     return (
         <>
-        <ErrorDisplay errorMessage={errorMessage} onDismiss={dismissError} />
+        <ErrorDisplay message={errorMessage} onDismiss={dismissError} />
         <section className={styles['instructor-course-list-section']}>
             
             <div className={styles['instructor-course-list__header']}>

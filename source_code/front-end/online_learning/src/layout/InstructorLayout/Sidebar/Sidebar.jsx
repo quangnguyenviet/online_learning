@@ -65,7 +65,7 @@ export default function Sidebar() {
                     </ul>
                 </li>
 
-                <li className={styles['sidebar__nav-item']}>
+                {/* <li className={styles['sidebar__nav-item']}>
                     <NavLink
                         to="/instructor/profile"
                         className={({ isActive }) => 
@@ -75,7 +75,7 @@ export default function Sidebar() {
                         <FaUser />
                         <span>Profile</span>
                     </NavLink>
-                </li>
+                </li> */}
 
                 <li className={styles['sidebar__nav-item']}>
                     <NavLink
