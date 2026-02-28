@@ -14,6 +14,64 @@
 
 ---
 
+## 📸 Demo & Giao Diện
+
+### 👨‍🏫 Giao Diện Giảng Viên (Instructor)
+
+#### Dashboard
+![Instructor Dashboard](demoImages/instructor/dashboard.png)
+*Dashboard giảng viên với thống kê khóa học, học viên và doanh thu*
+
+#### Danh Sách Khóa Học
+![Instructor View List Course](demoImages/instructor/instructor-view-list-course.png)
+*Quản lý danh sách khóa học của giảng viên*
+
+#### Thêm Mới Khóa Học
+![Add New Course](demoImages/instructor/add-new-course.png)
+*Tạo khóa học mới với tất cả thông tin chi tiết*
+
+#### Chi Tiết Khóa Học
+![Course Detail](demoImages/instructor/course-detail.png)
+*Xem thông tin chi tiết và quản lý khóa học*
+
+#### Quản Lý Bài Học
+![Manage Lesson](demoImages/instructor/mange-lesson.png)
+*Tổ chức bài học theo chương trong khóa học*
+
+#### Xem Bài Học
+![View Lesson](demoImages/instructor/view-lesson.png)
+*Xem nội dung bài học đã tạo*
+
+---
+
+### 👨‍🎓 Giao Diện Học Viên (Student)
+
+#### Trang Chủ 1
+![Home 1](demoImages/student/home1.png)
+*Trang chủ với danh sách khóa học nổi bật*
+
+#### Trang Chủ 2
+![Home 2](demoImages/student/home2.png)
+*Khám phá thêm khóa học theo danh mục*
+
+#### Các Khóa Học Của Tôi
+![My Courses](demoImages/student/my-courses.png)
+*Quản lý danh sách khóa học đã đăng ký*
+
+#### Chi Tiết Khóa Học
+![View Course Detail](demoImages/student/view-course-detail.png)
+*Xem thông tin chi tiết khóa học trước khi đăng ký*
+
+#### Học Tập
+![Study](demoImages/student/study.png)
+*Tham gia bài học và theo dõi tiến độ*
+
+#### Xem Trước Bài Học
+![Preview Lesson](demoImages/student/preview-lesson.png)
+*Xem nội dung bài học chi tiết*
+
+---
+
 ## 🚀 Tính Năng Chính
 
 ### 👨‍🏫 Dành cho Giảng viên (Instructor)
@@ -45,7 +103,8 @@
 - **Framework**: Spring Boot (Java)
 - **Security**: Spring Security & JWT
 - **Database**: MySQL/PostgreSQL
-- **Storage**: Firebase Storage (Quản lý hình ảnh và video)
+- **Migration**: Flyway (Database version control)
+- **Storage**: AWS S3 Bucket (Quản lý hình ảnh và video)
 - **Real-time**: WebSocket (STOMP)
 
 ### Frontend
@@ -58,8 +117,8 @@
 
 ### Third-party Services
 - **Payment Gateway**: ZaloPay Sandbox
-- **Cloud Storage**: Firebase Storage
-- **Analytics**: Firebase Analytics
+- **Cloud Storage**: AWS S3 Bucket
+- **Cloud Provider**: AWS (Amazon Web Services)
 
 ---
 

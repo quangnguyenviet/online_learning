@@ -4,9 +4,10 @@ import { Link } from 'react-router-dom';
 import UserApi from 'service/apis/UserApi';
 import { useNavigate } from 'react-router-dom';
 import { useError } from 'components/common/ErrorDisplay/ErrorDisplay';
+import { ErrorDisplay } from 'components/common/ErrorDisplay/ErrorDisplay';
 export default function Signup() {
   const navigate = useNavigate();
-  const {ErrorDisplay, showError} = useError();
+  const { showError, dismissError, errorMessage } = useError();
   const [isLoading, setIsLoading] = useState(false);
 
   const createUser = async (data) => {
@@ -39,7 +40,7 @@ export default function Signup() {
 
   return (
     <>
-    <ErrorDisplay />
+    <ErrorDisplay message={errorMessage} onDismiss={dismissError} />
       <div className={styles.signupContainer}>
       
       <Link to="/" className={styles.backToHome}>← Trang chủ</Link>
