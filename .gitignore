@@ -76,7 +76,7 @@ media/
 *.swo
 
 # MySQL
-*.sql
+
 *.db
 
 plan/
