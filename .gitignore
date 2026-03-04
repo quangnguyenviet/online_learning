@@ -37,7 +37,7 @@ media/
 *.swo
 
 # MySQL
-*.sql
+
 *.db
 # General
 *.log
@@ -77,7 +77,6 @@ media/
 
 # MySQL
 
-*.db
 
 plan/
 finalReport/
