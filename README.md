@@ -1,6 +1,6 @@
 # 🎓 Online Learning Platform - Hệ thống Học Trực Tuyến
 
-Đây là một nền tảng học trực tuyến toàn diện cho phép **Giảng viên** tạo khóa học và **Học viên** có thể đăng ký, thanh toán và học tập một cách dễ dàng. Dự án được xây dựng với kiến trúc mạnh mẽ, đảm bảo tính mở rộng và bảo mật cao.
+Nền tảng học trực tuyến cho phép **Giảng viên** tạo và quản lý khóa học, **Học viên** đăng ký - thanh toán - học tập trên cùng một hệ thống.
 
 ---
 
@@ -9,7 +9,7 @@
 - [Tính Năng Chính](#-tính-năng-chính)
 - [Công Nghệ Sử Dụng](#️-công-nghệ-sử-dụng)
 - [Cấu Trúc Dự Án](#-cấu-trúc-dự-án)
-- [Hướng Dẫn Cài Đặt](#-hướng-dẫn-cài-đặt)
+- [Hướng Dẫn Chạy Nhanh](#-hướng-dẫn-chạy-nhanh)
 - [Lộ Trình Phát Triển](#-lộ-trình-phát-triển)
 
 ---
@@ -28,7 +28,7 @@
 
 #### Thêm Mới Khóa Học
 ![Add New Course](demoImages/instructor/add-new-course.png)
-*Tạo khóa học mới với tất cả thông tin chi tiết*
+*Tạo khóa học mới với đầy đủ thông tin*
 
 #### Chi Tiết Khóa Học
 ![Course Detail](demoImages/instructor/course-detail.png)
@@ -74,105 +74,92 @@
 
 ## 🚀 Tính Năng Chính
 
-### 👨‍🏫 Dành cho Giảng viên (Instructor)
+### 👨‍🏫 Dành cho Giảng viên
+- ✅ Quản lý khóa học (thêm/sửa/xóa)
+- ✅ Quản lý bài học, chương, tài liệu, video
+- ✅ Publish/Unpublish khóa học
+- ✅ Dashboard thống kê
 
-- ✅ **Quản lý khóa học**: Tạo mới, chỉnh sửa và xóa các khóa học chuyên nghiệp
-- ✅ **Quản lý nội dung**: Tổ chức bài học theo chương, quản lý tài liệu và video bài giảng
-- ✅ **Kiểm soát hiển thị**: Tính năng Publish/Unpublish để kiểm soát thời gian ra mắt khóa học
-- ✅ **Dashboard thống kê**: Theo dõi số lượng học viên, doanh thu và tương tác
-- 🔧 **Báo cáo chuyên sâu**: *(Đang phát triển)* Xem chi tiết tỷ lệ hoàn thành và phản hồi
-
-### 👨‍🎓 Dành cho Học viên (Student)
-
-- ✅ **Khám phá khóa học**: Tìm kiếm khóa học thông minh theo danh mục
-- ✅ **Đăng ký dễ dàng**: Quy trình đăng ký khóa học nhanh chóng
-- ✅ **Theo dõi tiến độ**: Progress tracking để biết mức độ hoàn thành
-- ✅ **Thanh toán tích hợp**: Hỗ trợ thanh toán qua ví điện tử ZaloPay
+### 👨‍🎓 Dành cho Học viên
+- ✅ Tìm kiếm và khám phá khóa học
+- ✅ Đăng ký khóa học
+- ✅ Theo dõi tiến độ học
+- ✅ Thanh toán qua ZaloPay
 
 ### 🛡️ Hệ Thống & Bảo Mật
-
-- ✅ **Xác thực người dùng**: Hệ thống Đăng ký/Đăng nhập bảo mật
-- ✅ **JWT Authentication**: Bảo vệ tài nguyên API và xác thực phiên làm việc
-- ✅ **Spring Security**: Quản lý phân quyền và bảo mật tổng thể
+- ✅ Đăng ký/đăng nhập
+- ✅ JWT Authentication
+- ✅ Spring Security phân quyền
 
 ---
 
 ## 🛠️ Công Nghệ Sử Dụng
 
 ### Backend
-- **Framework**: Spring Boot (Java)
-- **Security**: Spring Security & JWT
-- **Database**: MySQL/PostgreSQL
-- **Migration**: Flyway (Database version control)
-- **Storage**: AWS S3 Bucket (Quản lý hình ảnh và video)
-- **Real-time**: WebSocket (STOMP)
+- Spring Boot (Java)
+- Spring Security + JWT
+- MySQL
+- Maven
 
 ### Frontend
-- **Framework**: React.js 19
-- **Styling**: SASS/SCSS
-- **State Management**: Redux
-- **HTTP Client**: Axios
-- **Icons**: React Icons, FontAwesome
-- **UI Components**: React Modal, SweetAlert2
+- React.js
+- SCSS/SASS
+- Redux
+- Axios
 
-### Third-party Services
-- **Payment Gateway**: ZaloPay Sandbox
-- **Cloud Storage**: AWS S3 Bucket
-- **Cloud Provider**: AWS (Amazon Web Services)
+### Dịch vụ tích hợp
+- ZaloPay Sandbox
+- Firebase / AWS S3 (lưu trữ)
 
 ---
 
 ## 📁 Cấu Trúc Dự Án
 
+> Lưu ý: các thư mục `plan/`, `weeklyReport/`, `finalReport/` là tài liệu nội bộ, đã ignore và **không đẩy lên GitHub**.
+
 ```
 online_learning/
-├── source_code/
-│   ├── back-end/
-│   │   └── online_learning/        # Spring Boot Backend
-│   │       ├── src/
-│   │       ├── pom.xml
-│   │       └── RUN_GUIDE.md
-│   │
-│   └── front-end/
-│       └── online_learning/         # React Frontend
-│           ├── src/
-│           ├── package.json
-│           └── HUONG_DAN_CHAY_DU_AN.md
-│
-├── finalReport/                     # Báo cáo dự án
-├── plan/                           # Kế hoạch
-└── weeklyReport/                   # Báo cáo tuần
+├── README.md
+├── demoImages/
+└── source_code/
+	├── online_learning_client/              # Frontend React
+	│   ├── FRONTEND_RUN_GUIDE.md
+	│   ├── package.json
+	│   ├── public/
+	│   └── src/
+	└── online_learning_server/              # Backend Spring Boot
+		├── BACKEND_RUN_GUIDE.md
+		├── pom.xml
+		├── docker-compose.yaml
+		└── src/
 ```
 
 ---
 
-## 💻 Hướng Dẫn Cài Đặt
+## 💻 Hướng Dẫn Chạy Nhanh
 
-### Yêu Cầu Hệ Thống
+### 1) Chạy Backend
 
-**Backend:**
-- Java JDK 17 trở lên
-- Maven 3.6+
-- MySQL/PostgreSQL
-- IDE: IntelliJ IDEA / Eclipse
+- Tài liệu chi tiết: [source_code/online_learning_server/BACKEND_RUN_GUIDE.md](source_code/online_learning_server/BACKEND_RUN_GUIDE.md)
 
-**Frontend:**
-- Node.js >= 16.x
-- npm >= 8.x hoặc yarn
+```bash
+cd source_code/online_learning_server
+mvn clean install
+mvn spring-boot:run
+```
 
-### Cài Đặt Backend
+### 2) Chạy Frontend
 
-Chi tiết xem tại: [source_code/back-end/online_learning/RUN_GUIDE.md](source_code/back-end/online_learning/BACKEND_RUN_GUIDE.md.md)
+- Tài liệu chi tiết: [source_code/online_learning_client/FRONTEND_RUN_GUIDE.md](source_code/online_learning_client/FRONTEND_RUN_GUIDE.md)
 
+```bash
+cd source_code/online_learning_client
+npm install
+npm start
+```
 
-### Cài Đặt Frontend
+### 3) Biến môi trường frontend (`.env`)
 
-Chi tiết xem tại: [source_code/front-end/online_learning/HUONG_DAN_CHAY_DU_AN.md](source_code/front-end/online_learning/FRONTEND_RUN_GUIDE.md.md)
-
-
-### Cấu Hình Môi Trường
-
-**Frontend** - Tạo file `.env`:
 ```env
 REACT_APP_BASE_URL=http://localhost:8080/online_learning
 ```
@@ -190,17 +177,19 @@ REACT_APP_BASE_URL=http://localhost:8080/online_learning
 
 ## 📞 Hỗ Trợ
 
-Nếu gặp vấn đề khi cài đặt hoặc sử dụng:
-1. Kiểm tra hướng dẫn chi tiết trong thư mục tương ứng
-2. Xem phần troubleshooting trong file HUONG_DAN_CHAY_DU_AN.md
-3. Kiểm tra logs trong console/terminal
+Nếu gặp vấn đề khi cài đặt hoặc chạy dự án:
+1. Kiểm tra đúng thư mục frontend/backend theo cấu trúc mới.
+2. Xem mục troubleshooting trong:
+   - [source_code/online_learning_client/FRONTEND_RUN_GUIDE.md](source_code/online_learning_client/FRONTEND_RUN_GUIDE.md)
+   - [source_code/online_learning_server/BACKEND_RUN_GUIDE.md](source_code/online_learning_server/BACKEND_RUN_GUIDE.md)
+3. Kiểm tra logs trong terminal và browser console.
 
 ---
 
 ## 📄 License
 
-Dự án này được phát triển cho mục đích học tập và nghiên cứu.
+Dự án phục vụ mục đích học tập và nghiên cứu.
 
 ---
 
-**Chúc bạn cài đặt và sử dụng thành công! 🎉**
+**Chúc bạn triển khai thành công! 🎉**

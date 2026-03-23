@@ -33,7 +33,7 @@ npm --version
 ### Bước 1: Clone Source Code
 ```bash
 git clone <repository-url>
-cd source_code/front-end/online_learning
+cd online_learning/source_code/online_learning_client
 ```
 
 ### Bước 2: Cài Đặt Dependencies
