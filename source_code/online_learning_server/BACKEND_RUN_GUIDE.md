@@ -48,15 +48,42 @@ mvn clean install
 ## 6. Chạy dự án
 
 ### Cách 1: Chạy bằng dòng lệnh (Terminal)
-Tại thư mục gốc dự án:
+Tại thư mục gốc dự án. Nếu bạn đã tạo file `.env`, dùng các lệnh sau để nạp các biến môi trường rồi chạy ứng dụng (PowerShell hoặc CMD):
 
-```sh
+- Trên Windows PowerShell (nạp `.env` cho tiến trình hiện tại rồi chạy):
+
+```powershell
+# Nạp tất cả dòng không phải comment từ .env vào biến môi trường tiến trình, sau đó chạy ứng dụng
+Get-Content .env | Where-Object { $_ -and ($_ -notmatch '^\s*#') } | ForEach-Object { $p = $_ -split '=',2; if ($p.Count -eq 2) { [System.Environment]::SetEnvironmentVariable($p[0].Trim(), $p[1].Trim(), 'Process') } }
+# Sau khi nạp xong, khởi chạy ứng dụng bằng Maven
 mvn spring-boot:run
+```
+
+- Trên Windows CMD (nạp `.env` rồi chạy):
+
+```cmd
+for /f "usebackq tokens=1* delims==" %a in (".env") do set "%a=%b"
+mvn spring-boot:run
+```
+
+> Lưu ý: Lệnh `for` trên CMD phù hợp với giá trị không chứa ký tự đặc biệt; nếu giá trị biến có dấu `=` hoặc ký tự phức tạp, dùng PowerShell hoặc thiết lập biến thủ công.
+
+- Chạy file jar (thích hợp cho production):
+
+```powershell
+# Nạp .env vào tiến trình hiện tại
+Get-Content .env | Where-Object { $_ -and ($_ -notmatch '^\s*#') } | ForEach-Object { $p = $_ -split '=',2; if ($p.Count -eq 2) { [System.Environment]::SetEnvironmentVariable($p[0].Trim(), $p[1].Trim(), 'Process') } }
+# Build và chạy jar
+mvn clean package -DskipTests
+java -jar target/online_learning-0.0.1-SNAPSHOT.jar
 ```
 
 ### Cách 2: Chạy bằng IDE (Android Studio / IntelliJ)
 1.  Mở file Main Class: `src/main/java/com/vitube/online_learning/OnlineLearningApplication.java`.
-2.  Nhấn nút **Run** (biểu tượng tam giác xanh).
+2.  Nếu bạn muốn IDE khởi chạy với biến từ `.env`, bạn có hai lựa chọn:
+    - Paste từng biến (KEY=VALUE) vào phần **Environment variables** của Run Configuration.
+    - Sử dụng plugin như **EnvFile** để trỏ tới file `.env` và IDE sẽ nạp tự động.
+3.  Nhấn nút **Run** (biểu tượng tam giác xanh).
 
 
 ## 7. Các lỗi thường gặp (Troubleshooting)
