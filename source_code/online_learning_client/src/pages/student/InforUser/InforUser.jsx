@@ -3,9 +3,10 @@ import styles from './InforUser.module.scss';
 import UserInfoSection from './UserInfoSection';
 import EditUserInfoModal from './EditUserInfoModal';
 import UserApi from 'service/apis/UserApi';
+import { ErrorDisplay } from 'components/common/ErrorDisplay/ErrorDisplay';
 import { useError } from 'components/common/ErrorDisplay/ErrorDisplay';
 export default function InforUser() {
-    const { ErrorDisplay, showError } = useError();
+    const { showError, dismissError, errorMessage } = useError();
 
     // Static user data (split for future APIs)
     const [userStat, setUserStat] = useState({
@@ -107,7 +108,7 @@ export default function InforUser() {
 
     return (
         <div className={styles['user-info-page']}>
-            <ErrorDisplay />
+            <ErrorDisplay errorMessage={errorMessage} onDismiss={dismissError} />
             <EditUserInfoModal
                 isOpen={isEditModalOpen}
                 onClose={handleCloseEditModal}
