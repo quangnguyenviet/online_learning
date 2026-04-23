@@ -1,7 +1,7 @@
 ## Yêu Cầu
 - Java 21 hoặc cao hơn. https://vntalking.com/huong-dan-download-va-cai-dat-jdk-java-development-kit.html
 - Maven 3.8 hoặc cao hơn. https://viblo.asia/p/cai-dat-maven-tren-mac-va-windows-6BAMYVXBGnjz
-- Cơ sở dữ liệu MySQL. https://www.thegioididong.com/game-app/huong-dan-cach-tai-cai-dat-mysql-ban-moi-nhat-chi-tiet-tung-1299084
+- Cơ sở dữ liệu PostgreSQL. https://www.postgresql.org/download/
 - FFmpeg được cài đặt và cấu hình.
 
 ## hướng dẫn cài đặt FFmpeg và cấu hình
@@ -23,9 +23,9 @@ ffmpeg -version
    ```bash
    cd online_learning
 3. Cấu hình thông tin cơ sở dữ liệu trong file src/main/resources/application.properties:
-chú ý thay thế `your_username` và `your_password` bằng thông tin đăng nhập của bạn và cổng mà mysql bn đang dùng.
+chú ý thay thế `your_username` và `your_password` bằng thông tin đăng nhập của bạn và cổng mà postgresql bạn đang dùng.
    ```properties
-   spring.datasource.url=jdbc:mysql://localhost:3306/online_learning
+   spring.datasource.url=jdbc:postgresql://localhost:5432/online_learning
    spring.datasource.username=your_username
    spring.datasource.password=your_password
    ```
