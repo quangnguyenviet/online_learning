@@ -6,7 +6,7 @@ Tài liệu này hướng dẫn chi tiết cách cài đặt và chạy dự án
 Trước khi bắt đầu, hãy đảm bảo máy tính của bạn đã cài đặt:
 
 *   **Java Development Kit (JDK):** Phiên bản **17** hoặc mới hơn.
-*   **Database:** MySQL Server (khuyến nghị bản 8.0).
+*   **Database:** PostgreSQL Server (khuyến nghị bản 15 hoặc mới hơn).
 *   **Build Tool:** Maven.
 *   **FFmpeg:** Bộ công cụ xử lý video (Bắt buộc).
 
@@ -26,11 +26,11 @@ ffmpeg.path=D:\\download\\ffmpeg-master-latest-win64-gpl-shared\\bin\\ffprobe.ex
 ```
 
 ## 3. Cấu hình Database
-1.  Mở MySQL Workbench hoặc công cụ quản lý DB bất kỳ.
+1.  Mở pgAdmin hoặc công cụ quản lý DB bất kỳ.
 2.  Tạo một database rỗng với tên `online_learning_db`.
 
 ```sql
-CREATE DATABASE online_learning_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE online_learning_db;
 ```
 
 ## 4. Cấu hình Môi trường
