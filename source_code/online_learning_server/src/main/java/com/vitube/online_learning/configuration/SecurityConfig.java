@@ -30,7 +30,7 @@ public class SecurityConfig {
 
     // Các endpoint công khai cho phương thức POST
     private final String[] PUBLIC_ENPOINTS = {
-            "/users", "/auth/**", "/zalopay/callback"
+            "/users", "/auth/**", "/zalopay/callback", "/swagger-ui/**", "/v3/api-docs/**"
     };
 
     // Các endpoint công khai cho phương thức GET
