@@ -10,8 +10,8 @@
 - [x] Memory Bank initialization
 
 ## In Progress
-- [ ] Microservices communication (OpenFeign or WebClient)
-- [ ] Notification service implementation
+- [/] Notification service implementation (Success registration email)
+- [ ] Microservices communication (Kafka setup)
 - [ ] Frontend integration (assuming a client exists or will be built)
 
 ## Pending

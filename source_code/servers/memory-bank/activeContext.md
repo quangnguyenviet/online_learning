@@ -13,6 +13,6 @@ The project is a Spring Boot-based online learning platform. It is currently bei
 - Synchronized documentation (`README.md`, `BACKEND_RUN_GUIDE.md`) to use **PostgreSQL** as the primary database.
 
 ## Next Steps
+- Implement Event-Driven Notification for Successful Registration (using Kafka).
 - Verify the integration between the main server and the notification service.
 - Review the database schema for any gaps in course/lesson management.
-- Ensure FFmpeg configuration is consistent across development environments.
