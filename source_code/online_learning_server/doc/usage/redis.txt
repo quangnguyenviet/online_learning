@@ -1,0 +1,47 @@
+Bạn đang chạy Redis bằng Docker → muốn xem dữ liệu bên trong thì có vài cách rất đơn giản 👇
+
+🧠 Cách 1 (chuẩn nhất): vào Redis CLI trong container
+Bước 1: vào container
+docker exec -it redis redis-cli
+Bước 2: xem tất cả key
+KEYS *
+
+Ví dụ bạn blacklist JWT:
+
+auth:blacklist:abc123
+auth:blacklist:def456
+Bước 3: xem value của key
+GET auth:blacklist:abc123
+Bước 4: xem TTL (còn sống bao lâu)
+TTL auth:blacklist:abc123
+
+Kết quả:
+
+-1 → không có TTL
+-2 → key không tồn tại
+số dương → còn bao nhiêu giây nữa sẽ bị xóa
+🧠 Cách 2: xem toàn bộ Redis nhanh gọn
+docker exec -it redis redis-cli keys "*"
+🧠 Cách 3 (khuyến nghị khi nhiều data)
+
+Tránh dùng KEYS * vì sẽ chậm nếu Redis lớn
+
+👉 dùng:
+
+docker exec -it redis redis-cli scan 0
+🧠 Cách 4: xem realtime “đang có gì chạy vào Redis”
+docker exec -it redis redis-cli monitor
+
+→ sẽ log mọi request (GET/SET)
+
+⚡ Bonus (rất hữu ích cho JWT blacklist của bạn)
+Xem tất cả blacklist:
+KEYS auth:blacklist:*
+💡 Tóm lại
+
+Bạn chỉ cần nhớ 3 lệnh chính:
+
+docker exec -it redis redis-cli
+KEYS *
+GET <key>
+TTL <key>

@@ -10,14 +10,13 @@ import com.vitube.online_learning.dto.request.LogoutRequest;
 import com.vitube.online_learning.dto.request.RefreshRequest;
 import com.vitube.online_learning.dto.response.AuthenticationResponse;
 import com.vitube.online_learning.dto.response.IntrospectRespone;
-import com.vitube.online_learning.entity.InvalidToken;
 import com.vitube.online_learning.entity.User;
 import com.vitube.online_learning.enums.ErrorCode;
 import com.vitube.online_learning.exception.AppException;
-import com.vitube.online_learning.repository.InvalidTokenRepository;
 import com.vitube.online_learning.repository.UserRepository;
 import com.vitube.online_learning.service.AuthenticationService;
 import com.vitube.online_learning.service.JWTService;
+import com.vitube.online_learning.service.TokenBlacklistService;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +28,6 @@ import java.text.ParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 /**
  * Lớp triển khai các phương thức liên quan đến xác thực.
@@ -39,9 +37,9 @@ import java.util.NoSuchElementException;
 @Slf4j
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final PasswordEncoder passwordEncoder;
-    private final InvalidTokenRepository invalidTokenRepository;
     private final UserRepository userRepository;
     private final JWTService jwtService;
+    private final TokenBlacklistService tokenBlacklistService;
 
     @Value("${jwt.singerKey}")
     @NonFinal
@@ -104,17 +102,27 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         SignedJWT signedJWT = SignedJWT.parse(token);
 
         Date expiration = signedJWT.getJWTClaimsSet().getExpirationTime();
+        String jti = signedJWT.getJWTClaimsSet().getJWTID();
 
         var verified = signedJWT.verify(verifier);
 
-        boolean valid = verified && expiration.after(new Date());
+        boolean valid = verified
+                && expiration != null
+                && expiration.after(new Date())
+                && jti != null
+                && !jti.isBlank();
+
+        if (!valid) {
+            return IntrospectRespone.builder().valid(false).build();
+        }
+
         try {
-            InvalidToken invalidToken = invalidTokenRepository
-                    .findById(signedJWT.getJWTClaimsSet().getJWTID())
-                    .get();
+            if (tokenBlacklistService.isBlacklisted(jti)) {
+                valid = false;
+            }
+        } catch (RuntimeException e) {
+            log.error("Cannot check blacklist from Redis", e);
             valid = false;
-        } catch (NoSuchElementException e) {
-            // token không tồn tại trong bảng invalidToken
         }
 
         return IntrospectRespone.builder().valid(valid).build();
@@ -131,17 +139,20 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         try {
             SignedJWT signedJWT = SignedJWT.parse(request.getToken()); // có thể xảy ra ParseException
             String jtid = signedJWT.getJWTClaimsSet().getJWTID();
-            Date expiration = new Date(signedJWT
-                    .getJWTClaimsSet()
-                    .getIssueTime()
-                    .toInstant()
-                    .plus(REFRESH_DURATION, ChronoUnit.SECONDS)
-                    .toEpochMilli());
+            Date expiration = signedJWT.getJWTClaimsSet().getExpirationTime();
 
-            if (!expiration.before(new Date())) {
-                InvalidToken invalidToken =
-                        InvalidToken.builder().id(jtid).expiration(expiration).build();
-                invalidTokenRepository.save(invalidToken);
+            if (jtid == null || jtid.isBlank() || expiration == null) {
+                throw new AppException(ErrorCode.INVALID_TOKEN);
+            }
+
+            long ttlSeconds = Math.max(0, (expiration.getTime() - System.currentTimeMillis()) / 1000);
+            if (ttlSeconds > 0) {
+                try {
+                    tokenBlacklistService.blacklist(jtid, ttlSeconds);
+                } catch (RuntimeException e) {
+                    log.error("Cannot write token blacklist to Redis", e);
+                    throw new AppException(ErrorCode.INVALID_TOKEN);
+                }
             }
 
         } catch (ParseException e) {
@@ -161,20 +172,34 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             SignedJWT signedJWT = jwtService.verifyToken(request.getToken(), true);
 
             String jtid = signedJWT.getJWTClaimsSet().getJWTID();
-            Date expiration = signedJWT.getJWTClaimsSet().getExpirationTime();
             String email = signedJWT.getJWTClaimsSet().getSubject();
+            Date issueTime = signedJWT.getJWTClaimsSet().getIssueTime();
+
+            if (jtid == null || jtid.isBlank() || issueTime == null) {
+            throw new AppException(ErrorCode.INVALID_TOKEN);
+            }
+
+            Date refreshExpiration = new Date(issueTime.toInstant()
+                .plus(REFRESH_DURATION, ChronoUnit.SECONDS)
+                .toEpochMilli());
+
+            long ttlSeconds = Math.max(0, (refreshExpiration.getTime() - System.currentTimeMillis()) / 1000);
+            if (ttlSeconds > 0) {
+            try {
+                tokenBlacklistService.blacklist(jtid, ttlSeconds);
+            } catch (RuntimeException e) {
+                log.error("Cannot write refresh token blacklist to Redis", e);
+                throw new AppException(ErrorCode.INVALID_TOKEN);
+            }
+            }
 
             User user = userRepository.findByEmail(email)
-                    .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
-
-            InvalidToken invalidToken =
-                    InvalidToken.builder().id(jtid).expiration(expiration).build();
-            invalidTokenRepository.save(invalidToken);
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXIST));
 
             String newToken = jwtService.generateToken(user);
             return AuthenticationResponse.builder()
-                    .token(newToken)
-                    .build();
+                .token(newToken)
+                .build();
 
 
     }
