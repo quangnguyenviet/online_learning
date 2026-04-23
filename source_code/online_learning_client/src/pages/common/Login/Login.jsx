@@ -24,7 +24,7 @@ export default function Login() {
                 StorageService.saveToken(data.token);
                 StorageService.saveRole(data.roles);
                 if (data.roles.includes('ADMIN')) {
-                    navigate('/admin/dashboard');
+                    navigate('/instructor/dashboard');
                 }
                 else if (data.roles.includes('INSTRUCTOR')) {
                     navigate('/instructor/dashboard');
