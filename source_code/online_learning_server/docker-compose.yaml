@@ -17,6 +17,17 @@ services:
       # You can mount SQL init scripts here if needed
       # - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
 
+  # Redis service for JWT blacklist and caching
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+
   # MySQL service (kept for reference)
   # mysql:
   #   image: mysql:8.0
@@ -32,4 +43,5 @@ services:
 
 volumes:
   pgdata:
+  redis_data:
   mysql_data:

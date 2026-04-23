@@ -5,12 +5,11 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import com.vitube.online_learning.entity.InvalidToken;
 import com.vitube.online_learning.entity.User;
 import com.vitube.online_learning.enums.ErrorCode;
 import com.vitube.online_learning.exception.AppException;
-import com.vitube.online_learning.repository.InvalidTokenRepository;
 import com.vitube.online_learning.service.JWTService;
+import com.vitube.online_learning.service.TokenBlacklistService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +25,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class JWTServiceImpl implements JWTService {
-    private final InvalidTokenRepository invalidTokenRepository;
+    private final TokenBlacklistService tokenBlacklistService;
 
     @Value("${jwt.valid-duration}")
     private long VALID_DURATION;
@@ -69,35 +68,44 @@ public class JWTServiceImpl implements JWTService {
 
     @Override
     public SignedJWT verifyToken(String token, boolean isRefresh) throws JOSEException, ParseException {
-        JWSVerifier verifier = null;
-            verifier = new MACVerifier(SIGNER_KEY.getBytes());
-            SignedJWT signedJWT = SignedJWT.parse(token);
+        JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
+        SignedJWT signedJWT = SignedJWT.parse(token);
 
-            Date expiration = (isRefresh)
-                    ? (new Date(signedJWT
-                    .getJWTClaimsSet()
-                    .getIssueTime()
-                    .toInstant()
-                    .plus(REFRESH_DURATION, ChronoUnit.SECONDS)
-                    .toEpochMilli()))
-                    : (signedJWT.getJWTClaimsSet().getExpirationTime());
+        Date expiration = (isRefresh)
+                ? (new Date(signedJWT
+                .getJWTClaimsSet()
+                .getIssueTime()
+                .toInstant()
+                .plus(REFRESH_DURATION, ChronoUnit.SECONDS)
+                .toEpochMilli()))
+                : (signedJWT.getJWTClaimsSet().getExpirationTime());
 
-            var verified = signedJWT.verify(verifier);
+        var verified = signedJWT.verify(verifier);
+        String jti = signedJWT.getJWTClaimsSet().getJWTID();
 
-            boolean valid = verified && expiration.after(new Date());
+        boolean valid = verified
+                && expiration != null
+                && expiration.after(new Date())
+                && jti != null
+                && !jti.isBlank();
 
-            InvalidToken invalidToken = invalidTokenRepository
-                        .findById(signedJWT.getJWTClaimsSet().getJWTID())
-                        .get();
-            if (invalidToken != null) {
-                valid = false;
-            }
+        if (!valid) {
+            throw new AppException(ErrorCode.INVALID_TOKEN);
+        }
 
-            if (!valid) {
-                throw new AppException(ErrorCode.INVALID_TOKEN);
-            }
+        boolean blacklisted;
+        try {
+            blacklisted = tokenBlacklistService.isBlacklisted(jti);
+        } catch (RuntimeException e) {
+            log.error("Cannot check token blacklist from Redis", e);
+            throw new AppException(ErrorCode.INVALID_TOKEN);
+        }
 
-            return signedJWT;
+        if (blacklisted) {
+            throw new AppException(ErrorCode.INVALID_TOKEN);
+        }
+
+        return signedJWT;
 
 
     }

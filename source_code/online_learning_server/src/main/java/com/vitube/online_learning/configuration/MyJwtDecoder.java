@@ -2,6 +2,7 @@ package com.vitube.online_learning.configuration;
 
 import com.nimbusds.jose.JOSEException;
 import com.vitube.online_learning.dto.request.IntrospectRequest;
+import com.vitube.online_learning.exception.AppException;
 import com.vitube.online_learning.service.AuthenticationService;
 import lombok.experimental.NonFinal;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,7 @@ public class MyJwtDecoder implements JwtDecoder {
 
             // Ném ngoại lệ nếu token không hợp lệ
             if (!response.isValid()) throw new JwtException("Token invalid");
-        } catch (JOSEException | ParseException e) {
+        } catch (JOSEException | ParseException | AppException e) {
             // Xử lý ngoại lệ trong quá trình kiểm tra
             throw new JwtException(e.getMessage());
         }
