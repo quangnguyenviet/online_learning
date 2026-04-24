@@ -11,10 +11,15 @@ The project is currently in a transition phase from a **Monolithic Spring Boot**
 ## Design Patterns
 - **Layered Architecture**: Standard `Controller` -> `Service` -> `Repository` pattern.
 - **DTO (Data Transfer Objects)**: Used for API requests and responses to decouple the domain model from the API.
+- **Event-Driven Architecture**: Uses **Apache Kafka** to decouple the core business logic from side-effect services (like notifications).
+- **Service Discovery**: **Netflix Eureka** is used to allow services to find and communicate with each other dynamically.
 - **Automated Mapping**: MapStruct is used to convert between Entities and DTOs.
 - **Repository Pattern**: Spring Data JPA interfaces for database abstraction.
 
 ## Key Technical Decisions
+- **Asynchronous Communication**: Kafka is prioritized for non-critical, background tasks (email, logging) to improve system responsiveness.
+- **JSON Serialization**: `JsonSerializer`/`JsonDeserializer` from Spring Kafka is used for message exchange, with explicit target type mapping to handle cross-service DTO package differences.
+- **Infrastructure Monitoring**: Kafka UI is included in the development stack to monitor topic state and message flow.
 - **Video Metadata Extraction**: FFmpeg (via `ffprobe`) is used to extract duration and other metadata from uploaded videos.
 - **Database Migrations**: Flyway is used to manage schema changes in a version-controlled manner.
 - **Cloud Integration**: AWS S3 is utilized for scalable file storage.
