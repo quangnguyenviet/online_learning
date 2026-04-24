@@ -7,6 +7,7 @@ import com.vitube.online_learning.entity.Register;
 import com.vitube.online_learning.entity.User;
 import com.vitube.online_learning.enums.ErrorCode;
 import com.vitube.online_learning.exception.AppException;
+import com.vitube.online_learning.event.EnrollmentEvent;
 import com.vitube.online_learning.mapper.RegisterMapper;
 import com.vitube.online_learning.repository.CourseRepository;
 import com.vitube.online_learning.repository.RegisterRepository;
@@ -14,6 +15,8 @@ import com.vitube.online_learning.repository.UserRepository;
 import com.vitube.online_learning.service.RegisterService;
 import com.vitube.online_learning.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -23,12 +26,14 @@ import java.time.LocalDate;
  */
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class RegisterServiceImpl implements RegisterService {
     private final UserRepository userRepository;
     private final RegisterRepository registerRepository;
     private final CourseRepository courseRepository;
     private final UserService userService;
     private final RegisterMapper registerMapper;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
     /**
      * Chuyển đổi đối tượng RegisterRequest thành Register.
@@ -84,6 +89,23 @@ public class RegisterServiceImpl implements RegisterService {
 
         // Lưu thông tin đăng ký vào cơ sở dữ liệu
         registerRepository.save(register);
+
+        // Phát sự kiện đăng ký thành công qua Kafka
+        try {
+            EnrollmentEvent event = EnrollmentEvent.builder()
+                    .studentEmail(student.getEmail())
+                    .courseTitle(course.getTitle())
+                    .price(register.getPrice())
+                    .enrollmentDate(register.getRegisterDate())
+                    .build();
+            
+            kafkaTemplate.send("enrollment-topic", event);
+            log.info("Published enrollment event for student: {} to Kafka", student.getEmail());
+        } catch (Exception e) {
+            log.error("Failed to publish enrollment event to Kafka: {}", e.getMessage());
+            // Note: In a real-world scenario, we might want to use a transactional outbox pattern
+            // or a retry mechanism here to ensure the event is eventually published.
+        }
 
         // Cập nhật danh sách đăng ký của sinh viên và khóa học
 //        student.getRegisters().add(register);
