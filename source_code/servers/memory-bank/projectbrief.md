@@ -8,6 +8,7 @@ Vitube is a comprehensive online learning platform designed to facilitate course
 2. **Engage Students**: Offer a structured learning environment with lessons, categories, and progress monitoring.
 3. **Scalable Infrastructure**: Transition from a monolithic architecture to a microservices-based system to handle growth.
 4. **Reliable Video Processing**: Utilize FFmpeg for robust video metadata extraction and processing.
+5. **Security First**: Ensure all sensitive credentials and configurations are managed securely via environment variables, never committed to version control.
 
 ## Key Features
 - **User Management**: Role-based access control (Admin, Instructor, Student).
