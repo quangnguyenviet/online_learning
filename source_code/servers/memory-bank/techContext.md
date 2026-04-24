@@ -37,6 +37,10 @@
 - **FFmpeg**: Must be installed and configured in `PATH` or specified in `application.properties`.
 - **Docker**: Used for local infrastructure (PostgreSQL, Redis, Kafka, Zookeeper, Kafka UI) via `docker-compose.yaml`.
 
+## Development Standards
+- **[RULE] No Hardcoded Credentials**: Absolutely no passwords, API keys, or sensitive information in source code or `application.properties`. Use environment variables `${VAR_NAME}` managed via `.env` files.
+- **Environment Parity**: Maintain consistent environment variable names across different services for shared infrastructure (e.g., `KAFKA_BOOTSTRAP_SERVERS`).
+
 ## External Constraints
 - **FFmpeg Path**: The system relies on external binaries for video processing, which must be correctly configured in each environment.
 - **AWS Connectivity**: S3 integration requires valid credentials and network access to AWS endpoints.
