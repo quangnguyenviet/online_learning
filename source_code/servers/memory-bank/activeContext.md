@@ -1,18 +1,20 @@
 # Active Context
 
 ## Current State
-The project is a Spring Boot-based online learning platform. It is currently being initialized for systematic development using the "Memory Bank" method.
+The project is a Spring Boot-based microservices architecture. The enrollment notification system has been successfully refactored to use an event-driven architecture with Apache Kafka and Eureka.
 
 ### Active Focus
-- **Infrastructure Initialization**: Setting up the project context and documentation.
-- **Service Decoupling**: Transitioning from a monolith to microservices (Eureka and Notification services are in place).
+- **Post-Refactoring Verification**: Ensuring stability of the event-driven flow.
+- **Service Management**: Managing the lifecycle of multiple services (Main Server, Eureka, Notification).
 
 ## Recent Changes
-- Initialized `/memory-bank` with core documentation.
-- Project structure established for `online_learning_server`, `eureka-server`, and `notification` service.
-- Synchronized documentation (`README.md`, `BACKEND_RUN_GUIDE.md`) to use **PostgreSQL** as the primary database.
+- Implemented **Event-Driven Architecture** for course enrollment notifications.
+- Integrated **Apache Kafka** as a message broker between `online-learning-server` and `notification-service`.
+- Set up **Eureka Server** for service discovery.
+- Added **Kafka UI** for infrastructure monitoring.
+- Successfully verified the flow: Enrollment -> Kafka Event -> Notification Service -> Email sent.
 
 ## Next Steps
-- Implement Event-Driven Notification for Successful Registration (using Kafka).
-- Verify the integration between the main server and the notification service.
-- Review the database schema for any gaps in course/lesson management.
+- Implement Error Handling & Retry logic for failed notifications.
+- Extend the notification system to other events (e.g., payment failure, course updates).
+- Review and optimize the database schema for scalability.
