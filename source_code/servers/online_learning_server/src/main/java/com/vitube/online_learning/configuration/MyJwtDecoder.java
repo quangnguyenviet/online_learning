@@ -25,7 +25,7 @@ import java.text.ParseException;
 public class MyJwtDecoder implements JwtDecoder {
 
     // Lấy khóa ký JWT từ file cấu hình
-    @Value("${jwt.singerKey}")
+    @Value("${jwt.signerKey}")
     @NonFinal
     private String signerKey;
 
