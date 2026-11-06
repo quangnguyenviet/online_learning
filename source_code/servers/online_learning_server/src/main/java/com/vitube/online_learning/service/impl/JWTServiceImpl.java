@@ -30,7 +30,7 @@ public class JWTServiceImpl implements JWTService {
     @Value("${jwt.valid-duration}")
     private long VALID_DURATION;
 
-    @Value("${jwt.singerKey}")
+    @Value("${jwt.signerKey}")
     String SIGNER_KEY;
 
     @Value("${jwt.refresh-duration}")

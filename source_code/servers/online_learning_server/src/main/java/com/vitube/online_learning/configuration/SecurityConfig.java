@@ -40,7 +40,7 @@ public class SecurityConfig {
     };
 
     // Khóa ký JWT được lấy từ file cấu hình
-    @Value("${jwt.singerKey}")
+    @Value("${jwt.signerKey}")
     @NonFinal
     private String SIGNER_KEY;
 

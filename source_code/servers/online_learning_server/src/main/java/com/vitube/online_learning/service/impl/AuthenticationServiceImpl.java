@@ -41,7 +41,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JWTService jwtService;
     private final TokenBlacklistService tokenBlacklistService;
 
-    @Value("${jwt.singerKey}")
+    @Value("${jwt.signerKey}")
     @NonFinal
     String SIGNER_KEY;
 
