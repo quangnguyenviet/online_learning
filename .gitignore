@@ -29,7 +29,10 @@ media/
 *.iml
 /target/
 /.idea/
-.mvn/
+# Maven Wrapper: keep the wrapper metadata so ./mvnw works on a fresh clone
+**/.mvn/*
+!**/.mvn/wrapper/
+!**/.mvn/wrapper/maven-wrapper.properties
 
 # IDE / Editor specific
 .vscode/
@@ -68,7 +71,10 @@ media/
 *.iml
 /target/
 /.idea/
-.mvn/
+# Maven Wrapper: keep the wrapper metadata so ./mvnw works on a fresh clone
+**/.mvn/*
+!**/.mvn/wrapper/
+!**/.mvn/wrapper/maven-wrapper.properties
 
 # IDE / Editor specific
 .vscode/

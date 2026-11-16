@@ -1,46 +1,33 @@
-## Yêu Cầu
-- Java 21 hoặc cao hơn. https://vntalking.com/huong-dan-download-va-cai-dat-jdk-java-development-kit.html
-- Maven 3.8 hoặc cao hơn. https://viblo.asia/p/cai-dat-maven-tren-mac-va-windows-6BAMYVXBGnjz
-- Cơ sở dữ liệu PostgreSQL. https://www.postgresql.org/download/
-- FFmpeg được cài đặt và cấu hình.
+# Online Learning Backend (Spring Boot)
 
-## hướng dẫn cài đặt FFmpeg và cấu hình
-truy câp link sau để tải: https://drive.google.com/drive/folders/1W8yWbGigS4UgH5fIUo5hoBDmYAqlG7Jn?usp=sharing
-- Giải nén tệp tải về và đặt vào ổ đĩa D:\
-- Thêm đường dẫn đến thư mục chứa FFmpeg vào biến môi trường PATH:
-  - Mở Control Panel > System and Security > System > Advanced system settings.
-  - Nhấp vào nút "Environment Variables".
-  - Trong phần "System variables", tìm biến `Path` và nhấp vào "Edit".
-  - Thêm đường dẫn đến thư mục chứa FFmpeg (ví dụ: `D:\ffmpeg-master-latest-win64-gpl-shared\bin`).
-  - Nhấn OK để lưu thay đổi.
-Kiểm tra việc cài đặt FFmpeg bằng cách mở Command Prompt và chạy lệnh:
+API chính của dự án: **Java 21 / Spring Boot 3.3**, port `8080`, context-path `/online_learning`.
+
+Hướng dẫn chạy chi tiết (cài đặt, docker-compose, FFmpeg, `.env`, Eureka, notification) nằm trong
+[**BACKEND_RUN_GUIDE.md**](BACKEND_RUN_GUIDE.md) — xem file đó để chạy.
+
+## Yêu cầu chính
+
+- **JDK 21** và **Maven 3.8+**
+- **PostgreSQL, Redis, Kafka** — chạy sẵn bằng Docker Compose, file `docker-compose.yaml` nằm ngay trong thư mục `online_learning_server/` (khuyến nghị dùng)
+- **FFmpeg (ffprobe)** — cho tính năng video
+
+## Chạy nhanh
+
 ```bash
-ffmpeg -version
+# 1. Hạ tầng (docker-compose.yaml nằm ngay trong thư mục online_learning_server/)
+cd source_code/servers/online_learning_server
+docker compose up -d
+
+# 2. Backend (cùng thư mục đó)
+# tạo .env từ .env-example nếu chưa có, sửa ffmpeg.path trong application.properties
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
 ```
-## chạy dự án trên intellij
-1. Clone repository:
-2. Di chuyển vào thư mục dự án:
-   ```bash
-   cd online_learning
-3. Cấu hình thông tin cơ sở dữ liệu trong file src/main/resources/application.properties:
-chú ý thay thế `your_username` và `your_password` bằng thông tin đăng nhập của bạn và cổng mà postgresql bạn đang dùng.
-   ```properties
-   spring.datasource.url=jdbc:postgresql://localhost:5432/online_learning
-   spring.datasource.username=your_username
-   spring.datasource.password=your_password
-   ```
-config evn:
-click vào edit
-![img.png](img.png)
-ở phần environment variables, chỉ đến file .env
-![img_1.png](img_1.png)
-click ok
-Chạy lệnh sau để cài đặt các phụ thuộc:
-   ```bash
-    mvn clean install
-    ```
-Chạy ứng dụng:
-   ```bash
-   mvn spring-boot:run
-   ```
-Truy cập ứng dụng tại địa chỉ: `http://localhost:8080/oneline_learning`
+
+- Backend: `http://localhost:8080/online_learning`
+- Swagger UI: `http://localhost:8080/online_learning/swagger-ui/index.html`
+
+## Ghi chú cấu hình
+
+- DB, Redis dùng **profile `dev`** (đã khớp docker-compose: `root`/`12345`, db `online_learning_db`).
+- Các bí mật (JWT, Zalopay, storage S3/R2...) nằm trong file `.env` (gitignore) — copy từ `.env-example`.
+- Schema tự quản lý bằng **Flyway** (`src/main/resources/db/migration/`), không cần chạy SQL thủ công.

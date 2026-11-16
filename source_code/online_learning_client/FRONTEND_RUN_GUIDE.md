@@ -15,8 +15,8 @@
 
 Trước khi bắt đầu, đảm bảo máy tính của bạn đã cài đặt:
 
-- **Node.js** phiên bản >= 16.x ([Tải tại đây](https://nodejs.org/))
-- **npm** phiên bản >= 8.x (đi kèm với Node.js) hoặc **yarn**
+- **Node.js** phiên bản **18.x trở lên** ([Tải tại đây](https://nodejs.org/))
+- **npm** phiên bản **9.x trở lên** (đi kèm với Node.js) hoặc **yarn**
 - **Git** để clone source code
 - **Backend API** đã được cài đặt và đang chạy
 
@@ -53,16 +53,15 @@ yarn install
 
 ## ⚙️ Cấu Hình Môi Trường
 
-### Tạo File `.env`
-Tạo file `.env` trong thư mục gốc của dự án (`online_learning/`) với nội dung sau:
+### File `.env`
+Tạo file `.env` **trong thư mục client** (`source_code/online_learning_client/`) với nội dung sau:
 
 ```env
-# URL của Backend API
+# URL của Backend API (bao gồm context-path /online_learning)
 REACT_APP_BASE_URL=http://localhost:8080/online_learning
-
-# Các cấu hình khác (nếu cần)
-# REACT_APP_FIREBASE_API_KEY=your_firebase_api_key
 ```
+
+> Lưu ý: `.env` đã được gitignore nên mỗi máy cần tạo lại. Nếu clone từ repo mà chưa có `.env`, frontend sẽ gọi API mặc định và có thể bị lỗi CORS / kết nối — hãy kiểm tra file này trước khi chạy.
 
 ### Cấu Hình Firebase (Đã có sẵn)
 Dự án đã được cấu hình sẵn Firebase trong file [src/firebase.jsx](src/firebase.jsx) với các thông tin:
