@@ -58,10 +58,12 @@ Tạo file `.env` **trong thư mục client** (`source_code/online_learning_clie
 
 ```env
 # URL của Backend API (bao gồm context-path /online_learning)
-REACT_APP_BASE_URL=http://localhost:8080/online_learning
+VITE_BASE_URL=http://localhost:8080/online_learning
 ```
 
-> Lưu ý: `.env` đã được gitignore nên mỗi máy cần tạo lại. Nếu clone từ repo mà chưa có `.env`, frontend sẽ gọi API mặc định và có thể bị lỗi CORS / kết nối — hãy kiểm tra file này trước khi chạy.
+> Lưu ý: `.env` đã được gitignore nên mỗi máy cần tạo lại. Nếu clone từ repo mà chưa có `.env`, frontend sẽ không có `VITE_BASE_URL` và có thể bị lỗi CORS / kết nối — hãy kiểm tra file này trước khi chạy.
+
+> Biến env ở Vite dùng prefix **`VITE_`** (khác CRA dùng `REACT_APP_`). Truy cập trong code bằng `import.meta.env.VITE_BASE_URL` thay vì `process.env.REACT_APP_BASE_URL`.
 
 ### Cấu Hình Firebase (Đã có sẵn)
 Dự án đã được cấu hình sẵn Firebase trong file [src/firebase.jsx](src/firebase.jsx) với các thông tin:
@@ -76,19 +78,39 @@ Dự án đã được cấu hình sẵn Firebase trong file [src/firebase.jsx](
 
 ### Chế độ Development (Phát triển)
 ```bash
-npm start
+npm run dev
 ```
 
-Hoặc với yarn:
+Hoặc (tương đương):
 ```bash
-yarn start
+npm start
 ```
 
 Dự án sẽ tự động mở trình duyệt tại địa chỉ: **http://localhost:3000**
 
 **Lưu ý:** 
+- Dev server chạy bằng **Vite**, khởi động rất nhanh (không bundle trước như CRA)
+- Port mặc định là **3000** — giữ nguyên vì backend (CORS `FRONTEND_URL`) chỉ cho phép `http://localhost:3000`. Nếu muốn chạy port khác, sửa `port` trong [vite.config.js](vite.config.js) **và** `FRONTEND_URL` bên backend cho khớp
 - Đảm bảo Backend API đang chạy trước khi sử dụng frontend
 - Mặc định backend chạy tại `http://localhost:8080/online_learning/`
+
+### Production Build
+```bash
+npm run build
+```
+
+Xuất bundle vào thư mục `dist/`. Xem trước bản build:
+
+```bash
+npm run preview
+```
+
+### Chạy Test
+```bash
+npm test
+```
+
+Sử dụng **Vitest** (thay cho Jest của CRA). Config trong `vite.config.js` (mục `test`).
 
 ---
 
@@ -96,7 +118,9 @@ Dự án sẽ tự động mở trình duyệt tại địa chỉ: **http://loca
 
 ```
 online_learning/
-├── public/                 # File tĩnh (index.html, robots.txt, ...)
+├── index.html              # Template chính (root, dùng cho Vite)
+├── public/                 # File tĩnh (logo, manifest, robots.txt, ...)
+├── vite.config.js          # Cấu hình Vite (alias @, port, test)
 ├── src/
 │   ├── components/        # Các component dùng chung
 │   │   ├── common/       # ErrorDisplay, Modal, Button, ...
@@ -149,9 +173,10 @@ online_learning/
 **Nguyên nhân:** Backend chưa chạy hoặc sai URL
 **Giải pháp:**
 - Kiểm tra backend đã chạy chưa
-- Xác nhận `REACT_APP_BASE_URL` trong file `.env` đúng với URL backend
+- Xác nhận `VITE_BASE_URL` trong file `.env` đúng với URL backend
+- Kiểm tra dev server có đọc được biến (console log `import.meta.env.VITE_BASE_URL`)
 
-### 2. Lỗi "Module not found"
+### 2. Lỗi "Module not found" / "Failed to resolve import"
 **Nguyên nhân:** Dependencies chưa được cài đặt đầy đủ
 **Giải pháp:**
 ```bash
@@ -163,16 +188,24 @@ npm install
 **Nguyên nhân:** Thiếu package `sass`
 **Giải pháp:**
 ```bash
-npm install sass --save-dev
+npm install sass
 ```
 
-### 6. Port 3000 đã được sử dụng
+### 4. Alias `@` không resolve (IDE đỏ dòng import)
+**Nguyên nhân:** IDE chưa đọc `jsconfig.json`
+**Giải pháp:**
+- Import dùng alias `@/...` (vd `import ... from '@/service/apis/AuthApi'`)
+- Đảm bảo có [jsconfig.json](jsconfig.json) với mapping `"@/*": ["./*"]` và `vite.config.js` có `resolve.alias`
+- Restart IDE / reload window để đọc lại config
+
+### 5. Port 3000 đã được sử dụng
 **Giải pháp:**
 - Tắt ứng dụng đang chạy ở port 3000
-- Hoặc chạy với port khác:
-```bash
-PORT=3001 npm start
+- Hoặc chạy với port khác (Windows PowerShell):
+```powershell
+$env:PORT=3001; npm run dev
 ```
+> ⚠️ Nếu đổi port, nhớ đổi cả `FRONTEND_URL` bên backend cho khớp (CORS).
 
 ---
 
@@ -197,6 +230,9 @@ Nếu gặp vấn đề trong quá trình cài đặt hoặc chạy dự án, vu
 - **sweetalert2**: Hiển thị thông báo
 - **recharts**: Biểu đồ thống kê
 - **@stomp/stompjs**: WebSocket client
+- **vite**: Dev server & bundler (thay thế `react-scripts` / CRA)
+- **@vitejs/plugin-react**: Plugin React cho Vite (JSX transform, HMR)
+- **vitest** / **jsdom**: Chạy test (thay thế Jest của CRA)
 
 ---
 

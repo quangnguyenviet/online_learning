@@ -1,8 +1,8 @@
 import styles from "./ViewVideo.module.scss";
-import LessonApi from "service/apis/LessonApi";
+import LessonApi from "@/service/apis/LessonApi";
 import { useRef, useState } from "react";
 import React from "react";
-import ViewVideoModal from "components/ViewVideoModal/ViewVideoModal";
+import ViewVideoModal from "@/components/ViewVideoModal/ViewVideoModal";
 
 export default function ViewVideo({ lessonId, children }) {
     

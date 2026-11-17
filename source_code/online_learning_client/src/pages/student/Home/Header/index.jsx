@@ -1,4 +1,4 @@
-import Search from "components/Search";
+import Search from "@/components/Search";
 import styles from "./Header.module.scss";
 
 export default function Header() {

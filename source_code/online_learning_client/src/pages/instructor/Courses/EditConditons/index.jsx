@@ -1,9 +1,9 @@
 import { useRef, useState } from "react";
-import { saveConditions } from "utils/InstructorUtil/ConditionUtil";
+import { saveConditions } from "@/utils/InstructorUtil/ConditionUtil";
 import { useParams } from "react-router-dom";
 import "./style.scss";
 import Swal from 'sweetalert2';
-import { ModalContext } from "pages/instructor/Courses/ViewDetail/ViewDetail"; // Import the ModalContext
+import { ModalContext } from "@/pages/instructor/Courses/ViewDetail/ViewDetail"; // Import the ModalContext
 import { useContext } from "react";
 
 export function EditConditions(props) {

@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import RegisterBox from "./RegisterBox/RegisterBox";
 import CourseDescription from "./CourseDescription/CourseDescription";
 import styles from "./CourseDetail.module.scss";
-import CourseApi from "service/apis/CourseApi";
+import CourseApi from "@/service/apis/CourseApi";
 
 export default function CourseDetail() {
     const { courseId } = useParams();

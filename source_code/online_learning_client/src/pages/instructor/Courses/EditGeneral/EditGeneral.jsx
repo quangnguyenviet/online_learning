@@ -1,10 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import { FaBook, FaMoneyBillWave, FaAlignLeft, FaSave, FaImage, FaTag, FaPercent } from "react-icons/fa";
 import styles from "./EditGeneral.module.scss";
-import { ModalContext } from "pages/instructor/Courses/ViewDetail/ViewDetail";
-import CategoryApi from "service/apis/CategoryApi";
-import CourseApi from "service/apis/CourseApi";
-import { useLoading } from "components/common/Loading/Loading";
+import { ModalContext } from "@/pages/instructor/Courses/ViewDetail/ViewDetail";
+import CategoryApi from "@/service/apis/CategoryApi";
+import CourseApi from "@/service/apis/CourseApi";
+import { useLoading } from "@/components/common/Loading/Loading";
 const FormField = ({ label, icon: Icon, iconClass, children }) => (
     <>
         <h2 className={styles.fieldLabel}>

@@ -1,7 +1,7 @@
 // src/utils/fetchApi.js
 
 // load BASE_URL from environment variables or define it here
-const BASE_URL = process.env.REACT_APP_BASE_URL
+const BASE_URL = import.meta.env.VITE_BASE_URL
 const URL_SIGNUP = `${BASE_URL}/users`;
 
 // http://localhost:8080/online_learning/auth/login

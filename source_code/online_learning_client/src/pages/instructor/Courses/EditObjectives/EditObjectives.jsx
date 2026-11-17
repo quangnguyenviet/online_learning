@@ -1,10 +1,10 @@
-import { saveWillLearn } from "utils/InstructorUtil/WillLearnUtil";
+import { saveWillLearn } from "@/utils/InstructorUtil/WillLearnUtil";
 import React, { useContext, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./style.scss";
-import { ModalContext } from "pages/instructor/Courses/ViewDetail/ViewDetail"; 
-import CourseApi from "service/apis/CourseApi";
-import { useLoading } from "components/common/Loading/Loading";
+import { ModalContext } from "@/pages/instructor/Courses/ViewDetail/ViewDetail"; 
+import CourseApi from "@/service/apis/CourseApi";
+import { useLoading } from "@/components/common/Loading/Loading";
 
 export function EditObjectives(props) {
     console.log("EditObjectives props:", props);

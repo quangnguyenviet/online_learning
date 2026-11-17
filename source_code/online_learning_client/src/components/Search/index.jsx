@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { search as s } from "actions/search";
-import Button from "components/Button";
-import "components/Search/Search.scss";
+import { search as s } from "@/actions/search";
+import Button from "@/components/Button";
+import "@/components/Search/Search.scss";
 
 export default function Search() {
     const [inputValue, setInputValue] = useState("");

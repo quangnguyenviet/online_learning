@@ -1,7 +1,7 @@
 import './Course.scss';
 import { useSelector } from "react-redux";
-import CourseSearch from "components/Course/CourseSearch/CourseSearch";
-import CourseApi from 'service/apis/CourseApi';
+import CourseSearch from "@/components/Course/CourseSearch/CourseSearch";
+import CourseApi from '@/service/apis/CourseApi';
 import React, { useEffect } from 'react';
 import CourseList from './CourseList/CourseList';
 

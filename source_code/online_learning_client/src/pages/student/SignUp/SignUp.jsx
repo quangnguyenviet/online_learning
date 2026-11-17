@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import styles from './Signup.module.scss';
 import { Link } from 'react-router-dom';
-import UserApi from 'service/apis/UserApi';
+import UserApi from '@/service/apis/UserApi';
 import { useNavigate } from 'react-router-dom';
-import { useError } from 'components/common/ErrorDisplay/ErrorDisplay';
-import { ErrorDisplay } from 'components/common/ErrorDisplay/ErrorDisplay';
+import { useError } from '@/components/common/ErrorDisplay/ErrorDisplay';
+import { ErrorDisplay } from '@/components/common/ErrorDisplay/ErrorDisplay';
 export default function Signup() {
   const navigate = useNavigate();
   const { showError, dismissError, errorMessage } = useError();

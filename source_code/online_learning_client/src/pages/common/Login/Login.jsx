@@ -1,10 +1,10 @@
 import styles from './Login.module.scss';
-import StorageService from 'service/StorageService';
+import StorageService from '@/service/StorageService';
 import { Link, useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
-import AuthApi from 'service/apis/AuthApi';
-import { useError } from 'components/common/ErrorDisplay/ErrorDisplay';
-import { ErrorDisplay } from 'components/common/ErrorDisplay/ErrorDisplay';
+import AuthApi from '@/service/apis/AuthApi';
+import { useError } from '@/components/common/ErrorDisplay/ErrorDisplay';
+import { ErrorDisplay } from '@/components/common/ErrorDisplay/ErrorDisplay';
 
 export default function Login() {
     const navigate = useNavigate();

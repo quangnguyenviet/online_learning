@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./style.scss";
-import { authenticate } from "utils/AuthUtil";
-import StorageService from "service/StorageService";
+import { authenticate } from "@/utils/AuthUtil";
+import StorageService from "@/service/StorageService";
 import Swal from "sweetalert2";
 export default function AdminLogin() {
       const URL_AUTH = 'http://localhost:8080/online_learning/auth/login';

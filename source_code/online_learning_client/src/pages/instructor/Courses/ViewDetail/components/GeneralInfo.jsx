@@ -1,6 +1,6 @@
 import styles from "../ViewDetail.module.scss";
 import { FaImage } from "react-icons/fa";
-import { useLoading } from "components/common/Loading/Loading";
+import { useLoading } from "@/components/common/Loading/Loading";
 
 export default function GeneralInfo({ title, price, description, category, imageUrl, discount }) {
     const { LocalLoading } = useLoading();

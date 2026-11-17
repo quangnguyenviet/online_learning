@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./Profile.scss";
-import { getMyInfor } from "utils/MyInforUtil";
+import { getMyInfor } from "@/utils/MyInforUtil";
 
 export default function Profile() {
 

@@ -1,8 +1,8 @@
 import React from "react";
 import { FaEdit, FaTrashAlt, FaTimes, FaVideo } from "react-icons/fa";
-import DeleteLesson from "pages/instructor/Courses/LessonList/DeleteLesson/DeleteLesson";
-import ViewVideo from "components/ViewVideo/ViewVideo";
-import EditLesson from "pages/instructor/Courses/LessonList/EditLesson/EditLesson";
+import DeleteLesson from "@/pages/instructor/Courses/LessonList/DeleteLesson/DeleteLesson";
+import ViewVideo from "@/components/ViewVideo/ViewVideo";
+import EditLesson from "@/pages/instructor/Courses/LessonList/EditLesson/EditLesson";
 import styles from "../LessonList.module.scss";
 
 export default function LessonItem({

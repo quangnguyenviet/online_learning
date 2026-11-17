@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
-import LessonApi from "service/apis/LessonApi";
-import { useLoading } from "components/common/Loading/Loading";
+import LessonApi from "@/service/apis/LessonApi";
+import { useLoading } from "@/components/common/Loading/Loading";
 
 export default function DeleteLesson(props) {
     const { lessonId, handleDelete, children } = props;

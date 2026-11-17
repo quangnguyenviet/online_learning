@@ -1,6 +1,6 @@
 import {useState, useEffect} from "react";
-import CourseList from "components/Course/CourseList/CourseList";
-import {getCourses} from "utils/CoursesUtil";
+import CourseList from "@/components/Course/CourseList/CourseList";
+import {getCourses} from "@/utils/CoursesUtil";
 
 export default function PlusCourse() {
 

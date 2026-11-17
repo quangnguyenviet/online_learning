@@ -1,5 +1,5 @@
 import apiClient from "./apiClient";
-import { User } from "models/user/User";
+import { User } from "@/models/user/User";
 class UserApi {
     static async createUser(data) {
         const response = await apiClient.post('/users', data);

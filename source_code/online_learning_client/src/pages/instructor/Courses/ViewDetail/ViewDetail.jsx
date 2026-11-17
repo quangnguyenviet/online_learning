@@ -2,15 +2,15 @@ import { FaBookOpen, FaCheckCircle, FaTasks, FaListAlt } from "react-icons/fa";
 import styles from "./ViewDetail.module.scss";
 import { useEffect, useState, createContext } from "react";
 import { useParams } from "react-router-dom";
-import { getCourseById } from "utils/CoursesUtil";
-import { LessonList } from "pages/instructor/Courses/LessonList/LessonList";
+import { getCourseById } from "@/utils/CoursesUtil";
+import { LessonList } from "@/pages/instructor/Courses/LessonList/LessonList";
 import CourseSection from "./components/CourseSection";
 import GeneralInfo from "./components/GeneralInfo";
 import PublishControl from "./components/PublishControl";
 import useEditModal from "./hooks/useEditModal";
-import { useSuccess } from "components/common/SucessDisplay/SuccessDisplay";
+import { useSuccess } from "@/components/common/SucessDisplay/SuccessDisplay";
 import Objective from "./components/Objective";
-import CourseApi from "service/apis/CourseApi";
+import CourseApi from "@/service/apis/CourseApi";
 
 
 export const ModalContext = createContext(null);

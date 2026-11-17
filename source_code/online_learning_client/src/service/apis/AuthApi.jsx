@@ -1,5 +1,5 @@
-import apiClient from 'service/apis/apiClient';
-const BASE_URL = process.env.REACT_APP_BASE_URL
+import apiClient from '@/service/apis/apiClient';
+const BASE_URL = import.meta.env.VITE_BASE_URL
 class AuthApi {
     static async login(data) {
         console.log("API BASE URL:", BASE_URL);

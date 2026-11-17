@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './style.scss';
-import { signup } from 'utils/AuthUtil';
+import { signup } from '@/utils/AuthUtil';
 import Swal from 'sweetalert2';
 
 export default function SignupInstructor() {

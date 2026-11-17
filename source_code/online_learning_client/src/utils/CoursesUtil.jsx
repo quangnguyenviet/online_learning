@@ -1,4 +1,4 @@
-const BASE_URL = `${process.env.REACT_APP_API_URL}/courses`;
+const BASE_URL = `${import.meta.env.VITE_BASE_URL}/courses`;
 
 // const token = localStorage.getItem("token");
 

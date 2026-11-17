@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CourseCard from "components/Course/CourseCard/CourseCard";
+import CourseCard from "@/components/Course/CourseCard/CourseCard";
 import styles from "./MyLearning.module.scss";
-import CourseApi from "service/apis/CourseApi";
+import CourseApi from "@/service/apis/CourseApi";
 
 export default function MyLearning() {
     const URL = "http://localhost:8080/online_learning/courses/learning";

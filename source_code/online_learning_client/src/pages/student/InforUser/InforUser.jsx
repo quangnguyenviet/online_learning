@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import styles from './InforUser.module.scss';
 import UserInfoSection from './UserInfoSection';
 import EditUserInfoModal from './EditUserInfoModal';
-import UserApi from 'service/apis/UserApi';
-import { ErrorDisplay } from 'components/common/ErrorDisplay/ErrorDisplay';
-import { useError } from 'components/common/ErrorDisplay/ErrorDisplay';
+import UserApi from '@/service/apis/UserApi';
+import { ErrorDisplay } from '@/components/common/ErrorDisplay/ErrorDisplay';
+import { useError } from '@/components/common/ErrorDisplay/ErrorDisplay';
 export default function InforUser() {
     const { showError, dismissError, errorMessage } = useError();
 

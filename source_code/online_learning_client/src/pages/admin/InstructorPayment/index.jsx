@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./InstructorPayment.scss";
-import { getPaymentData } from "utils/AdminUtil/InstructorPaymentUtil";
-import { update } from "utils/AdminUtil/InstructorPaymentUtil";
+import { getPaymentData } from "@/utils/AdminUtil/InstructorPaymentUtil";
+import { update } from "@/utils/AdminUtil/InstructorPaymentUtil";
 
 const months = Array.from({ length: 12 }, (_, i) => i + 1);
 const years = [2025, 2024, 2023];

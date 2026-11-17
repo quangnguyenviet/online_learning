@@ -1,8 +1,8 @@
 import { Link, NavLink } from 'react-router-dom';
 import { FaUser } from 'react-icons/fa';
-import { logout } from 'utils/AuthUtil';
+import { logout } from '@/utils/AuthUtil';
 import { useState, useRef, useEffect } from 'react';
-import { isLoggedIn, isInstructor, isAdmin } from 'service/Guard';
+import { isLoggedIn, isInstructor, isAdmin } from '@/service/Guard';
 import styles from './Nav.module.scss';
 
 function Nav() {

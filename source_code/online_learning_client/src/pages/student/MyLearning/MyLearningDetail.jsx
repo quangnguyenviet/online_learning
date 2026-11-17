@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import "./MyLearningDetail.scss";
-import { getSignedUrl } from "utils/LessonUtil";
-import LessonApi from "service/apis/LessonApi";
-import LessonProgressApi from "service/apis/LessonProgressApi";
+import { getSignedUrl } from "@/utils/LessonUtil";
+import LessonApi from "@/service/apis/LessonApi";
+import LessonProgressApi from "@/service/apis/LessonProgressApi";
 
 export default function MyLearningDetail() {
     const { courseId } = useParams();

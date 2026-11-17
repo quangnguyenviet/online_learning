@@ -1,7 +1,7 @@
-import StorageService from "service/StorageService";
+import StorageService from "@/service/StorageService";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import AuthApi from "service/apis/AuthApi";
+import AuthApi from "@/service/apis/AuthApi";
 export default function Logout() {
     const navigate = useNavigate();
     const logout = async () => {

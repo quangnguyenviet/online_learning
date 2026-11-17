@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import RegisterBtn from "pages/student/CourseDetail/RegisterBtn/RegisterBtn";
-import { isRegistered as checkRegister } from "utils/StudentUtil/RegisterUtil";
+import RegisterBtn from "@/pages/student/CourseDetail/RegisterBtn/RegisterBtn";
+import { isRegistered as checkRegister } from "@/utils/StudentUtil/RegisterUtil";
 import styles from "./RegisterBox.module.scss";
-import { useSuccess } from "components/common/SucessDisplay/SuccessDisplay";
+import { useSuccess } from "@/components/common/SucessDisplay/SuccessDisplay";
 
 export default function RegisterBox({ course }) {
     const [isRegistered, setIsRegistered] = React.useState(false);

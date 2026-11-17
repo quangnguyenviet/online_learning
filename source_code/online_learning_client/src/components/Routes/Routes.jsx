@@ -13,21 +13,21 @@ import UploadVideo from "../../pages/student/UploadVideo";
 import StudentLayout from "../../layout/StudentLayout/StudentLayout";
 import InstructorLayout from "../../layout/InstructorLayout";
 import Dashboard from "../../pages/instructor/Dashboard/Dashboard";
-import * as Guard from "service/Guard";
+import * as Guard from "@/service/Guard";
 import Courses from "../../pages/instructor/Courses";
 import CourseList from "../../pages/instructor/Courses/CourseList/CourseList.jsx";
-import ViewDetail from "pages/instructor/Courses/ViewDetail/ViewDetail";
-import Profile from "pages/instructor/Profile";
-import Notification from "pages/instructor/Notification";
-import NotificationDetail from "pages/instructor/Notification/NotificationDetail";
-import InstructorPayment from "pages/admin/InstructorPayment";
-import AdminLayout from "layout/AdminLayout";
-import { User } from "pages/admin/User";
-import AdminLogin from "pages/admin/AdminLogin";
-import Signup from "pages/student/SignUp/SignUp";
-import SignupInstructor from "pages/instructor/SignUp/SignUp";
-import Logout from "components/Logout";
-import AddNewCourse from "pages/instructor/Courses/AddNewCourse/AddNewCourse";
+import ViewDetail from "@/pages/instructor/Courses/ViewDetail/ViewDetail";
+import Profile from "@/pages/instructor/Profile";
+import Notification from "@/pages/instructor/Notification";
+import NotificationDetail from "@/pages/instructor/Notification/NotificationDetail";
+import InstructorPayment from "@/pages/admin/InstructorPayment";
+import AdminLayout from "@/layout/AdminLayout";
+import { User } from "@/pages/admin/User";
+import AdminLogin from "@/pages/admin/AdminLogin";
+import Signup from "@/pages/student/SignUp/SignUp";
+import SignupInstructor from "@/pages/instructor/SignUp/SignUp";
+import Logout from "@/components/Logout";
+import AddNewCourse from "@/pages/instructor/Courses/AddNewCourse/AddNewCourse";
 const ROUTES = [
     {
         element: <StudentLayout />,

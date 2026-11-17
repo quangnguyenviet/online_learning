@@ -1,4 +1,4 @@
-import { getCourses } from "utils/CoursesUtil";
+import { getCourses } from "@/utils/CoursesUtil";
 
 export const courseReducer = (state = [], action) => {
 

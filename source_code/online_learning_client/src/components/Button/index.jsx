@@ -1,5 +1,5 @@
 // Button.js
-import "components/Button/Button.scss";
+import "@/components/Button/Button.scss";
 
 export default function Button({ content, onClick }) {
     return (

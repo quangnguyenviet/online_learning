@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./Dashboard.module.scss";
-import InstructorDashboardApi from "service/apis/InstructorDashboardApi";
+import InstructorDashboardApi from "@/service/apis/InstructorDashboardApi";
 import { MdSchool, MdPeople, MdPlayArrow, MdAttachMoney, MdStar } from "react-icons/md";
 import DashboardHeader from "./components/DashboardHeader";
 import StatsGrid from "./components/StatsGrid";

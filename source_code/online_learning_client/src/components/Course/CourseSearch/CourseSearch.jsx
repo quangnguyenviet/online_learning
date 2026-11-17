@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { getCourses } from "utils/CoursesUtil";
+import { getCourses } from "@/utils/CoursesUtil";
 import { useSelector } from "react-redux";
 import CourseList from "../CourseList/CourseList";
 import "./style.scss";
-import CourseApi from "service/apis/CourseApi";
+import CourseApi from "@/service/apis/CourseApi";
 
 export default function CourseSearch() {
     const [courses, setCourses] = useState([]);

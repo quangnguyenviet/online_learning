@@ -2,11 +2,11 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 import styles from "./LessonList.module.scss";
-import { useSuccess, SuccessDisplay } from "components/common/SucessDisplay/SuccessDisplay";
-import { useLoading } from "components/common/Loading/Loading";
-import LessonApi from "service/apis/LessonApi";
-import { useError } from "components/common/ErrorDisplay/ErrorDisplay";
-import { ErrorDisplay } from "components/common/ErrorDisplay/ErrorDisplay";
+import { useSuccess, SuccessDisplay } from "@/components/common/SucessDisplay/SuccessDisplay";
+import { useLoading } from "@/components/common/Loading/Loading";
+import LessonApi from "@/service/apis/LessonApi";
+import { useError } from "@/components/common/ErrorDisplay/ErrorDisplay";
+import { ErrorDisplay } from "@/components/common/ErrorDisplay/ErrorDisplay";
 import LessonItem from "./components/LessonItem";
 import AddLessonSection from "./components/AddLessonSection";
 import SockJS from "sockjs-client";
@@ -19,7 +19,7 @@ export function LessonList(props) {
     const [showAddLesson, setShowAddLesson] = useState(false);
     const [newLesson, setNewLesson] = useState({ title: "", description: "", video: null });
     const [editForm, setEditForm] = useState({ title: "", description: "", video: null });
-    const BASE_URL = process.env.REACT_APP_BASE_URL;
+    const BASE_URL = import.meta.env.VITE_BASE_URL;
 
     const { showError, dismissError, errorMessage} = useError();
     const { successMessage, showSuccess, dismissSuccess } = useSuccess();

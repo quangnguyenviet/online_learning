@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { FaChalkboardTeacher, FaBook, FaUser, FaSignOutAlt, FaBell, FaChevronDown, FaUserGraduate } from "react-icons/fa";
-import { logout } from "utils/AuthUtil";
+import { logout } from "@/utils/AuthUtil";
 import { useState } from "react";
 import styles from "./Sidebar.module.scss";
 

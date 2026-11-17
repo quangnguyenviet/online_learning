@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { FaSave } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import styles from './AddNewCourse.module.scss';
-import { useError } from 'components/common/ErrorDisplay/ErrorDisplay';
-import { ErrorDisplay } from 'components/common/ErrorDisplay/ErrorDisplay';
-import CategoryApi from 'service/apis/CategoryApi';
-import CourseApi from 'service/apis/CourseApi';
-import { useLoading } from 'components/common/Loading/Loading';
+import { useError } from '@/components/common/ErrorDisplay/ErrorDisplay';
+import { ErrorDisplay } from '@/components/common/ErrorDisplay/ErrorDisplay';
+import CategoryApi from '@/service/apis/CategoryApi';
+import CourseApi from '@/service/apis/CourseApi';
+import { useLoading } from '@/components/common/Loading/Loading';
 import SockJS from "sockjs-client";
 import { Client } from "@stomp/stompjs";
 import CourseBasicInfoForm from './components/CourseBasicInfoForm';
@@ -15,7 +15,7 @@ import CourseLearningObjectives from './components/CourseLearningObjectives';
 
 
 export default function AddNewCourse() {
-    const BASE_URL = process.env.REACT_APP_BASE_URL;
+    const BASE_URL = import.meta.env.VITE_BASE_URL;
     const navigate = useNavigate();
     const [thumbnail, setThumbnail] = useState(null);
     const [categories, setCategories] = useState([]);

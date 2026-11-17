@@ -1,6 +1,6 @@
 import axios from 'axios';
-import StorageService from 'service/StorageService';
-const BASE_URL = process.env.REACT_APP_BASE_URL
+import StorageService from '@/service/StorageService';
+const BASE_URL = import.meta.env.VITE_BASE_URL
 // Base API client configured for the Online Learning app
 const apiClient = axios.create({
   baseURL: BASE_URL,

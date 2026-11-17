@@ -1,8 +1,8 @@
 import { use, useEffect, useState } from "react";
 import GoToCourseBtn from "../../../../components/GoToCourseBtn";
-import ZalopayApi from "service/apis/ZalopayApi";
+import ZalopayApi from "@/service/apis/ZalopayApi";
 import { useNavigate } from "react-router-dom";
-import RegisterApi from "service/apis/RegisterApi";
+import RegisterApi from "@/service/apis/RegisterApi";
 import styles from "./RegisterBtn.module.scss";
 
 export default function RegisterBtn(props) {

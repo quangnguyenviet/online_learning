@@ -8,7 +8,7 @@ import {
     FaTags
 } from "react-icons/fa";
 import styles from "./CourseDescription.module.scss";
-import ViewVideo from "components/ViewVideo/ViewVideo";
+import ViewVideo from "@/components/ViewVideo/ViewVideo";
 
 export default function CourseDescription({ course }) {
     const getLevelText = (level) => {
