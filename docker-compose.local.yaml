@@ -1,0 +1,138 @@
+# One-command local dev stack for the online_learning backend.
+#
+#   Usage (from the repo root):
+#     docker compose -f docker-compose.local.yaml up -d --build
+#
+# This replaces the old "docker compose up" infra stack (postgres/redis/kafka)
+# AND runs the 3 Java services in containers. Before first use, stop the old
+# stack so ports 5432/6379/9092/8090 are free:
+#     docker compose -f source_code/servers/online_learning_server/docker-compose.yaml down
+#
+# Config notes:
+#   - The app container bind-mounts source_code/servers/online_learning_server/.env
+#     to /app/.env (read-only); Spring loads it via
+#     spring.config.import=optional:file:.env[.properties]. If the file is missing,
+#     copy .env-example to .env first.
+#   - The `environment:` block in the app service sets container env vars, which
+#     out-prioritize the mounted .env file. That is how the `localhost` hosts in
+#     .env get swapped for the Docker service names (postgres, redis, kafka,
+#     eureka-server) so the app reaches its infra inside the compose network.
+
+name: ol-local
+
+services:
+  # ============ Infrastructure (same as the old docker-compose.yaml) ============
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: online_learning_db
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: "12345"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ol_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root -d online_learning_db"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - ol_redis:/data
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:7.4.0
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:29092,PLAINTEXT_HOST://0.0.0.0:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    depends_on:
+      - kafka
+    ports:
+      - "8090:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
+      KAFKA_CLUSTERS_0_ZOOKEEPER: zookeeper:2181
+
+  # ============ Java services ============
+  eureka-server:
+    build: ./source_code/servers/eureka-server
+    image: ol-eureka-server
+    ports:
+      - "8761:8761"
+
+  app:
+    build: ./source_code/servers/online_learning_server
+    image: ol-app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      kafka:
+        condition: service_started
+      eureka-server:
+        condition: service_started
+    ports:
+      - "8080:8080"
+    volumes:
+      # Spring loads this at startup via spring.config.import=optional:file:.env[.properties]
+      - ./source_code/servers/online_learning_server/.env:/app/.env:ro
+    environment:
+      # prod profile: all its placeholders are filled by the env vars below
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:postgresql://postgres:5432/online_learning_db
+      DB_USERNAME: root
+      DB_PASSWORD: "12345"
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS: kafka:9092
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      # keep Swagger UI available in local dev (prod profile disables it by default)
+      OPENAPI_DOCS_ENABLED: "true"
+      OPENAPI_SWAGGER_UI_ENABLED: "true"
+
+  notification-service:
+    build: ./source_code/servers/services/notification
+    image: ol-notification
+    depends_on:
+      kafka:
+        condition: service_started
+      eureka-server:
+        condition: service_started
+    ports:
+      - "8081:8081"
+    volumes:
+      # Spring loads this at startup via spring.config.import=optional:file:.env[.properties]
+      - ./source_code/servers/services/notification/.env:/app/.env:ro
+    environment:
+      SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS: kafka:9092
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka/
+
+volumes:
+  ol_pgdata:
+  ol_redis:
