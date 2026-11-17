@@ -26,10 +26,10 @@ import java.time.Duration;
 @Slf4j
 public class AwsS3Service implements S3Service {
 
-    @Value("${storage.videoBucketName}")
+    @Value("${aws.videoBucketName}")
     private String videoBucketName;
 
-    @Value("${storage.imageBucketName}")
+    @Value("${aws.imageBucketName}")
     private String imageBucketName;
 
     private final S3Client s3Client;

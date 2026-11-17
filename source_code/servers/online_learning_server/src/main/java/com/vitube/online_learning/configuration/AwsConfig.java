@@ -9,6 +9,7 @@ import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.http.urlconnection.UrlConnectionHttpClient;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 
 @Configuration
 @ConditionalOnProperty(name = "storage.provider", havingValue = "aws", matchIfMissing = true)
@@ -41,6 +42,21 @@ public class AwsConfig {
                 .region(Region.of(region))
                 .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
                 .httpClientBuilder(UrlConnectionHttpClient.builder())
+                .build();
+    }
+
+    /**
+     * Định nghĩa bean cho S3Presigner.
+     * Dùng để tạo URL presigned cho video (xem thêm AwsS3Service#generatePresignedUrl).
+     * @return Đối tượng S3Presigner đã được cấu hình
+     */
+    @Bean
+    public S3Presigner s3Presigner() {
+        AwsBasicCredentials awsCreds = AwsBasicCredentials.create(accessKey, secretKey);
+
+        return S3Presigner.builder()
+                .region(Region.of(region))
+                .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
                 .build();
     }
 }
